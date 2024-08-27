@@ -16,7 +16,7 @@ namespace Mortal_Combat_Data_Library
 
         public Lobby(string lobbyName)
         {
-            LobbyName = lobbyName;
+            this.LobbyName = lobbyName;
             _players = new List<Player>();
             messeges = new List<Message>();
         }
