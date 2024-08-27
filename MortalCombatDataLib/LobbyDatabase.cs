@@ -2,8 +2,8 @@
  * Module: LobbyDatabase
  * Description: Responsible for handling the different
  *              lobby operations
- * Authors: Ahmed, Moukhtada, Jauhar
- * ID: , , 21494299
+ * Authors: Ahmed, Mouktada, Jauhar
+ * ID: 20640266, , 21494299
  * Version: 1.0.0.2
  */
 
