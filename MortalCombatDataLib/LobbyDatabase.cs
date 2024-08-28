@@ -24,6 +24,9 @@ namespace Mortal_Combat_Data_Library
 
         public static LobbyDatabase Instance { get; } = new LobbyDatabase();
 
+        static LobbyDatabase() { }
+
+
         /* Method: LobbyDatabase
          * Description: Private constructor to instantiate instance
          *              of the lobby database

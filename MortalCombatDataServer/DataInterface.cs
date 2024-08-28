@@ -24,9 +24,7 @@ namespace DataServer
         void CreateMessage(Message message);
 
         [OperationContract]
-
         void DistributeMessage(Message message);
-
 
         [OperationContract]
         void DeleteLobby(int playerCount);
