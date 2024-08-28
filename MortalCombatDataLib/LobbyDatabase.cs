@@ -21,5 +21,18 @@ namespace Mortal_Combat_Data_Library
          * lobbies -> the list of lobby rooms in the menu
          */
         private readonly List<Lobby> lobbies;
+
+        public static LobbyDatabase Instance { get; } = new LobbyDatabase();
+
+        /* 
+         * Method: LobbyDatabase
+         * Description: Private constructor to instantiate instance
+         *              of the lobby database
+         * Parameters: none
+         */
+        private LobbyDatabase()
+        {
+            lobbies = new List<Lobby>();
+        }
     }
 }
