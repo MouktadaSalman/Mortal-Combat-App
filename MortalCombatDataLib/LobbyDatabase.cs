@@ -34,5 +34,9 @@ namespace Mortal_Combat_Data_Library
         {
             lobbies = new List<Lobby>();
         }
+
+        /* 
+         * Method: CreateLobby
+         */
     }
 }
