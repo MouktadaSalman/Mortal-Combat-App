@@ -34,6 +34,8 @@ namespace Mortal_Combat_Data_Library
         /* 
          * Method: Lobby
          * Description: The constructor method of the class
+         *              also creates a new empty list for
+         *              players + messages (for history)
          * Parameters: lobbyID (string), lobbyName (string)
          */
         public Lobby(string lobbyID, string lobbyName)
