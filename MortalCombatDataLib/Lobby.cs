@@ -53,5 +53,16 @@ namespace Mortal_Combat_Data_Library
         {
             _players.Add(player);
         }
+
+        /* 
+         * Method: AddMessage
+         * Description: Add message to lobby
+         * Parameters: message (Message)
+         * Result: none
+         */
+        public void AddMessage(Message message) 
+        {
+            _messages.Add(message);
+        }
     }
 }
