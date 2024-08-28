@@ -7,8 +7,6 @@
  * Version: 1.0.0.2
  */
 
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +17,9 @@ namespace Mortal_Combat_Data_Library
 {
     public class LobbyDatabase
     {
-    // lobbies -> the list of lobby rooms in the menu
+        /* Class fields:
+         * lobbies -> the list of lobby rooms in the menu
+         */
         private readonly List<Lobby> lobbies;
     }
 }
