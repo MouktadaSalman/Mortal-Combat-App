@@ -24,8 +24,7 @@ namespace Mortal_Combat_Data_Library
 
         public static LobbyDatabase Instance { get; } = new LobbyDatabase();
 
-        /* 
-         * Method: LobbyDatabase
+        /* Method: LobbyDatabase
          * Description: Private constructor to instantiate instance
          *              of the lobby database
          * Parameters: none
@@ -35,8 +34,7 @@ namespace Mortal_Combat_Data_Library
             _lobbies = new List<Lobby>();
         }
 
-        /* 
-         * Method: CreateLobby
+        /* Method: CreateLobby
          * Description: Create a lobby
          * Parameter: lobbyName (string)
          * Result: none
@@ -50,8 +48,7 @@ namespace Mortal_Combat_Data_Library
             _lobbies.Add(newLobby);
         }
 
-        /* 
-         * Method: RemoveLobby
+        /* Method: RemoveLobby
          * Description: Remove a lobby
          * Parameter: lobbyName (string)
          * Result: none
@@ -71,6 +68,7 @@ namespace Mortal_Combat_Data_Library
                 }
             }
 
+            //Checks if lobby exists in database
             if (temp == null)
             {
                 Console.WriteLine("MissingLobbyError:: No matching lobby found");
@@ -78,6 +76,35 @@ namespace Mortal_Combat_Data_Library
             else
             {
                 _lobbies.Remove(temp);
+            }
+        }
+
+        /* Method: AddPlayer
+         * Description: Add a player to the appropriate lobby
+         * Parameters: player (Player), lobbyName (string)
+         * Result: none
+         */
+        public void AddPlayer(Player player, string lobbyName)
+        {
+            Lobby correctLobby = null;
+
+            foreach (Lobby lob in _lobbies)
+            {
+                if(lob.lobbyName == lobbyName)
+                {
+                    correctLobby = lob;
+                    break;
+                }
+            }
+
+            //Check if lobby exists in database
+            if (correctLobby == null)
+            {
+                Console.WriteLine("MissingLobbyError:: No matching lobby found");
+            }
+            else
+            {
+                correctLobby.AddPlayer(player);
             }
         }
     }
