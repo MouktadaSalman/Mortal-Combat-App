@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* 
+ * Module: Lobby
+ * Description: Responsible for individual lobby 
+ *              functionalities.
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
