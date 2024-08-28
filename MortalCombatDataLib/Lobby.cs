@@ -30,6 +30,11 @@ namespace Mortal_Combat_Data_Library
 
         private List<Message> _messages;
 
+        /* 
+         * Method: Lobby
+         * Description: The constructor method of the class
+         * Parameters: lobbyID (string), lobbyName (string)
+         */
         public Lobby(string lobbyID, string lobbyName)
         {
             this.lobbyID = lobbyID;
