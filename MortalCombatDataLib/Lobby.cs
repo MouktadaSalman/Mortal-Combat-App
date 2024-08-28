@@ -17,17 +17,17 @@ namespace Mortal_Combat_Data_Library
 {
     public class Lobby
     {
-        public string LobbyName { get; set; }
+        private string lobbyName { get; set; }
 
-        public List<Player> _players;
+        private List<Player> _players;
 
-        public List<Message> messeges;
+        private List<Message> _messages;
 
         public Lobby(string lobbyName)
         {
-            this.LobbyName = lobbyName;
+            this.lobbyName = lobbyName;
             _players = new List<Player>();
-            messeges = new List<Message>();
+            _messages = new List<Message>();
         }
     }
 }
