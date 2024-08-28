@@ -98,5 +98,16 @@ namespace Mortal_Combat_Data_Library
         {
             _messages.Add(message);
         }
+
+        /* 
+         * Method: GetPlayerCount
+         * Description: Get player count of lobby
+         * Parameters: none
+         * Result: count (int)
+         */
+        public int GetPlayerCount()
+        {
+            return _players.Count; 
+        }
     }
 }
