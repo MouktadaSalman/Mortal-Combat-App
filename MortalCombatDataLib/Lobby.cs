@@ -17,13 +17,13 @@ namespace Mortal_Combat_Data_Library
 {
     public class Lobby
     {
-    /* Class fields:
-     * lobbyID -> the id of the lobby
-     * lobbyName -> the name of the lobby
-     * _players -> list of players in the current lobby
-     * _messages -> the messages of the current lobby
-     */
-        private string lobbyID {  get; set; }
+        /* Class fields:
+         * lobbyID -> the id of the lobby
+         * lobbyName -> the name of the lobby
+         * _players -> list of players in the current lobby
+         * _messages -> the messages of the current lobby
+         */
+        private string lobbyID { get; set; }
         private string lobbyName { get; set; }
 
         private List<Player> _players;
@@ -41,6 +41,17 @@ namespace Mortal_Combat_Data_Library
             this.lobbyName = lobbyName;
             _players = new List<Player>();
             _messages = new List<Message>();
+        }
+
+        /* 
+         * Method: AddPlayer
+         * Description: Add a player to the current lobby
+         * Parameters: player (Player)
+         * Result: none
+         */
+        public void AddPlayer(Player player)
+        {
+            _players.Add(player);
         }
     }
 }
