@@ -50,6 +50,35 @@ namespace Mortal_Combat_Data_Library
             _lobbies.Add(newLobby);
         }
 
+        /* 
+         * Method: RemoveLobby
+         * Description: Remove a lobby
+         * Parameter: lobbyName (string)
+         * Result: none
+         */
+        public void RemoveLobby(string lobbyName)
+        {
+            //initialise
+            Lobby temp = null;
 
+            //Check through database
+            foreach (Lobby lob in _lobbies)
+            {
+                if (lob.lobbyName == lobbyName)
+                {
+                    temp = lob;
+                    break;
+                }
+            }
+
+            if (temp == null)
+            {
+                Console.WriteLine("MissingLobbyError:: No matching lobby found");
+            }
+            else
+            {
+                _lobbies.Remove(temp);
+            }
+        }
     }
 }
