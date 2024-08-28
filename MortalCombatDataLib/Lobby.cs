@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,6 +53,37 @@ namespace Mortal_Combat_Data_Library
         public void AddPlayer(Player player)
         {
             _players.Add(player);
+        }
+
+        /* 
+         * Method: RemovePlayer
+         * Description: Remove a player from current lobby
+         * Parameters: playerName (string)
+         * Result: none
+         */
+        public void RemovePlayer(string playerName)
+        {
+            //Create a temp as placeholder for player
+            Player temp = null;
+            foreach (Player player in _players)
+            {
+                //If there is a matching player currently in lobby
+                if(player.Username == playerName) 
+                {            
+                    temp = player; 
+                    break; 
+                }
+            }
+
+            if (temp == null)
+            {
+                //Going to throw an actual custom exception
+                Console.WriteLine("MissingPlayerError:: Player not found in lobby");
+            }
+            else
+            {
+                _players.Remove(temp);
+            }
         }
 
         /* 
