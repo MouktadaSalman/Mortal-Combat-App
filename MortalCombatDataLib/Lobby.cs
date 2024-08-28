@@ -19,12 +19,10 @@ namespace Mortal_Combat_Data_Library
     public class Lobby
     {
         /* Class fields:
-         * lobbyID -> the id of the lobby
          * lobbyName -> the name of the lobby
          * _players -> list of players in the current lobby
          * _messages -> the messages of the current lobby
          */
-        private string lobbyID { get; set; }
         private string lobbyName { get; set; }
 
         private List<Player> _players;
@@ -38,9 +36,8 @@ namespace Mortal_Combat_Data_Library
          *              players + messages (for history)
          * Parameters: lobbyID (string), lobbyName (string)
          */
-        public Lobby(string lobbyID, string lobbyName)
+        public Lobby(string lobbyName)
         {
-            this.lobbyID = lobbyID;
             this.lobbyName = lobbyName;
             _players = new List<Player>();
             _messages = new List<Message>();
