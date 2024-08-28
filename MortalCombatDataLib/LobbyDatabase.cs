@@ -20,7 +20,7 @@ namespace Mortal_Combat_Data_Library
         /* Class fields:
          * lobbies -> the list of lobby rooms in the menu
          */
-        private readonly List<Lobby> lobbies;
+        private readonly List<Lobby> _lobbies;
 
         public static LobbyDatabase Instance { get; } = new LobbyDatabase();
 
@@ -32,11 +32,24 @@ namespace Mortal_Combat_Data_Library
          */
         private LobbyDatabase()
         {
-            lobbies = new List<Lobby>();
+            _lobbies = new List<Lobby>();
         }
 
         /* 
          * Method: CreateLobby
+         * Description: Create a lobby
+         * Parameter: lobbyName (string)
+         * Result: none
          */
+        public void CreateLobby(string lobbyName)
+        {
+            //Create new lobby
+            Lobby newLobby = new Lobby(lobbyName);
+
+            //Add new lobby
+            _lobbies.Add(newLobby);
+        }
+
+
     }
 }
