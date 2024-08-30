@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Mortal_Combat_Data_Library;
 
-namespace DataServer
+namespace MortalCombatBusinessServer
 {
     [ServiceContract]
-    public interface DataInterface
+    public interface BusinessInterface
     {
         [OperationContract]
         void CreateLobby(string lobbyName);
@@ -18,7 +18,7 @@ namespace DataServer
         void AddPlayerToServer(string pUserName);
 
         [OperationContract]
-        void RemovePlayerFromServer(string pUserName, Player playerToRemove);
+        void RemovePlayerFromServer(string pUserName);
 
         [OperationContract]
         void CreateMessage(Message message);
@@ -27,7 +27,7 @@ namespace DataServer
         void DistributeMessage(Message message);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+        void DeleteLobby(string lobbyName);
 
         [OperationContract]
         Player GetPlayerUsingUsername(string username);
@@ -37,5 +37,3 @@ namespace DataServer
 
     }
 }
-
-
