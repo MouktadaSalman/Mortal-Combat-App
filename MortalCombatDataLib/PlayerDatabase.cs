@@ -41,16 +41,9 @@ namespace Mortal_Combat_Data_Library
          * Parameter: playerUserName (string)
          * Result: none
          */
-        public void AddNewPlayer(string playerUserName)
+        public void AddNewPlayerToServer(string playerUserName)
         {
-            foreach (Player p in _players)
-            {
-                if (p.Username.Equals(playerUserName))
-                {
-                    Console.WriteLine("Username already taken, try a different userName");
-                    return;
-                }
-            }
+            
             //Create new lobby
             Player newPlayer = new Player(playerUserName);
 
@@ -63,17 +56,9 @@ namespace Mortal_Combat_Data_Library
          * Parameter: playerUserName (string)
          * Result: none
          */
-        public void RemovePlayer(string playerUsername)
-        {
-            foreach (Player  p in _players)
-            {
-                if (p.Username.Equals(playerUsername))
-                {
-                    _players.Remove(p);
-                    return;
-                }
-            }
-            Console.WriteLine($" Player with username ( {playerUsername} ) does not exist!!");
+        public void RemovePlayerFromServer(Player playerToRemove)
+        {            
+            _players.Remove(playerToRemove);                
         }
 
         /* Method: GetPlayer
@@ -92,6 +77,11 @@ namespace Mortal_Combat_Data_Library
             }
             Console.WriteLine($" Player with username ( {playerUsername} ) does not exist!!");
             return null;
+        }
+
+        public List<Player> GetPlayers() 
+        {
+            return _players;
         }
 
         public string GetPlayerUserByIndex(int index)

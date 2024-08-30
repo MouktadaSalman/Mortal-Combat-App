@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MortalCombatDataLib", "Mort
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MortalCombatDataServer", "MortalCombatDataServer\MortalCombatDataServer.csproj", "{A3854E1E-902D-474C-900E-6F972B5C53E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MortalCombatClient", "MortalCombatClient\MortalCombatClient.csproj", "{57C4658A-1E82-4025-9658-20EFC19BD2D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MortalCombatBusinessServer", "MortalCombatBusinessServer\MortalCombatBusinessServer.csproj", "{E7C19C98-5396-4D89-A6B4-78A316D6761B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A3854E1E-902D-474C-900E-6F972B5C53E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3854E1E-902D-474C-900E-6F972B5C53E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3854E1E-902D-474C-900E-6F972B5C53E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57C4658A-1E82-4025-9658-20EFC19BD2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57C4658A-1E82-4025-9658-20EFC19BD2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57C4658A-1E82-4025-9658-20EFC19BD2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57C4658A-1E82-4025-9658-20EFC19BD2D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7C19C98-5396-4D89-A6B4-78A316D6761B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7C19C98-5396-4D89-A6B4-78A316D6761B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7C19C98-5396-4D89-A6B4-78A316D6761B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7C19C98-5396-4D89-A6B4-78A316D6761B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
