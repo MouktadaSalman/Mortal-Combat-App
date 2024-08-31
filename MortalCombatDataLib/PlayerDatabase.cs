@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+ * Module: PlayerDatabase
+ * Description: Responsible for handling the different
+ *              Player operations for the entire server.
+ * Authors: Ahmed, Mouktada, Jauhar
+ * ID: 20640266, , 21494299
+ * Version: 1.0.0.3
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,32 +18,85 @@ namespace Mortal_Combat_Data_Library
 {
     public class PlayerDatabase
     {
+        /* Class fields:
+         * lobbies -> the list of players in the server in the menu
+         */
         private readonly List<Player> _players;
         public static PlayerDatabase Instance { get; } = new PlayerDatabase();
 
         static PlayerDatabase() { }
 
+        /* Method: PlayerDatabase
+         * Description: Private constructor to instantiate instance
+         *              of the player database
+         * Parameters: none
+         */
         public PlayerDatabase()
         {
             _players = new List<Player>();
         }
 
-        public void AddPlayer(Player player)
+        /* Method: AddNewPlayer
+         * Description: Add a new player to the list of players
+         * Parameter: playerUserName (string)
+         * Result: none
+         */
+        public void AddNewPlayer(string playerUserName)
         {
-            _players.Add(player);
+            foreach (Player p in _players)
+            {
+                if (p.Username.Equals(playerUserName))
+                {
+                    Console.WriteLine("Username already taken, try a different userName");
+                    return;
+                }
+            }
+            //Create new lobby
+            Player newPlayer = new Player(playerUserName);
+
+            //Add new lobby
+            _players.Add(newPlayer);
         }
 
-        public void RemovePlayer(Player player)
+        /* Method: RemovePlayer
+         * Description: remove a player from the list of players in the server
+         * Parameter: playerUserName (string)
+         * Result: none
+         */
+        public void RemovePlayer(string playerUsername)
         {
-            _players.Remove(player);
+            foreach (Player  p in _players)
+            {
+                if (p.Username.Equals(playerUsername))
+                {
+                    _players.Remove(p);
+                    return;
+                }
+            }
+            Console.WriteLine($" Player with username ( {playerUsername} ) does not exist!!");
+        }
+
+        /* Method: GetPlayer
+         * Description: Return a player based on their username 
+         * Parameter: playerUserName (string)
+         * Result: Player
+         */
+        public Player GetPlayer(string playerUsername) 
+        {
+            foreach (Player p in _players)
+            {
+                if (p.Username.Equals(playerUsername))
+                {
+                    return p;
+                }
+            }
+            Console.WriteLine($" Player with username ( {playerUsername} ) does not exist!!");
+            return null;
         }
 
         public string GetPlayerUserByIndex(int index)
         {
             return _players[index].Username;
         }
-
-        //this is to test the branch
-
     }
 }
