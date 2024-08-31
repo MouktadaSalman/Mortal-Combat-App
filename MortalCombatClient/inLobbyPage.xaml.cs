@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MortalCombatBusinessServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -13,19 +14,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MortalCombatBusinessServer;
-
 
 namespace MortalCombatClient
 {
     /// <summary>
-    /// Interaction logic for lobbyPage.xaml
+    /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class lobbyPage : Page { 
+    public partial class inLobbyPage : Page
+    {
 
         private BusinessInterface foob;
-    
-        public lobbyPage()
+        public inLobbyPage(string lobbyName)
         {
             InitializeComponent();
 
@@ -33,42 +32,28 @@ namespace MortalCombatClient
             NetTcpBinding tcp = new NetTcpBinding();
 
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new ChannelFactory<BusinessInterface>();
+            channelFactory  = new ChannelFactory<BusinessInterface>();
             foob = channelFactory.CreateChannel();
 
+            lobbyNameTextBox.Text = lobbyName;
         }
 
 
-        
-        private void JoinLobbyButton_Click(Object sender, RoutedEventArgs e)
+        private void sendButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
 
-
-        private void CreateLobbyButton_Click(Object sender, RoutedEventArgs e)
+        // Still unsure on how to handle file sharing...
+        private void selectFilesButton_Click(Object sender, RoutedEventArgs e)
         {
-            foob.CreateLobby(NewLobbyName.Text);
 
-            string lobbyName = NewLobbyName.Text;
+        }
 
+        private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
+        {
             
-
-            inLobbyPage nextPage = new inLobbyPage(lobbyName);
-
-            
-
-            NavigationService.Navigate(nextPage);
         }
-
-
-        private void LogOutButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            // Goes back to the loginPage
-            NavigationService.GoBack();
-        }
-       
     }
 }

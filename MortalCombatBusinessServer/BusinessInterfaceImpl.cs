@@ -113,7 +113,7 @@ namespace MortalCombatBusinessServer
             }
             else
             {
-                Console.WriteLine("Recipient not found  ");
+                Console.WriteLine($"Recipient {mRecipent} not found  ");
             }
         }
     
@@ -150,7 +150,7 @@ namespace MortalCombatBusinessServer
             else
             {
 
-                Console.WriteLine("Lobby not found");
+                Console.WriteLine($"Lobby {lobbyName} not found");
             }
         }
 

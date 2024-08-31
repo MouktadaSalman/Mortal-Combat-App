@@ -70,7 +70,7 @@ namespace Mortal_Combat_Data_Library
          * Normal overall Message getter:
          * To return a string with the entire details of the message.
          * 
-         * Will we need to use something like this later on for debugging or logging or if a player wants to view a message.
+         * Will we need to use something like this later on for debugging or logging or if a player wants to view a message?
          * 
          * Note: MessageType shouldn't be displayed that is for us to know the type of the message + we might remove that field.
          */
