@@ -25,7 +25,9 @@ namespace Mortal_Combat_Data_Library
          */
         public string LobbyName { get; set; }
 
-        private List<Player> _players;
+
+        //Changed from private to public so it could be used in BusinessImp line 141
+        public List<Player> _players;
 
         private List<Message> _messages;
 

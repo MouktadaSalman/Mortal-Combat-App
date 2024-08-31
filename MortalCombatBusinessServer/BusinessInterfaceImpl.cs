@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,20 +84,31 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        public void CreateMessage(string msender, string mrecipent, object mcontent, int mmessageType, DateTime mdateTime)
+
+        /*
+         * Method for sending a private message between 2 players (sender, recipent).
+         * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
+         * 
+         */
+        public void CreateMessage(string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
         {
            
            
-           if (allPlayerCallback.ContainsKey(mrecipent))
+            // Searching through all the callbacks if it contains a recipent
+           if (allPlayerCallback.ContainsKey(mRecipent))
             {
-                var callback = allPlayerCallback[mrecipent];
+                
+                var callback = allPlayerCallback[mRecipent];
+
+                //Making the message with assigning the sender, content, timeOfmessage
                 Message message = new Message();
 
 
-                message.sender = msender;
-                message.content = mcontent;
-                message.timeOfMessage = mdateTime;
+                message.sender = mSender;
+                message.content = mContent;
+                message.timeOfMessage = mDateTime;
                 
+                // insert the message with the previous details into the recieving end.
                 callback.ReceivePrivateMessage(message);
             }
             else
@@ -109,12 +121,41 @@ namespace MortalCombatBusinessServer
 
         
 
-        public void DistributeMessage(Message message)
+        public void DistributeMessage(string lobbyName, string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
         {
 
+            //Making the message with assigning the sender, content, timeOfmessage
+            Message message = new Message();
 
-            throw new NotImplementedException();
+
+            message.sender = mSender;
+            message.content = mContent;
+            message.timeOfMessage = mDateTime;
+
+
+            //searching through allLobbies if that lobby exists.
+            if (allLobbies.ContainsKey(lobbyName))
+            {
+                // For-loop to show the message to every player that is in the lobby.
+                var lobby = allLobbies[lobbyName];
+                foreach (var player in lobby._players) 
+                {
+                    if (allPlayerCallback.ContainsKey(player.Username))
+                    {
+                        var callback = allPlayerCallback[player.Username];
+                        callback.ReceiveLobbyMessage(message); 
+                    }
+                }
+            }
+            else
+            {
+
+                Console.WriteLine("Lobby not found");
+            }
         }
+
+
+    
 
         
         public void RemovePlayerFromServer(string pUserName)
