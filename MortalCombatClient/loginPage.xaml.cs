@@ -20,13 +20,25 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class loginPage : Page
     {
+        private BusinessInterface foob;
 
-        public MainWindow()
+        public loginPage()
         {
             InitializeComponent();
-            MainFrame.NavigationService.Navigate(new loginPage());
+
+            ChannelFactory<BusinessInterface> channelFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+
+            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
+            channelFactory = new ChannelFactory<BusinessInterface>();
+            foob = channelFactory.CreateChannel();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            foob.AddPlayerToServer(UsernameBox.Text.ToString());
         }
     }
 }

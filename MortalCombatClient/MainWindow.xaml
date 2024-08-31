@@ -7,9 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Login" HorizontalAlignment="Left" Margin="296,271,0,0" VerticalAlignment="Top" Height="31" Width="151" Click="Button_Click"/>
-        <TextBox Name="UsernameBox" HorizontalAlignment="Left" Margin="165,168,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="459" Height="49"/>
-        <TextBlock HorizontalAlignment="Left" Margin="223,136,0,0" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Top" Height="27" Width="343"/>
-
+        <Frame Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

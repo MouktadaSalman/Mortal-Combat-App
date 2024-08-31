@@ -73,7 +73,7 @@ namespace Mortal_Combat_Data_Library
 
             foreach (Lobby lob in _lobbies)
             {
-                if(lob.lobbyName == lobbyName)
+                if(lob.LobbyName == lobbyName)
                 {
                     correctLobby = lob;
                     break;
@@ -102,7 +102,7 @@ namespace Mortal_Combat_Data_Library
 
             foreach(Lobby lob in _lobbies)
             {
-                if(lob.lobbyName == lobbyName)
+                if(lob.LobbyName == lobbyName)
                 {
                     correctLobby= lob;
                     break;
