@@ -3,6 +3,7 @@ using Mortal_Combat_Data_Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,12 @@ namespace MortalCombatBusinessServer
 {
     internal class BusinessInterfaceImpl : BusinessInterface
     {
+
+        private Dictionary<string, Lobby> allLobbies = new Dictionary<string, Lobby>();
+        private Dictionary<string, List<Message>> messageQueue = new Dictionary<string, List<Message>>();
+        private Dictionary<string, PlayerCallback> allPlayerCallback = new Dictionary<string, PlayerCallback>();
+    
+        
         private DataInterface data;
         private BusinessInterfaceImpl() 
         {
@@ -58,11 +65,6 @@ namespace MortalCombatBusinessServer
 
         }
 
-        public void CreateMessage(Message message)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DeleteLobby(string lobbyName)
         {
             Lobby lobby = this.GetLobbyUsingName(lobbyName);
@@ -81,8 +83,36 @@ namespace MortalCombatBusinessServer
             }
         }
 
+        public void CreateMessage(string msender, string mrecipent, object mcontent, int mmessageType, DateTime mdateTime)
+        {
+           
+           
+           if (allPlayerCallback.ContainsKey(mrecipent))
+            {
+                var callback = allPlayerCallback[mrecipent];
+                Message message = new Message();
+
+
+                message.sender = msender;
+                message.content = mcontent;
+                message.timeOfMessage = mdateTime;
+                
+                callback.ReceivePrivateMessage(message);
+            }
+            else
+            {
+                Console.WriteLine("Recipient not found  ");
+            }
+        }
+    
+        
+
+        
+
         public void DistributeMessage(Message message)
         {
+
+
             throw new NotImplementedException();
         }
 
@@ -114,6 +144,11 @@ namespace MortalCombatBusinessServer
         public Lobby GetLobbyUsingName(string lobbyName)
         {
             return data.GetLobbyUsingName(lobbyName);
+        }
+
+        public List<Lobby> GetAllLobbies()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -20,13 +20,13 @@ namespace Mortal_Combat_Data_Library
          * 
          * 
          */
-        private string sender { get; set; }
-        private string recipent { get; set; }
+        public string sender { get; set; }
+        public string recipent { get; set; }
 
         //object for now as var did not work
-        private object content { get; set; }
+        public object content { get; set; }
         private int messageType { get; set; }
-        private DateTime timeOfMessage { get; set; }
+        public DateTime timeOfMessage { get; set; }
 
 
         /*

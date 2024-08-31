@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,19 +13,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ServiceModel;
 using MortalCombatBusinessServer;
+
 
 namespace MortalCombatClient
 {
     /// <summary>
-    /// Interaction logic for loginPage.xaml
+    /// Interaction logic for lobbyPage.xaml
     /// </summary>
-    public partial class loginPage : Page
-    {
-        private BusinessInterface foob;
+    public partial class lobbyPage : Page { 
 
-        public loginPage()
+        private BusinessInterface foob;
+    
+        public lobbyPage()
         {
             InitializeComponent();
 
@@ -34,12 +35,23 @@ namespace MortalCombatClient
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new ChannelFactory<BusinessInterface>();
             foob = channelFactory.CreateChannel();
+
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        
+        private void JoinLobbyButton_Click(Object sender, RoutedEventArgs e)
         {
-            foob.AddPlayerToServer(UsernameBox.Text.ToString());
-            NavigationService.Navigate(new lobbyPage());
+
         }
+
+
+
+        private void CreateLobbyButton_Click(Object sender, RoutedEventArgs e)
+        {
+            foob.CreateLobby(NewLobbyName.Text);
+        }
+
+       
     }
 }

@@ -8,7 +8,7 @@ using Mortal_Combat_Data_Library;
 
 namespace MortalCombatBusinessServer
 {
-    [ServiceContract]
+    [ServiceContract(CallbackContract =typeof(PlayerCallback))]
     public interface BusinessInterface
     {
         [OperationContract]
@@ -21,7 +21,7 @@ namespace MortalCombatBusinessServer
         void RemovePlayerFromServer(string pUserName);
 
         [OperationContract]
-        void CreateMessage(Message message);
+        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
         void DistributeMessage(Message message);
@@ -35,5 +35,20 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         Lobby GetLobbyUsingName(string lobbyName);
 
+        [OperationContract]
+
+        List<Lobby> GetAllLobbies();
+
     }
+
+
+    public interface PlayerCallback
+    {
+        [OperationContract(IsOneWay = true)]
+        void ReceivePrivateMessage(Message message);
+
+        [OperationContract(IsOneWay = true)]
+        void ReceiveLobbyMessage(Message message);
+    }
+
 }
