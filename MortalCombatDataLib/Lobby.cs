@@ -23,7 +23,7 @@ namespace Mortal_Combat_Data_Library
          * _players -> list of players in the current lobby
          * _messages -> the messages of the current lobby
          */
-        public string lobbyName { get; set; }
+        public string LobbyName { get; set; }
 
         private List<Player> _players;
 
@@ -38,7 +38,7 @@ namespace Mortal_Combat_Data_Library
          */
         public Lobby(string lobbyName)
         {
-            this.lobbyName = lobbyName;
+            this.LobbyName = lobbyName;
             _players = new List<Player>();
             _messages = new List<Message>();
         }

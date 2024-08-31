@@ -12,36 +12,70 @@ namespace MortalCombatDataServer
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
 
     // Add the implementation of the DataInterface
-    internal class interfaceImplementation : DataInterface
+    internal class DataInterfaceImpl : DataInterface
     {
-        public void AddPlayerToLobby(string pUserName)
+
+        private readonly PlayerDatabase _playerDatabase = PlayerDatabase.Instance;
+        private readonly LobbyDatabase _lobbyDatabase = LobbyDatabase.Instance;
+        // to add a player to the selected existing lobby
+        void DataInterface.AddPlayerToServer(string pUserName) 
+        {
+            _playerDatabase.AddNewPlayerToServer(pUserName);
+        }
+
+        void DataInterface.CreateLobby(string lobbyName)
+        {
+            _lobbyDatabase.CreateLobby(lobbyName);
+        }
+
+        void DataInterface.CreateMessage(Message message)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateLobby(string lobbyName)
+        void DataInterface.DeleteLobby(string lobbyName, Lobby lobbyToDelete)
+        {
+            _lobbyDatabase.RemoveLobby(lobbyToDelete);
+        }
+
+        void DataInterface.DistributeMessage(Message message)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateMessage(Message message)
+        void DataInterface.RemovePlayerFromServer(string pUserName, Player playerToRemove)
         {
-            throw new NotImplementedException();
+            _playerDatabase.RemovePlayerFromServer(playerToRemove);
         }
 
-        public void DeleteLobby(int playerCount)
+        Player DataInterface.GetPlayerUsingUsername(string username)
         {
-            throw new NotImplementedException();
-        }
+            List<Player> players = _playerDatabase.GetPlayers();
 
-        public void DistributeMessage(Message message)
-        {
-            throw new NotImplementedException();
+            // loop throught all players in database and return the player that matches the imported username
+            foreach (Player p in players)
+            {
+                if (p.Username == username)
+                {
+                    return p;
+                }
+            }
+            return null; // player with imported username doesn't exist
         }
-
-        public void RemovePlayerFromLobby(string pUserName)
+        
+        Lobby DataInterface.GetLobbyUsingName(string lobbyName)
         {
-            throw new NotImplementedException();
+            List<Lobby> lobbies = _lobbyDatabase.GetLobbies();
+
+            // find the lobby that matches the imported lobby name and return it
+            foreach (Lobby l in lobbies)
+            {
+                if (l.LobbyName == lobbyName)
+                {
+                    return l;
+                }
+            }
+            return null; // no lobby exists with the imported lobby name
         }
     }
 }
