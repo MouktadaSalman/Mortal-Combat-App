@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Mortal_Combat_Data_Library
 {
+
+    [DataContract]
     public class Player
     {
         /* Class fields:
@@ -13,8 +16,14 @@ namespace Mortal_Combat_Data_Library
          * isInLobby -> To check if a player is already inside a lobby
          * DateTime -> to save the time and date of when the player joins the lobby
          */
+
+        [DataMember]
         public string Username { get; set; }
+
+        [DataMember]
         public bool isInLobby{ get; set; } // do we actually need this? we can just have the list of player in each lobby through the lobby class
+
+        [DataMember]        
         public DateTime timeJoinedToLobby { get; }
 
         /* 
