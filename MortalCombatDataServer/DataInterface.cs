@@ -21,10 +21,10 @@ namespace DataServer
         void RemovePlayerFromServer(string pUserName, Player playerToRemove);
 
         [OperationContract]
-        void CreateMessage(Message message);
+        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime;
 
         [OperationContract]
-        void DistributeMessage(Message message);
+        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
         void DeleteLobby(string lobbyName, Lobby lobbyToDelete);

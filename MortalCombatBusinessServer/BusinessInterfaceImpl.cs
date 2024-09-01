@@ -3,6 +3,8 @@ using Mortal_Combat_Data_Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Contexts;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,12 @@ namespace MortalCombatBusinessServer
 {
     internal class BusinessInterfaceImpl : BusinessInterface
     {
+
+        private Dictionary<string, Lobby> allLobbies = new Dictionary<string, Lobby>();
+        private Dictionary<string, List<Message>> messageQueue = new Dictionary<string, List<Message>>();
+        private Dictionary<string, PlayerCallback> allPlayerCallback = new Dictionary<string, PlayerCallback>();
+    
+        
         private DataInterface data;
         private BusinessInterfaceImpl() 
         {
@@ -58,11 +66,6 @@ namespace MortalCombatBusinessServer
 
         }
 
-        public void CreateMessage(Message message)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DeleteLobby(string lobbyName)
         {
             Lobby lobby = this.GetLobbyUsingName(lobbyName);
@@ -81,10 +84,78 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        public void DistributeMessage(Message message)
+
+        /*
+         * Method for sending a private message between 2 players (sender, recipent).
+         * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
+         * 
+         */
+        public void CreateMessage(string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
         {
-            throw new NotImplementedException();
+           
+           
+            // Searching through all the callbacks if it contains a recipent
+           if (allPlayerCallback.ContainsKey(mRecipent))
+            {
+                
+                var callback = allPlayerCallback[mRecipent];
+
+                //Making the message with assigning the sender, content, timeOfmessage
+                Message message = new Message();
+
+
+                message.sender = mSender;
+                message.content = mContent;
+                message.timeOfMessage = mDateTime;
+                
+                // insert the message with the previous details into the recieving end.
+                callback.ReceivePrivateMessage(message);
+            }
+            else
+            {
+                Console.WriteLine($"Recipient {mRecipent} not found  ");
+            }
         }
+    
+        
+
+        
+
+        public void DistributeMessage(string lobbyName, string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
+        {
+
+            //Making the message with assigning the sender, content, timeOfmessage
+            Message message = new Message();
+
+
+            message.sender = mSender;
+            message.content = mContent;
+            message.timeOfMessage = mDateTime;
+
+
+            //searching through allLobbies if that lobby exists.
+            if (allLobbies.ContainsKey(lobbyName))
+            {
+                // For-loop to show the message to every player that is in the lobby.
+                var lobby = allLobbies[lobbyName];
+                foreach (var player in lobby._players) 
+                {
+                    if (allPlayerCallback.ContainsKey(player.Username))
+                    {
+                        var callback = allPlayerCallback[player.Username];
+                        callback.ReceiveLobbyMessage(message); 
+                    }
+                }
+            }
+            else
+            {
+
+                Console.WriteLine($"Lobby {lobbyName} not found");
+            }
+        }
+
+
+    
 
         
         public void RemovePlayerFromServer(string pUserName)
@@ -114,6 +185,11 @@ namespace MortalCombatBusinessServer
         public Lobby GetLobbyUsingName(string lobbyName)
         {
             return data.GetLobbyUsingName(lobbyName);
+        }
+
+        public List<Lobby> GetAllLobbies()
+        {
+            throw new NotImplementedException();
         }
     }
 }

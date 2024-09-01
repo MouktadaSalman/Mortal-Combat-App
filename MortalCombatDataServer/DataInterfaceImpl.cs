@@ -28,9 +28,10 @@ namespace MortalCombatDataServer
             _lobbyDatabase.CreateLobby(lobbyName);
         }
 
-        void DataInterface.CreateMessage(Message message)
+        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            Message message = new Message(sender, recipent, content, messageType, dateTime);    
+            
         }
 
         void DataInterface.DeleteLobby(string lobbyName, Lobby lobbyToDelete)
@@ -38,7 +39,7 @@ namespace MortalCombatDataServer
             _lobbyDatabase.RemoveLobby(lobbyToDelete);
         }
 
-        void DataInterface.DistributeMessage(Message message)
+        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime)
         {
             throw new NotImplementedException();
         }

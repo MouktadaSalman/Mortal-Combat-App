@@ -3,7 +3,7 @@
  * Description: Responsible for individual lobby 
  *              functionalities.
  * Author: Ahmed, Moukhtada, Jauhar
- * ID: 20640266, , 21494299
+ * ID: 21467369, 20640266, , 21494299
  * Version: 1.0.0.2
  */
 
@@ -25,7 +25,9 @@ namespace Mortal_Combat_Data_Library
          */
         public string LobbyName { get; set; }
 
-        private List<Player> _players;
+
+        //Changed from private to public so it could be used in BusinessImp line 141
+        public List<Player> _players;
 
         private List<Message> _messages;
 

@@ -3,7 +3,7 @@
  * Description: Responsible for handling the different
  *              lobby operations
  * Authors: Ahmed, Mouktada, Jauhar
- * ID: 20640266, , 21494299
+ * ID: 21467369, 20640266, , 21494299
  * Version: 1.0.0.3
  */
 
@@ -73,7 +73,7 @@ namespace Mortal_Combat_Data_Library
 
             foreach (Lobby lob in _lobbies)
             {
-                if(lob.lobbyName == lobbyName)
+                if(lob.LobbyName == lobbyName)
                 {
                     correctLobby = lob;
                     break;
@@ -102,7 +102,7 @@ namespace Mortal_Combat_Data_Library
 
             foreach(Lobby lob in _lobbies)
             {
-                if(lob.lobbyName == lobbyName)
+                if(lob.LobbyName == lobbyName)
                 {
                     correctLobby= lob;
                     break;
