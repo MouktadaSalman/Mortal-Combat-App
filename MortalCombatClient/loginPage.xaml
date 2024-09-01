@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MortalCombatClient"
         mc:Ignorable="d"
-        Title="loginPage" >
+        Title="loginPage"  Height="450" Width="800">
     <Grid>
-        <Button Content="Login" HorizontalAlignment="Left" Margin="157,145,0,0" VerticalAlignment="Top" Height="31" Width="151" Click="Button_Click"/>
-        <TextBox Name="UsernameBox" HorizontalAlignment="Left" Margin="25,0,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Center" Width="459" Height="50"/>
-        <TextBlock HorizontalAlignment="Center" Margin="0,36,0,0" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Top" Height="27" Width="344"/>
+        <Button Content="Login" HorizontalAlignment="Center" Margin="0,255,0,0" VerticalAlignment="Top" Height="31" Width="152" Click="Button_Click"/>
+        <TextBox Name="UsernameBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Username" VerticalAlignment="Center" Width="460" Height="50"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,168,0,0" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Top" Height="27" Width="344"/>
 
     </Grid>
 </Page>

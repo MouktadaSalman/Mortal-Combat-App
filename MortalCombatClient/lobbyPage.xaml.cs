@@ -29,12 +29,7 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-            ChannelFactory<BusinessInterface> channelFactory;
-            NetTcpBinding tcp = new NetTcpBinding();
-
-            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new ChannelFactory<BusinessInterface>();
-            foob = channelFactory.CreateChannel();
+            
 
         }
 
@@ -49,7 +44,7 @@ namespace MortalCombatClient
 
         private void CreateLobbyButton_Click(Object sender, RoutedEventArgs e)
         {
-            foob.CreateLobby(NewLobbyName.Text);
+            //foob.CreateLobby(NewLobbyName.Text);
 
             string lobbyName = NewLobbyName.Text;
 
