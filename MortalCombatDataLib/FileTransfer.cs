@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace MortalCombatDataLib
 {
@@ -25,8 +26,8 @@ namespace MortalCombatDataLib
         }
 
         /* Method: FileToBytes
-         * Description: Compress file/image data into bytes
-         * Parameters: filePatch (string)
+         * Description: Compress image data into bytes
+         * Parameters: filePath (string)
          * result: fileData (bytes[])
          */
         private byte[] FileToBytes(string filePath)
@@ -40,6 +41,27 @@ namespace MortalCombatDataLib
             }
 
             return fileData;
+        }
+
+        /* Method: ImageToBytes
+         * Description: Compress image data into bytes
+         * Parameters: imagePath (string)
+         * result: imageData (bytes[])
+         */
+        private byte[] ImageToBytes(string imagePath)
+        {
+            byte[] imageData = null;
+
+            Image image = Image.FromFile(imagePath);
+
+            if (image != null)
+            {
+                ImageConverter _iConvert = new ImageConverter();
+
+                var imageByte = (byte[])_iConvert.ConvertTo(image, typeof(byte[]));
+            }
+
+            return imageData;
         }
     }
 }
