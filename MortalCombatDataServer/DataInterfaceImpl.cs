@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MortalCombatDataServer
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
 
     // Add the implementation of the DataInterface
     internal class DataInterfaceImpl : DataInterface
@@ -26,6 +26,11 @@ namespace MortalCombatDataServer
         void DataInterface.CreateLobby(string lobbyName)
         {
             _lobbyDatabase.CreateLobby(lobbyName);
+        }
+
+        void DataInterface.AddPlayerToLobby(Lobby lobbyName, Player inPlayer)
+        {       
+            _lobbyDatabase.AddPlayer(inPlayer, lobbyName);
         }
 
         void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime)
@@ -47,6 +52,11 @@ namespace MortalCombatDataServer
         void DataInterface.RemovePlayerFromServer(string pUserName, Player playerToRemove)
         {
             _playerDatabase.RemovePlayerFromServer(playerToRemove);
+        }
+
+        List<Lobby> DataInterface.GetAllLobbies()
+        {
+            return _lobbyDatabase.GetLobbies();
         }
 
         Player DataInterface.GetPlayerUsingUsername(string username)

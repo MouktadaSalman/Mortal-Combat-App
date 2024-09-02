@@ -24,17 +24,23 @@ namespace MortalCombatClient
     {
         private BusinessInterface foob;
 
-        public loginPage()
+        public loginPage(BusinessInterface inFoob)
         {
             InitializeComponent();
-
-            
+            this.foob = inFoob;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-        //foob.AddPlayerToServer(UsernameBox.Text.ToString());
-            NavigationService.Navigate(new lobbyPage());
+            string username = UsernameBox.Text.ToString();
+
+            
+            foob.AddPlayerToServer(username);
+
+            NavigationService.Navigate(new lobbyPage(foob, username));
+
+            
         }
+
     }
 }

@@ -67,28 +67,9 @@ namespace Mortal_Combat_Data_Library
          * Parameters: player (Player), lobbyName (string)
          * Result: none
          */
-        public void AddPlayer(Player player, string lobbyName)
-        {
-            Lobby correctLobby = null;
-
-            foreach (Lobby lob in _lobbies)
-            {
-                if(lob.LobbyName == lobbyName)
-                {
-                    correctLobby = lob;
-                    break;
-                }
-            }
-
-            //Check if lobby exists in database
-            if (correctLobby == null)
-            {
-                Console.WriteLine("MissingLobbyError:: No matching lobby found");
-            }
-            else
-            {
-                correctLobby.AddPlayer(player);
-            }
+        public void AddPlayer(Player player, Lobby lobby)
+        {            
+            lobby.AddPlayer(player);            
         }
 
         /* Method: RemovePlayer

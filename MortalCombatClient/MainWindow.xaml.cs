@@ -35,7 +35,7 @@ namespace MortalCombatClient
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new ChannelFactory<BusinessInterface>(tcp, URL);
             foob = channelFactory.CreateChannel();
-            MainFrame.NavigationService.Navigate(new loginPage());
+            MainFrame.NavigationService.Navigate(new loginPage(foob));
         }
     }
 }

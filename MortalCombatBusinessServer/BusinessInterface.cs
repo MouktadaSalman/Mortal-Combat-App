@@ -16,6 +16,12 @@ namespace MortalCombatBusinessServer
         void CreateLobby(string lobbyName);
 
         [OperationContract]
+        void DeleteLobby(string lobbyName);
+
+        [OperationContract]
+        void AddPlayerToLobby(string lobbyName, string userName);
+
+        [OperationContract]
         void AddPlayerToServer(string pUserName);
 
         [OperationContract]
@@ -27,8 +33,6 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
-        [OperationContract]
-        void DeleteLobby(string lobbyName);
 
         [OperationContract]
         Player GetPlayerUsingUsername(string username);
@@ -37,7 +41,6 @@ namespace MortalCombatBusinessServer
         Lobby GetLobbyUsingName(string lobbyName);
 
         [OperationContract]
-
         List<Lobby> GetAllLobbies();
 
     }

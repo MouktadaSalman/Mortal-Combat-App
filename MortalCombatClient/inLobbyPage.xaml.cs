@@ -40,7 +40,7 @@ namespace MortalCombatClient
 
 
         // Still unsure on how to handle file sharing...
-        private void selectFilesButton_Click(Object sender, RoutedEventArgs e)
+        private void selectFilesButton_Click(object sender, RoutedEventArgs e)
         {
 
         }

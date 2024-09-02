@@ -15,6 +15,12 @@ namespace DataServer
         void CreateLobby(string lobbyName);
 
         [OperationContract]
+        void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+
+        [OperationContract]
+        void AddPlayerToLobby(Lobby lobbyName, Player inPlayer);
+
+        [OperationContract]
         void AddPlayerToServer(string pUserName);
 
         [OperationContract]
@@ -27,14 +33,13 @@ namespace DataServer
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
-
-        [OperationContract]
         Player GetPlayerUsingUsername(string username);
 
         [OperationContract]
         Lobby GetLobbyUsingName(string lobbyName);
 
+        [OperationContract]
+        List<Lobby> GetAllLobbies();
     }
 }
 

@@ -43,7 +43,6 @@ namespace Mortal_Combat_Data_Library
          */
         public void AddNewPlayerToServer(string playerUserName)
         {
-            
             //Create new lobby
             Player newPlayer = new Player(playerUserName);
 

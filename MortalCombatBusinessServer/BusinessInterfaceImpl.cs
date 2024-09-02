@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace MortalCombatBusinessServer
 {
 
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     internal class BusinessInterfaceImpl : BusinessInterface
     {
 
@@ -20,7 +20,6 @@ namespace MortalCombatBusinessServer
         private Dictionary<string, List<Message>> messageQueue = new Dictionary<string, List<Message>>();
         private Dictionary<string, PlayerCallback> allPlayerCallback = new Dictionary<string, PlayerCallback>();
     
-        
         private DataInterface data;
         private BusinessInterfaceImpl() 
         {
@@ -48,11 +47,13 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine("Username has already been taken. " +
                     "Try a different username");
             }
+
         }
 
         public void CreateLobby(string lobbyName)
         {
             Lobby lobby = this.GetLobbyUsingName(lobbyName);
+            
 
             // create lobby with imported name only if the name doesn't already exist
             if(lobby == null)
@@ -66,6 +67,21 @@ namespace MortalCombatBusinessServer
                     "Try a different lobby name");
             }
 
+        }
+
+        public void AddPlayerToLobby(string lobbyName, string username)
+        {
+
+            if (lobbyName != null && username != null)
+            {
+                Lobby lobby = this.GetLobbyUsingName(lobbyName);
+                Player player = this.GetPlayerUsingUsername(username);
+                Console.WriteLine($"This is joining the lobby {lobbyName}");
+                Console.WriteLine($"This is the player joinging the lobby {username}");
+
+                data.AddPlayerToLobby(lobby, player);
+                Console.WriteLine($"Player {username} has joined {lobbyName}");
+            }
         }
 
         public void DeleteLobby(string lobbyName)
@@ -119,10 +135,6 @@ namespace MortalCombatBusinessServer
             }
         }
     
-        
-
-        
-
         public void DistributeMessage(string lobbyName, string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
         {
 
@@ -156,10 +168,6 @@ namespace MortalCombatBusinessServer
             }
         }
 
-
-    
-
-        
         public void RemovePlayerFromServer(string pUserName)
         {
             Player player = this.GetPlayerUsingUsername(pUserName);
@@ -191,7 +199,7 @@ namespace MortalCombatBusinessServer
 
         public List<Lobby> GetAllLobbies()
         {
-            throw new NotImplementedException();
+            return data.GetAllLobbies();
         }
     }
 }
