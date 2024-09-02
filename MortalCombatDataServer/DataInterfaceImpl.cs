@@ -28,9 +28,11 @@ namespace MortalCombatDataServer
             _lobbyDatabase.CreateLobby(lobbyName);
         }
 
-        void DataInterface.AddPlayerToLobby(Lobby lobbyName, Player inPlayer)
-        {       
-            _lobbyDatabase.AddPlayer(inPlayer, lobbyName);
+        void DataInterface.AddPlayerToLobby(string lobbyName, string username)
+        {
+            Player player = GetPlayerUsingUsername(username);
+            _lobbyDatabase.AddPlayer(player, lobbyName);
+            Console.WriteLine("Also reached the data interface, Add player method");
         }
 
         void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime)
@@ -59,14 +61,15 @@ namespace MortalCombatDataServer
             return _lobbyDatabase.GetLobbies();
         }
 
-        Player DataInterface.GetPlayerUsingUsername(string username)
+        public Player GetPlayerUsingUsername(string username)
         {
+
             List<Player> players = _playerDatabase.GetPlayers();
 
             // loop throught all players in database and return the player that matches the imported username
             foreach (Player p in players)
             {
-                if (p.Username == username)
+                if (p.Username.Equals(username))
                 {
                     return p;
                 }
@@ -76,12 +79,13 @@ namespace MortalCombatDataServer
         
         Lobby DataInterface.GetLobbyUsingName(string lobbyName)
         {
+
             List<Lobby> lobbies = _lobbyDatabase.GetLobbies();
 
             // find the lobby that matches the imported lobby name and return it
             foreach (Lobby l in lobbies)
             {
-                if (l.LobbyName == lobbyName)
+                if (l.LobbyName.Equals(lobbyName))
                 {
                     return l;
                 }

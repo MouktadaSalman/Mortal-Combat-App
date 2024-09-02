@@ -33,7 +33,6 @@ namespace MortalCombatClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text.ToString();
-
             
             foob.AddPlayerToServer(username);
 

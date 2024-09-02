@@ -18,7 +18,7 @@ namespace DataServer
         void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
 
         [OperationContract]
-        void AddPlayerToLobby(Lobby lobbyName, Player inPlayer);
+        void AddPlayerToLobby(string lobbyName, string username);
 
         [OperationContract]
         void AddPlayerToServer(string pUserName);

@@ -60,6 +60,7 @@ namespace Mortal_Combat_Data_Library
          */
         public void AddPlayer(Player player)
         {
+            
             _players.Add(player);
         }
 
@@ -76,7 +77,7 @@ namespace Mortal_Combat_Data_Library
             foreach (Player player in _players)
             {
                 //If there is a matching player currently in lobby
-                if(player.Username == playerName) 
+                if(player.Username.Equals(playerName)) 
                 {            
                     temp = player; 
                     break; 

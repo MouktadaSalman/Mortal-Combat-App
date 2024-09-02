@@ -1,6 +1,7 @@
 ﻿using DataServer;
 using Mortal_Combat_Data_Library;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
@@ -13,15 +14,15 @@ namespace MortalCombatBusinessServer
 {
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
-    internal class BusinessInterfaceImpl : BusinessInterface
+    public class BusinessInterfaceImpl : BusinessInterface
     {
 
-        private Dictionary<string, Lobby> allLobbies = new Dictionary<string, Lobby>();
-        private Dictionary<string, List<Message>> messageQueue = new Dictionary<string, List<Message>>();
-        private Dictionary<string, PlayerCallback> allPlayerCallback = new Dictionary<string, PlayerCallback>();
+        private ConcurrentDictionary<string, Lobby> allLobbies = new ConcurrentDictionary<string, Lobby>();
+        private ConcurrentDictionary<string, List<Message>> messageQueue = new ConcurrentDictionary<string, List<Message>>();
+        private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
     
         private DataInterface data;
-        private BusinessInterfaceImpl() 
+        public BusinessInterfaceImpl() 
         {
             ChannelFactory<DataInterface> dataFactory;
             NetTcpBinding tcp = new NetTcpBinding();
@@ -34,7 +35,7 @@ namespace MortalCombatBusinessServer
 
         public void AddPlayerToServer(string pUserName)
         {
-            Player player = this.GetPlayerUsingUsername(pUserName);
+            Player player = data.GetPlayerUsingUsername(pUserName);
 
             // if player with the imported username doesn't exist, then create a new player with that username.
             if (player == null)
@@ -47,12 +48,11 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine("Username has already been taken. " +
                     "Try a different username");
             }
-
         }
 
         public void CreateLobby(string lobbyName)
         {
-            Lobby lobby = this.GetLobbyUsingName(lobbyName);
+            Lobby lobby = data.GetLobbyUsingName(lobbyName);
             
 
             // create lobby with imported name only if the name doesn't already exist
@@ -71,22 +71,22 @@ namespace MortalCombatBusinessServer
 
         public void AddPlayerToLobby(string lobbyName, string username)
         {
-
-            if (lobbyName != null && username != null)
+            if (string.IsNullOrWhiteSpace(lobbyName) || string.IsNullOrWhiteSpace(username))
             {
-                Lobby lobby = this.GetLobbyUsingName(lobbyName);
-                Player player = this.GetPlayerUsingUsername(username);
-                Console.WriteLine($"This is joining the lobby {lobbyName}");
-                Console.WriteLine($"This is the player joinging the lobby {username}");
-
-                data.AddPlayerToLobby(lobby, player);
-                Console.WriteLine($"Player {username} has joined {lobbyName}");
+                throw new ArgumentException("Lobby name and username cannot be null or empty.");
             }
+
+            data.AddPlayerToLobby(lobbyName, username);
+
+            Console.WriteLine($"Joining lobby: {lobbyName}");
+            Console.WriteLine($"Player joining: {username}");
+            Console.WriteLine($"Player {username} has joined {lobbyName}");
+            
         }
 
         public void DeleteLobby(string lobbyName)
         {
-            Lobby lobby = this.GetLobbyUsingName(lobbyName);
+            Lobby lobby = data.GetLobbyUsingName(lobbyName);
 
             // if lobby with imported name exists, remove it.
             if (lobby != null)
@@ -163,14 +163,13 @@ namespace MortalCombatBusinessServer
             }
             else
             {
-
                 Console.WriteLine($"Lobby {lobbyName} not found");
             }
         }
 
         public void RemovePlayerFromServer(string pUserName)
         {
-            Player player = this.GetPlayerUsingUsername(pUserName);
+            Player player = data.GetPlayerUsingUsername(pUserName);
 
             // remove player with imported username if they exist.
             if (player != null)
@@ -184,17 +183,6 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine("Username has already been taken. " +
                     "Try a different username");
             }
-
-        }
-
-        public Player GetPlayerUsingUsername(string username)
-        {
-            return data.GetPlayerUsingUsername(username);
-        }
-
-        public Lobby GetLobbyUsingName(string lobbyName)
-        {
-            return data.GetLobbyUsingName(lobbyName);
         }
 
         public List<Lobby> GetAllLobbies()

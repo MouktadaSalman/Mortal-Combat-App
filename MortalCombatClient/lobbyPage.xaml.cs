@@ -34,11 +34,9 @@ namespace MortalCombatClient
         public lobbyPage(BusinessInterface inFoob, string username)
         {
             InitializeComponent();
-
             
-
-            this.foob = inFoob;
-            this.usernameOfCurrentPlayer = username;
+            foob = inFoob;
+            usernameOfCurrentPlayer = username;
 
 
             foreach(Lobby lobby  in foob.GetAllLobbies())
@@ -51,11 +49,11 @@ namespace MortalCombatClient
         {
             string lobbyToJoin = LobbyRoomList.SelectedItem.ToString();
             string username = usernameOfCurrentPlayer;
+
             
             foob.AddPlayerToLobby(lobbyToJoin, username);
             
-
-            nextPage = new inLobbyPage(lobbyToJoin);
+            nextPage = new inLobbyPage(foob, lobbyToJoin);
             NavigationService.Navigate(nextPage);
         }
 
@@ -65,7 +63,7 @@ namespace MortalCombatClient
 
             string lobbyName = NewLobbyName.Text;
 
-            nextPage = new inLobbyPage(lobbyName);
+            nextPage = new inLobbyPage(foob, lobbyName);
             LobbyRoomList.Items.Add(lobbyName);
 
             NavigationService.Navigate(nextPage);
@@ -73,6 +71,9 @@ namespace MortalCombatClient
 
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
+
+            //foob.RemovePlayerFromServer(username);
+            
             // Goes back to the loginPage
             NavigationService.GoBack();
         }

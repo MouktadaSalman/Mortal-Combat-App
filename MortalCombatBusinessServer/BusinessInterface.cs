@@ -33,13 +33,6 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
-
-        [OperationContract]
-        Player GetPlayerUsingUsername(string username);
-
-        [OperationContract]
-        Lobby GetLobbyUsingName(string lobbyName);
-
         [OperationContract]
         List<Lobby> GetAllLobbies();
 

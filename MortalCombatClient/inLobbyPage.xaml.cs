@@ -24,11 +24,11 @@ namespace MortalCombatClient
     {
 
         private BusinessInterface foob;
-        public inLobbyPage(string lobbyName)
+        public inLobbyPage(BusinessInterface inFoob, string lobbyName)
         {
             InitializeComponent();
 
-
+            this.foob = inFoob;
             lobbyNameTextBox.Text = lobbyName;
         }
 
@@ -47,6 +47,8 @@ namespace MortalCombatClient
 
         private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
         {
+
+           //
 
             NavigationService.GoBack();
             

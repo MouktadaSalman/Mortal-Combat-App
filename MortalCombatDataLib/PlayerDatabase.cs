@@ -67,6 +67,7 @@ namespace Mortal_Combat_Data_Library
          */
         public Player GetPlayer(string playerUsername) 
         {
+
             foreach (Player p in _players)
             {
                 if (p.Username.Equals(playerUsername))

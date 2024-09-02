@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -67,8 +68,12 @@ namespace Mortal_Combat_Data_Library
          * Parameters: player (Player), lobbyName (string)
          * Result: none
          */
-        public void AddPlayer(Player player, Lobby lobby)
-        {            
+        public void AddPlayer(Player player, string lobbyName)
+        {
+            Lobby lobby = GetLobby(lobbyName);
+
+            Console.WriteLine($"Adding player {player.Username} to lobby: " + lobbyName);
+
             lobby.AddPlayer(player);            
         }
 
@@ -83,7 +88,7 @@ namespace Mortal_Combat_Data_Library
 
             foreach(Lobby lob in _lobbies)
             {
-                if(lob.LobbyName == lobbyName)
+                if(lob.LobbyName.Equals(lobbyName))
                 {
                     correctLobby= lob;
                     break;
@@ -104,6 +109,18 @@ namespace Mortal_Combat_Data_Library
         public List<Lobby> GetLobbies()
         {
             return _lobbies;
+        }
+
+        public Lobby GetLobby(string lobbyName)
+        {
+            foreach (Lobby l in _lobbies)
+            {
+                if (l.LobbyName.Equals(lobbyName))
+                {
+                    return l;
+                }
+            }
+            return null;
         }
     }
 }
