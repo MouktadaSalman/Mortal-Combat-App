@@ -16,5 +16,13 @@ namespace MortalCombatDataLib
 {
     public class FileTransfer
     {
+        public string FilePath { get; set; }
+
+        public FileTransfer(string filePath)
+        {
+            FilePath = filePath; 
+        }
+
+
     }
 }
