@@ -28,17 +28,12 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-            ChannelFactory<BusinessInterface> channelFactory;
-            NetTcpBinding tcp = new NetTcpBinding();
-
-            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new ChannelFactory<BusinessInterface>();
-            foob = channelFactory.CreateChannel();
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            foob.AddPlayerToServer(UsernameBox.Text.ToString());
+        //foob.AddPlayerToServer(UsernameBox.Text.ToString());
             NavigationService.Navigate(new lobbyPage());
         }
     }

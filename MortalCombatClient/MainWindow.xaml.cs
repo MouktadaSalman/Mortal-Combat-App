@@ -23,9 +23,18 @@ namespace MortalCombatClient
     public partial class MainWindow : Window
     {
 
+        private BusinessInterface foob;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            ChannelFactory<BusinessInterface> channelFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+
+            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
+            channelFactory = new ChannelFactory<BusinessInterface>(tcp, URL);
+            foob = channelFactory.CreateChannel();
             MainFrame.NavigationService.Navigate(new loginPage());
         }
     }

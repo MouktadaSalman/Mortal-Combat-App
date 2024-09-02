@@ -13,9 +13,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Mortal_Combat_Data_Library
 {
+
+    [DataContract]
     public class Lobby
     {
         /* Class fields:
@@ -23,12 +26,16 @@ namespace Mortal_Combat_Data_Library
          * _players -> list of players in the current lobby
          * _messages -> the messages of the current lobby
          */
+
+        [DataMember]
         public string LobbyName { get; set; }
 
+        [DataMember]
 
         //Changed from private to public so it could be used in BusinessImp line 141
         public List<Player> _players;
 
+        [DataMember]
         private List<Message> _messages;
 
         /* 

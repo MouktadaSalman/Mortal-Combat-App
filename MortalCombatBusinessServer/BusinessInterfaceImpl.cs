@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace MortalCombatBusinessServer
 {
+
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     internal class BusinessInterfaceImpl : BusinessInterface
     {
 

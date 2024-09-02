@@ -21,7 +21,7 @@ namespace DataServer
         void RemovePlayerFromServer(string pUserName, Player playerToRemove);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime;
+        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);

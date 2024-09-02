@@ -5,20 +5,20 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MortalCombatClient"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="inLobbyPage">
+      
+      Title="inLobbyPage"   Height="450" Width="800">
 
     <Grid>
-        <ListBox Name="previousMessages" HorizontalAlignment="Center" VerticalAlignment="Top" Width="608" Height="346" Margin="0,39,0,0"/>
-       
-        
-        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="96,390,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="500" FontStyle="Italic"/>
-        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="25" Margin="601,390,0,0" VerticalAlignment="Top" Width="103" Click="sendButton_Click"/>
-        
-        
-        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="22" Margin="10,39,0,0" VerticalAlignment="Top" Width="81" Click="leaveLobbyButton_Click"/>
-        
-        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="25" Margin="601,420,0,0" VerticalAlignment="Top" Width="103" Click="selectFilesButton_Click"/>
-        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="24" Margin="96,10,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="162" IsEnabled="False"/>
+        <ListBox Name="previousMessages" HorizontalAlignment="Center" VerticalAlignment="Top" Width="542" Height="319" Margin="0,39,0,0"/>
+
+
+        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="129,363,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="453" FontStyle="Italic"/>
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="25" Margin="587,363,0,0" VerticalAlignment="Top" Width="84" Click="sendButton_Click"/>
+
+
+        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="22" Margin="43,39,0,0" VerticalAlignment="Top" Width="81" Click="leaveLobbyButton_Click"/>
+
+        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="25" Margin="587,396,0,0" VerticalAlignment="Top" Width="84" Click="selectFilesButton_Click"/>
+        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="24" Margin="129,10,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False"/>
     </Grid>
 </Page>
