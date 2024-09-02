@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,22 @@ namespace MortalCombatDataLib
             FilePath = filePath; 
         }
 
+        /* Method: FileToBytes
+         * Description: Compress file/image data into bytes
+         * Parameters: filePatch (string)
+         * result: fileData (bytes[])
+         */
+        private byte[] FileToBytes(string filePath)
+        {
+            byte[] fileData = null;
 
+            using (FileStream fs = File.OpenRead(filePath))
+            {
+                var binaryRead = new BinaryReader(fs);
+                fileData = binaryRead.ReadBytes((int)fs.Length);
+            }
+
+            return fileData;
+        }
     }
 }
