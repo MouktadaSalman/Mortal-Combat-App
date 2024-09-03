@@ -19,12 +19,14 @@ namespace MortalCombatDataLib
 {
     public class FileDatabase
     {
-    /* Class fields:
-     * _files -> contains all the uploaded file byte data
-     * Instance -> to all a single instance of the file database
-     */
+        /* Class fields:
+         * _files -> contains all the uploaded file byte data
+         * Instance -> to all a single instance of the file database
+         */
         private readonly List<byte[]> _files;
         public static FileDatabase Instance { get; } = new FileDatabase();
+
+        private readonly string[] imageFormats;
 
         /* Constructor: FileDatabase
          * Description: The private constructor of the database
@@ -87,9 +89,13 @@ namespace MortalCombatDataLib
             string fFormat = "";
             int fType = 0;
             
+            //Extract file name
             string[] path = filePath.Split('/');
-
             fName = path.Last();
+
+            //Extract file format
+            string[] format = fName.Split('.');
+            fFormat = format.Last();
 
 
 
