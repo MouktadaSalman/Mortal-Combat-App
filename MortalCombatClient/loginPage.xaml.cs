@@ -14,9 +14,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
+using Mortal_Combat_Data_Library;
+using System.ServiceModel.Configuration;
 
 namespace MortalCombatClient
 {
+    //public delegate Player CreatePlayer(string pUserName);
     /// <summary>
     /// Interaction logic for loginPage.xaml
     /// </summary>
@@ -33,12 +36,47 @@ namespace MortalCombatClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text.ToString();
-            
-            foob.AddPlayerToServer(username);
 
-            NavigationService.Navigate(new lobbyPage(foob, username));
+            //Task<Player> task = new Task<Player>(() => CreatePlayer(username));
+            //task.Start();
 
-            
+            //Player curPlayer = await task;
+
+            if (usernameIsValid(username))
+            {
+                Player player = CreatePlayer(username);
+                
+                NavigationService.Navigate(new lobbyPage(foob, player));             
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        public bool usernameIsValid(string pUserName)
+        {
+            if (UsernameBox.Text == "")
+            {
+                MessageBox.Show("Please enter a username");
+            }
+            bool isValid;
+
+            foob.CheckUsernameValidity(pUserName, out isValid);
+
+            if (!isValid)
+            {
+                MessageBox.Show("Username already Taken");
+                return false;
+            }
+            return true;
+        }
+
+        private Player CreatePlayer(string pUserName)
+        {
+            Player newPlayer = new Player(pUserName, "Main");
+            foob.AddPlayerToServer(newPlayer);
+            return newPlayer;
         }
 
     }

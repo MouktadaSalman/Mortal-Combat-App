@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Mortal_Combat_Data_Library;
 
 namespace MortalCombatClient
 {
@@ -24,12 +25,16 @@ namespace MortalCombatClient
     {
 
         private BusinessInterface foob;
-        public inLobbyPage(BusinessInterface inFoob, string lobbyName)
+        private Player curPlayer; 
+        private Lobby curLobby;
+        public inLobbyPage(BusinessInterface inFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
 
-            this.foob = inFoob;
-            lobbyNameTextBox.Text = lobbyName;
+            foob = inFoob;
+            curPlayer = player;
+            curLobby = lobby;
+            lobbyNameTextBox.Text = player.JoinedLobbyName;
         }
 
 
@@ -47,11 +52,9 @@ namespace MortalCombatClient
 
         private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-
-           //
-
-            NavigationService.GoBack();
-            
+            curPlayer.JoinedLobbyName = "Main";
+            curLobby.PlayerCount--;
+            NavigationService.GoBack();            
         }
     }
 }

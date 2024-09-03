@@ -12,19 +12,32 @@ namespace DataServer
     public interface DataInterface
     {
         [OperationContract]
+        void GetNumOfPlayers(out int numOfPlayers);
+
+        [OperationContract]
+        void GetNumOfLobbies(out int numOfLobbies);
+
+        [OperationContract]
+        void AddPlayerToServer(Player player);
+
+        [OperationContract]
+        void AddLobbyToServer(Lobby lobby);
+
+        [OperationContract]
         void CreateLobby(string lobbyName);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+        void GetPlayerForIndex(int index, out string foundUsername);
 
         [OperationContract]
-        void AddPlayerToLobby(string lobbyName, string username);
+        void GetLobbyForIndex(int index, out string foundLobbyName);
 
-        [OperationContract]
-        void AddPlayerToServer(string pUserName);
+        //[OperationContract]
+        //void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
 
-        [OperationContract]
-        void RemovePlayerFromServer(string pUserName, Player playerToRemove);
+
+        //[OperationContract]
+        //void RemovePlayerFromServer(string pUserName, Player playerToRemove);
 
         [OperationContract]
         void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
@@ -33,13 +46,13 @@ namespace DataServer
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
-        Player GetPlayerUsingUsername(string username);
+        List<string> GetAllLobbyNames();
 
         [OperationContract]
-        Lobby GetLobbyUsingName(string lobbyName);
+        void GetPlayersInLobbyCount(int index, out int lobbyCount);
 
         [OperationContract]
-        List<Lobby> GetAllLobbies();
+        void DeleteLobby(int index);
     }
 }
 

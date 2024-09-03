@@ -25,58 +25,151 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for lobbyPage.xaml
     /// </summary>
-    public partial class lobbyPage : Page { 
-
+    public partial class lobbyPage : Page
+    {
         private BusinessInterface foob;
-        private string usernameOfCurrentPlayer;
-        inLobbyPage nextPage;
+        private string curLobbyName;
+        private inLobbyPage nextPage;
+        private Player curPlayer;
+        private List<Lobby> lobbiesInServer;
 
-        public lobbyPage(BusinessInterface inFoob, string username)
+        public lobbyPage(BusinessInterface inFoob, Player player)
         {
             InitializeComponent();
-            
+
             foob = inFoob;
-            usernameOfCurrentPlayer = username;
+            curPlayer = player;
 
-
-            foreach(Lobby lobby  in foob.GetAllLobbies())
+            if (lobbiesInServer == null)
             {
-                LobbyRoomList.Items.Add(lobby.LobbyName);
+                lobbiesInServer = new List<Lobby>();
             }
+
+            RefreshLobbyList();
         }
 
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            string lobbyToJoin = LobbyRoomList.SelectedItem.ToString();
-            string username = usernameOfCurrentPlayer;
+            string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
+            curPlayer.JoinedLobbyName = selectedLobbyName;
 
-            
-            foob.AddPlayerToLobby(lobbyToJoin, username);
-            
-            nextPage = new inLobbyPage(foob, lobbyToJoin);
-            NavigationService.Navigate(nextPage);
+
+            Lobby lobby = GetLobbyUsingName(selectedLobbyName);
+
+            if (lobby != null)
+            {
+                nextPage = new inLobbyPage(foob, curPlayer, lobby);
+                lobby.PlayerCount++;
+                NavigationService.Navigate(nextPage);
+            }
         }
 
         private void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            foob.CreateLobby(NewLobbyName.Text);
+            string createdLobbyName = NewLobbyName.Text;
 
-            string lobbyName = NewLobbyName.Text;
+            if (LobbyNameIsValid(createdLobbyName))
+            {
+                Lobby lobby = CreateLobby(createdLobbyName);
+                curPlayer.JoinedLobbyName = createdLobbyName;                
+                lobby.PlayerCount++;
+                nextPage = new inLobbyPage(foob, curPlayer, lobby);
 
-            nextPage = new inLobbyPage(foob, lobbyName);
-            LobbyRoomList.Items.Add(lobbyName);
+                LobbyRoomList.Items.Add(curLobbyName);
+                NavigationService.Navigate(nextPage);
+            }
+            else
+            {
+                return;
+            }
 
-            NavigationService.Navigate(nextPage);
+            RefreshLobbyList();
         }
 
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
-
             //foob.RemovePlayerFromServer(username);
-            
             // Goes back to the loginPage
             NavigationService.GoBack();
         }
-       
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshLobbyList();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
+            bool lobbyHasPlayers;
+            foob.DeleteLobby(selectedLobbyName, out lobbyHasPlayers);
+            if (lobbyHasPlayers)
+            {
+                MessageBox.Show("Lobby has players, cannot delete");
+                return;
+            }
+
+            if (!curPlayer.JoinedLobbyName.Equals("Main"))
+            {
+                curPlayer.JoinedLobbyName = "Main";
+            }
+
+            RefreshLobbyList();
+        }
+
+        public Lobby GetLobbyUsingName(string lobbyName)
+        {
+            foreach (Lobby lobby in lobbiesInServer)
+            {
+                if (lobby.LobbyName.Equals(lobbyName))
+                {
+                    return lobby;
+                }
+            }
+            return null;
+        }
+
+        public bool LobbyNameIsValid(string inLobbyName)
+        {
+            if (NewLobbyName.Text == "")
+            {
+                MessageBox.Show("Please enter a lobby name");
+            }
+            bool isValid;
+
+            foob.CheckLobbyNameValidity(inLobbyName, out isValid);
+
+            if (!isValid)
+            {
+                MessageBox.Show("Lobby name already Taken");
+                return false;
+            }
+            return true;
+        }
+
+        public Lobby CreateLobby(string lobbyName)
+        {
+            Lobby newLobby = new Lobby(lobbyName);
+            foob.AddLobbyToServer(newLobby);
+            lobbiesInServer.Add(newLobby);
+            return newLobby;
+        }
+
+        public void RefreshLobbyList()
+        {
+            LobbyRoomList.Items.Clear();
+            foreach (string lobbyName in foob.GetAllLobbyNames())
+            {
+                LobbyRoomList.Items.Add(lobbyName.ToString());
+            }
+
+            //foreach (Lobby l in lobbiesInServer)
+            //{
+            //    if (!LobbyRoomList.Items.Contains(l.LobbyName))
+            //    {
+            //        LobbyRoomList.Items.Add(l.LobbyName);
+            //    }
+            //}
+        }
     }
 }

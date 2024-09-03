@@ -12,29 +12,35 @@ namespace MortalCombatBusinessServer
     //[ServiceContract(CallbackContract =typeof(PlayerCallback))]
     public interface BusinessInterface
     {
-        [OperationContract]
-        void CreateLobby(string lobbyName);
+        //[OperationContract]
+        //void DeleteLobby(string lobbyName);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName);
+        void AddPlayerToServer(Player player);
 
         [OperationContract]
-        void AddPlayerToLobby(string lobbyName, string userName);
+        void AddLobbyToServer(Lobby lobby);
 
-        [OperationContract]
-        void AddPlayerToServer(string pUserName);
-
-        [OperationContract]
-        void RemovePlayerFromServer(string pUserName);
+        //[OperationContract]
+        //void RemovePlayerFromServer(string pUserName);
 
         [OperationContract]
         void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
 
-        [OperationContract]
-        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
+        //[OperationContract]
+        //void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
 
         [OperationContract]
-        List<Lobby> GetAllLobbies();
+        List<string> GetAllLobbyNames();
+
+        [OperationContract]
+        void CheckUsernameValidity(string username, out bool isValid);
+
+        [OperationContract]
+        void CheckLobbyNameValidity(string lobbyName, out bool isValid);
+
+        [OperationContract]
+        void DeleteLobby(string lobbyName, out bool doesHavePlayers);
 
     }
 
