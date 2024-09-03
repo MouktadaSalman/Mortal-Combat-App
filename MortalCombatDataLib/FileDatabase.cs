@@ -4,6 +4,7 @@
  *              to server and vice-versa
  * Author: Jauhar
  * ID: 21494299
+ * Version: 1.0.0.2
  */
 
 using System;
@@ -18,12 +19,20 @@ namespace MortalCombatDataLib
 {
     public class FileDatabase
     {
+    /* Class fields:
+     * _files -> contains all the uploaded file byte data
+     * Instance -> to all a single instance of the file database
+     */
         private readonly List<byte[]> _files;
-        public string FilePath { get; set; }
+        public static FileDatabase Instance { get; } = new FileDatabase();
 
-        public FileDatabase(string filePath)
+        /* Constructor: FileDatabase
+         * Description: The private constructor of the database
+         * Parameters: none
+         */
+        private FileDatabase()
         {
-            FilePath = filePath; 
+            _files = new List<byte[]>();
         }
 
         /* Method: FileToBytes
@@ -47,7 +56,7 @@ namespace MortalCombatDataLib
         /* Method: ImageToBytes
          * Description: Compress image data into bytes
          * Parameters: imagePath (string)
-         * result: imageData (bytes[])
+         * Result: imageData (bytes[])
          */
         private byte[] ImageToBytes(string imagePath)
         {
@@ -67,7 +76,14 @@ namespace MortalCombatDataLib
 
         /* Method: UploadFile
          * Description: Upload text files from clients
-         * Parameters: 
+         * Parameters: imagePath (string)
+         * Result: none
          */
+        public void UploadFile(string filePath)
+        {
+            byte[] fileData = FileToBytes(filePath);
+
+
+        }
     }
 }
