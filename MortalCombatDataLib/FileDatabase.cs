@@ -16,17 +16,18 @@ using System.Drawing;
 
 namespace MortalCombatDataLib
 {
-    public class FileTransfer
+    public class FileDatabase
     {
+        private readonly List<byte[]> _files;
         public string FilePath { get; set; }
 
-        public FileTransfer(string filePath)
+        public FileDatabase(string filePath)
         {
             FilePath = filePath; 
         }
 
         /* Method: FileToBytes
-         * Description: Compress image data into bytes
+         * Description: Compress text data into bytes
          * Parameters: filePath (string)
          * result: fileData (bytes[])
          */
@@ -63,5 +64,10 @@ namespace MortalCombatDataLib
 
             return imageData;
         }
+
+        /* Method: UploadFile
+         * Description: Upload text files from clients
+         * Parameters: 
+         */
     }
 }

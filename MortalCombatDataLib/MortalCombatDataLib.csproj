@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileTransfer.cs" />
+    <Compile Include="FileDatabase.cs" />
     <Compile Include="LobbyDatabase.cs" />
     <Compile Include="Lobby.cs" />
     <Compile Include="Message.cs" />
