@@ -14,8 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows;
 
 
 namespace MortalCombatDataLib
@@ -131,7 +129,7 @@ namespace MortalCombatDataLib
          */
         public void DownloadFile(string fileName)
         {
-            string downloadPath = @"" + UserDataPaths.GetDefault().Downloads;
+            string downloadPath = @"";
 
             if (downloadPath != @"")
             {
