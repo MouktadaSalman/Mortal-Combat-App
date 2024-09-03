@@ -21,12 +21,16 @@ namespace MortalCombatDataLib
     {
         /* Class fields:
          * _files -> contains all the uploaded file byte data
+         * _imageFormats -> all the acceptable image formats
          * Instance -> to all a single instance of the file database
          */
         private readonly List<byte[]> _files;
         public static FileDatabase Instance { get; } = new FileDatabase();
 
-        private readonly string[] imageFormats;
+        private readonly string[] _imageFormats =
+        {
+            "jpeg", "jpg", "png", "gif", "webp", "bmp", "svg", "eps", "raw", "tiff", "heif", "indd", "psd"
+        };
 
         /* Constructor: FileDatabase
          * Description: The private constructor of the database
