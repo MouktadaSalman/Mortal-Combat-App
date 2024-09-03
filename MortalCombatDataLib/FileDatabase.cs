@@ -81,7 +81,16 @@ namespace MortalCombatDataLib
          */
         public void UploadFile(string filePath)
         {
-            byte[] fileData = FileToBytes(filePath);
+            //Initialise variables
+            byte[] fileData = null;
+            string fName = "";
+            string fFormat = "";
+            int fType = 0;
+            
+            string[] path = filePath.Split('/');
+
+            fName = path.Last();
+
 
 
         }

@@ -24,6 +24,8 @@ namespace MortalCombatDataLib
      */
         public string fileName { get; }
 
+        public string fileFormat { get; }
+
         public int fileType { get; }
 
         public byte[] fileData { get; }
@@ -32,9 +34,10 @@ namespace MortalCombatDataLib
          * Description: The constructor a new file in the database
          * Parameters: fName (string), fType (int), fData (byte[])
          */
-        public FileData(string fName, int fType, byte[] fData)
+        public FileData(string fName, string fFormat, int fType, byte[] fData)
         {
             fileName = fName;
+            fileFormat = fFormat;
             fileType = fType;
             fileData = fData;
         }
