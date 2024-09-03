@@ -8,13 +8,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MortalCombatDataLib
 {
-    public class File
+    public class FileData
     {
     /* Class Fields:
      * fileName -> name of file
@@ -31,7 +32,7 @@ namespace MortalCombatDataLib
          * Description: The constructor a new file in the database
          * Parameters: fName (string), fType (int), fData (byte[])
          */
-        public File(string fName, int fType, byte[] fData)
+        public FileData(string fName, int fType, byte[] fData)
         {
             fileName = fName;
             fileType = fType;
