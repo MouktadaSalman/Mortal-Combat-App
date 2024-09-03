@@ -88,10 +88,9 @@ namespace MortalCombatDataLib
         public void UploadFile(string filePath)
         {
             //Initialise variables
-            byte[] fileData = null;
-            string fName = "";
-            string fFormat = "";
-            int fType = 0;
+            string fName;
+            string fFormat;
+            int fType;
             
             //Extract file name
             string[] path = filePath.Split('/');
@@ -101,22 +100,24 @@ namespace MortalCombatDataLib
             string[] format = fName.Split('.');
             fFormat = format.Last();
 
+            //Check if its a text file
+            if (fFormat == "txt")
+            {
+                //Add valid text file
+                fType = 2;
+                _files.Add(new FileData(fName, fFormat, fType, FileToBytes(filePath)));
+            }
+
             //Check if file an accepted image
             foreach (string f in _imageFormats)
             {
                 if (f == fFormat)
                 {
                     //Add valid image data upload
-                    _files.Add(new FileData(fName, fFormat, 1, ImageToBytes(filePath)));
+                    fType = 1;
+                    _files.Add(new FileData(fName, fFormat, fType, ImageToBytes(filePath)));
                     break;
                 }
-            }
-
-            //Check if its a text file instead
-            if (fFormat == "txt")
-            {
-                //Add valid text file
-                _files.Add(new FileData(fName, fFormat, 2, FileToBytes(filePath)));
             }
         }
     }
