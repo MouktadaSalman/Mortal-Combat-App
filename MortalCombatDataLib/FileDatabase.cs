@@ -24,12 +24,12 @@ namespace MortalCombatDataLib
          * _imageFormats -> all the acceptable image formats
          * Instance -> to all a single instance of the file database
          */
-        private readonly List<byte[]> _files;
+        private readonly List<FileData> _files;
         public static FileDatabase Instance { get; } = new FileDatabase();
 
         private readonly string[] _imageFormats =
         {
-            "jpeg", "jpg", "png", "gif", "webp", "bmp", "svg", "eps", "raw", "tiff", "heif", "indd", "psd"
+            "ai", "dwg","jpeg", "jpg", "png", "gif", "webp", "bmp", "svg", "eps", "raw", "tiff", "heif", "heic", "indd", "psd"
         };
 
         /* Constructor: FileDatabase
@@ -38,7 +38,7 @@ namespace MortalCombatDataLib
          */
         private FileDatabase()
         {
-            _files = new List<byte[]>();
+            _files = new List<FileData>();
         }
 
         /* Method: FileToBytes
@@ -101,8 +101,23 @@ namespace MortalCombatDataLib
             string[] format = fName.Split('.');
             fFormat = format.Last();
 
+            //Check if file an accepted image
+            foreach (string f in _imageFormats)
+            {
+                if (f == fFormat)
+                {
+                    //Add valid image data upload
+                    _files.Add(new FileData(fName, fFormat, 1, ImageToBytes(filePath)));
+                    break;
+                }
+            }
 
-
+            //Check if its a text file instead
+            if (fFormat == "txt")
+            {
+                //Add valid text file
+                _files.Add(new FileData(fName, fFormat, 2, FileToBytes(filePath)));
+            }
         }
     }
 }
