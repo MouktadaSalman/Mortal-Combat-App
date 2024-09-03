@@ -14,6 +14,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows;
+
 
 namespace MortalCombatDataLib
 {
@@ -117,6 +120,30 @@ namespace MortalCombatDataLib
                     fType = 1;
                     _files.Add(new FileData(fName, fFormat, fType, ImageToBytes(filePath)));
                     break;
+                }
+            }
+        }
+
+        /* Method: DownloadFile
+         * Description: To allow download of files from database
+         * Parameters: fileName (string)
+         * Result:
+         */
+        public void DownloadFile(string fileName)
+        {
+            string downloadPath = @"" + UserDataPaths.GetDefault().Downloads;
+
+            if (downloadPath != @"")
+            {
+                foreach (FileData f in _files)
+                {
+                    if (f.fileName == fileName)
+                    {
+                        if (f.fileType == 2)
+                        {
+                            File.WriteAllBytes(downloadPath, f.fileData);
+                        }
+                    }
                 }
             }
         }
