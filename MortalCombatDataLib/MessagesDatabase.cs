@@ -41,9 +41,9 @@ namespace Mortal_Combat_Data_Library
          * Parameters: sender (string), recipient (string), content (string), messageType (int)
          * 
          */
-        public void SaveMessage(string sender, string recipient, string content, int messageType)
+        public void SaveMessage(string sender, string recipent, string content, int messageType)
         {
-            Message newMessage = new Message(sender, recipient, content, messageType, DateTime.Now);
+            Message newMessage = new Message(sender, recipent, content, messageType);
             _messages.Add(newMessage);
         }
 
@@ -53,12 +53,12 @@ namespace Mortal_Combat_Data_Library
          * Parameters: recipient (string)
          * Result: List of messages for the recipient.
          */
-        public List<Message> GetMessagesForRecipient(string recipient)
+        public List<Message> GetMessagesForRecipient(string sender, string recipent)
         {
             List<Message> recipientMessages = new List<Message>();
             foreach (Message message in _messages)
             {
-                if (message.Recipient == recipient)
+                if (message.Recipent.Equals(recipent) && message.Sender.Equals(sender))
                 {
                     recipientMessages.Add(message);
                 }
@@ -84,31 +84,31 @@ namespace Mortal_Combat_Data_Library
         public class Message
         {
             public string Sender { get; }
-            public string Recipient { get; }
+            public string Recipent { get; }
             public string Content { get; }
             public int MessageType { get; }  // maybe we could have this set 1 in default for normal messages,
                                              // however if it is a file we set it to 2, in the message chat
-            public DateTime Timestamp { get; }
+          
 
             /*
              * Constructor: Message
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (string), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, string content, int messageType, DateTime timestamp)
+            public Message(string sender, string recipient, string content, int messageType)
             {
                 Sender = sender;
-                Recipient = recipient;
+                Recipent = recipient;
                 Content = content;
                 MessageType = messageType;
-                Timestamp = timestamp;
+                
             }
 
 
             // IDK just maybe we will use it for debugging later on similar to the one in message.cs
             public override string ToString()
             {
-                return $"Message{{sender='{Sender}', recipient='{Recipient}', content='{Content}', messageType={MessageType}, timestamp={Timestamp}}}";
+                return $"Message{{sender='{Sender}', recipient='{Recipent}', content='{Content}', messageType={MessageType}}}";
             }
         }
     }

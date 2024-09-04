@@ -24,20 +24,35 @@ namespace MortalCombatBusinessServer
         //[OperationContract]
         //void RemovePlayerFromServer(string pUserName);
 
+
+        //Private Messaging methods so far..
         [OperationContract]
+        
         void SendPrivateMessage(string sender, string recipent, object content);
 
+      
+     
         [OperationContract]
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
 
         [OperationContract]
-        List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
+        void NotifyPrivatePlayer(string sender, string recipent, string content);
 
+
+
+        //lobby Messaging methods so far..
         [OperationContract]
         void DistributeMessageToLobby(string lobbyName, string sender, object content);
 
-        
+
+        [OperationContract]
+        List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
+
+
+        [OperationContract]
+        void NotifyDistributedMessages(string lobbyName, string sender, string content);
+
 
         [OperationContract]
         List<string> GetAllLobbyNames();
@@ -60,10 +75,10 @@ namespace MortalCombatBusinessServer
     public interface PlayerCallback
     {
         [OperationContract(IsOneWay = true)]
-        void ReceivePrivateMessage(Message message);
+        void ReceivePrivateMessage(MessageDatabase.Message);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveLobbyMessage(Message message);
+        void ReceiveLobbyMessage(MessageDatabase.Message);
     }
 
 }

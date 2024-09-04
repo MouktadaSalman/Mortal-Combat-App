@@ -69,15 +69,15 @@ namespace MortalCombatDataServer
         }
 
 
-        List<MessageDatabase.Message> DataInterface.GetMessagesForLobby(string LobbyName)
+        List<MessageDatabase.Message> DataInterface.GetMessagesForLobby(string sender, string LobbyName)
         {
-            return _messageDatabase.GetMessagesForRecipient(LobbyName); 
+            return _messageDatabase.GetMessagesForRecipient(sender, LobbyName); 
         }
 
 
-        List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string recipent)
+        List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string sender,string recipent)
         {
-            return _messageDatabase.GetMessagesForRecipient(recipent);
+            return _messageDatabase.GetMessagesForRecipient(sender,recipent);
         }
 
         void DataInterface.DeleteLobby(int index)

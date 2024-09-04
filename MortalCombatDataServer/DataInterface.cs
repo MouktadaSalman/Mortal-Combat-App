@@ -47,10 +47,10 @@ namespace DataServer
 
         [OperationContract]
 
-        List<MessageDatabase.Message> GetPrivateMessages(string recipent);
+        List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
 
-        List<MessageDatabase.Message> GetMessagesForLobby(string lobbyName);
+        List<MessageDatabase.Message> GetMessagesForLobby(string sender, string lobbyName);
 
 
         [OperationContract]

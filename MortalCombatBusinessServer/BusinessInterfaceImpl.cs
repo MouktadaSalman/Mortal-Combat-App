@@ -19,7 +19,7 @@ namespace MortalCombatBusinessServer
     {
 
         private ConcurrentDictionary<string, Lobby> allLobbies = new ConcurrentDictionary<string, Lobby>();
-        private ConcurrentDictionary<string, List<Message>> messageQueue = new ConcurrentDictionary<string, List<Message>>();
+      
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
     
         private DataInterface data;
@@ -111,6 +111,10 @@ namespace MortalCombatBusinessServer
             }
         }
 
+
+
+
+
         //public void DeleteLobby(string lobbyName)
         //{
         //    Lobby lobby = data.GetLobbyUsingName(lobbyName);
@@ -135,64 +139,59 @@ namespace MortalCombatBusinessServer
          * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
          * 
          */
-        public void CreateMessage(string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
+
+
+
+        public void SendPrivateMessage(string sender, string recipent, object content)
         {
-           
-           
-            // Searching through all the callbacks if it contains a recipent
-           if (allPlayerCallback.ContainsKey(mRecipent))
+            data.CreateMessage(sender, recipent, content, 1);
+
+            NotifyPrivatePlayer(sender, recipent, content.ToString());
+        }
+
+        public List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent)
+        {
+            return data.GetPrivateMessages(sender, recipent);
+        }
+
+        public void NotifyPrivatePlayer(string sender, string recipent, string content)
+        {
+           if (allPlayerCallback.ContainsKey(recipent))
             {
-                
-                var callback = allPlayerCallback[mRecipent];
+                var callback = allPlayerCallback[recipent];
+                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
 
-                //Making the message with assigning the sender, content, timeOfmessage
-                Message message = new Message();
-
-
-                message.sender = mSender;
-                message.content = mContent;
-                message.timeOfMessage = mDateTime;
-                
-                // insert the message with the previous details into the recieving end.
                 callback.ReceivePrivateMessage(message);
             }
-            else
+
+        }
+
+        public void DistributeMessageToLobby(string lobbyName, string sender, object content)
+        {
+            data.CreateMessage(sender, lobbyName, content, 1);
+            NotifyDistributedMessages(lobbyName, sender, content.ToString());
+
+
+        }
+
+        public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)
+        {
+            return data.GetMessagesForLobby(sender, recipent);
+        }
+
+        public void NotifyDistributedMessages(string lobbyName, string sender, string content)
+        {
+
+            if (allPlayerCallback.ContainsKey(lobbyName))
             {
-                Console.WriteLine($"Recipient {mRecipent} not found  ");
+                var callback = allPlayerCallback[lobbyName];
+                MessageDatabase.Message message = new MessageDatabase.Message(sender, lobbyName, content, 1);
+
+                callback.ReceivePrivateMessage(message);
             }
         }
-    
-        //public void DistributeMessage(string lobbyName, string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
-        //{
-
-        //    //Making the message with assigning the sender, content, timeOfmessage
-        //    Message message = new Message();
 
 
-        //    message.sender = mSender;
-        //    message.content = mContent;
-        //    message.timeOfMessage = mDateTime;
-
-
-        //    //searching through allLobbies if that lobby exists.
-        //    if (allLobbies.ContainsKey(lobbyName))
-        //    {
-        //        // For-loop to show the message to every player that is in the lobby.
-        //        var lobby = allLobbies[lobbyName];
-        //        foreach (var player in lobby._players) 
-        //        {
-        //            if (allPlayerCallback.ContainsKey(player.Username))
-        //            {
-        //                var callback = allPlayerCallback[player.Username];
-        //                callback.ReceiveLobbyMessage(message); 
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"Lobby {lobbyName} not found");
-        //    }
-        //}
 
         //public void RemovePlayerFromServer(string pUserName)
         //{
@@ -216,5 +215,7 @@ namespace MortalCombatBusinessServer
         {
             return data.GetAllLobbyNames();
         }
+
+       
     }
 }
