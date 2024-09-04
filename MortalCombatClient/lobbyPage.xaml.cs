@@ -50,19 +50,27 @@ namespace MortalCombatClient
 
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
-            curPlayer.JoinedLobbyName = selectedLobbyName;
-
-
-            Lobby lobby = GetLobbyUsingName(selectedLobbyName);
-
-            if (lobby != null)
+            if (LobbyRoomList.SelectedItem != null)
             {
-                nextPage = new inLobbyPage(foob, curPlayer, lobby);
-                lobby.PlayerCount++;
-                NavigationService.Navigate(nextPage);
+                string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
+                curPlayer.JoinedLobbyName = selectedLobbyName;
+
+
+                Lobby lobby = GetLobbyUsingName(selectedLobbyName);
+
+                if (lobby != null)
+                {
+                    nextPage = new inLobbyPage(foob, curPlayer, lobby);
+                    lobby.PlayerCount++;
+                    NavigationService.Navigate(nextPage);
+                }
+
+            } else
+            {
+                MessageBox.Show("Choose one of the lobbies then click 'Join' \n Note: If there are no lobbies, you can create one");
             }
         }
+        
 
         private void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {
@@ -154,7 +162,7 @@ namespace MortalCombatClient
             lobbiesInServer.Add(newLobby);
             return newLobby;
         }
-
+        
         public void RefreshLobbyList()
         {
             LobbyRoomList.Items.Clear();

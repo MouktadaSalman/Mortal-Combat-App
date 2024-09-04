@@ -9,7 +9,7 @@
       Title="inLobbyPage"   Height="450" Width="800">
 
     <Grid>
-        <ListBox Name="previousMessages" HorizontalAlignment="Center" VerticalAlignment="Top" Width="542" Height="319" Margin="0,39,0,0"/>
+        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="542" Height="319" Margin="0,39,0,0"/>
 
 
         <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="129,363,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="453" FontStyle="Italic"/>

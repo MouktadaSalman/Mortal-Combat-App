@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileData.cs" />
+    <Compile Include="MessagesDatabase.cs" />
     <Compile Include="FileDatabase.cs" />
     <Compile Include="LobbyDatabase.cs" />
     <Compile Include="Lobby.cs" />
