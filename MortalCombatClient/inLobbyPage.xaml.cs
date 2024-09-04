@@ -35,12 +35,38 @@ namespace MortalCombatClient
             curPlayer = player;
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
+
+
+            //LoadLobbyMessagesAsync();
         }
 
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            string messageContent = messageBox.Text;
 
+            foob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+
+            showMessage(messageBox.Text);
+            messageBox.Clear();
+        }
+
+        public void showMessage(string message)
+        {
+            MessagesListBox.Items.Add($"{curPlayer.Username}: {message}");
+        }
+
+
+       
+
+        public async Task LoadLobbyMessagesAsync()
+        {
+            var lobbyMessages = await Task.Run(() => foob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
+            foreach (var message in lobbyMessages)
+            {
+
+               showMessage(message.ToString());
+            }
         }
 
 

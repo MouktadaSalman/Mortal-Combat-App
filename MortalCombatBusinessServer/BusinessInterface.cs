@@ -75,10 +75,10 @@ namespace MortalCombatBusinessServer
     public interface PlayerCallback
     {
         [OperationContract(IsOneWay = true)]
-        void ReceivePrivateMessage(MessageDatabase.Message);
+        void ReceivePrivateMessage(MessageDatabase.Message message);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveLobbyMessage(MessageDatabase.Message);
+        void ReceiveLobbyMessage(MessageDatabase.Message message);
     }
 
 }

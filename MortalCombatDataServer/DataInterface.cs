@@ -49,7 +49,7 @@ namespace DataServer
 
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
-
+        [OperationContract]
         List<MessageDatabase.Message> GetMessagesForLobby(string sender, string lobbyName);
 
 
