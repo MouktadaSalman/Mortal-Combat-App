@@ -50,7 +50,6 @@ namespace Mortal_Combat_Data_Library
             this.LobbyName = lobbyName;
             //_players = new List<Player>();
             _messages = new List<Message>();
-            PlayerCount = 0;
         }
 
         //public string GetUsernameByIndex(int index)
