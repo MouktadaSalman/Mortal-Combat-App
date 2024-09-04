@@ -127,7 +127,7 @@ namespace MortalCombatClient
 
         public Lobby GetLobbyUsingName(string lobbyName)
         {
-            foreach (Lobby lobby in lobbiesInServer)
+            foreach (var lobby in lobbiesInServer)
             {
                 if (lobby.LobbyName.Equals(lobbyName))
                 {
@@ -162,13 +162,19 @@ namespace MortalCombatClient
             lobbiesInServer.Add(newLobby);
             return newLobby;
         }
-        
+
         public void RefreshLobbyList()
         {
+
             LobbyRoomList.Items.Clear();
+            lobbiesInServer.Clear();
             foreach (string lobbyName in foob.GetAllLobbyNames())
             {
+
                 LobbyRoomList.Items.Add(lobbyName.ToString());
+
+                Lobby lobby = new Lobby(lobbyName);
+                lobbiesInServer.Add(lobby);
             }
 
             //foreach (Lobby l in lobbiesInServer)

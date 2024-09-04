@@ -36,9 +36,34 @@ namespace MortalCombatClient
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
+            InitializeComponent();
+
+            //duplex channel with getting callbacks
+            var callbackInstance = new InstanceContext(new callbacks(this));
+
+            DuplexChannelFactory<BusinessInterface> channelFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+
+            tcp.SendTimeout = TimeSpan.FromMinutes(5);
+            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+
+
+
+            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
+            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, new EndpointAddress(URL));
+            foob = channelFactory.CreateChannel();
+
 
             //LoadLobbyMessagesAsync();
         }
+
+
+
+
+
+
 
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
@@ -61,7 +86,7 @@ namespace MortalCombatClient
 
         public async Task LoadLobbyMessagesAsync()
         {
-            var lobbyMessages = await Task.Run(() => foob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
+            var lobbyMessages = await Task.Run(() =>foob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
 

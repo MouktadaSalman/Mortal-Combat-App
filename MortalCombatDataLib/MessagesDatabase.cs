@@ -81,11 +81,19 @@ namespace Mortal_Combat_Data_Library
          * Inner Class: Message
          * Description: Represents a message entity in the database.
          */
+        [DataContract]
         public class Message
         {
+            [DataMember]
             public string Sender { get; }
+
+            [DataMember]
             public string Recipent { get; }
+
+            [DataMember]
             public string Content { get; }
+
+            [DataMember]
             public int MessageType { get; }  // maybe we could have this set 1 in default for normal messages,
                                              // however if it is a file we set it to 2, in the message chat
           

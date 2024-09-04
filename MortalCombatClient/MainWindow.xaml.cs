@@ -29,7 +29,7 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-
+            // I will have to switch this to duplex too
             ChannelFactory<BusinessInterface> channelFactory;
             NetTcpBinding tcp = new NetTcpBinding();
 

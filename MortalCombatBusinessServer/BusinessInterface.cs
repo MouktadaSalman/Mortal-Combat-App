@@ -8,8 +8,7 @@ using Mortal_Combat_Data_Library;
 
 namespace MortalCombatBusinessServer
 {
-    [ServiceContract]
-    //[ServiceContract(CallbackContract =typeof(PlayerCallback))]
+    [ServiceContract(CallbackContract =typeof(PlayerCallback))]
     public interface BusinessInterface
     {
         //[OperationContract]
