@@ -129,20 +129,36 @@ namespace MortalCombatDataLib
          */
         public void DownloadFile(string fileName)
         {
+            //Get the path to the downloads folder
             string downloadPath = @"";
+            downloadPath = Path.Combine(downloadPath, fileName);
 
             if (downloadPath != @"")
             {
+                string finalPath = Path.Combine(downloadPath, fileName);
                 foreach (FileData f in _files)
                 {
                     if (f.fileName == fileName)
                     {
+                        //If it is an image
+                        if (f.fileType == 1) 
+                        {
+                            ImageConverter converter = new ImageConverter();
+                            Image x = (Bitmap)converter.ConvertFrom(f.fileData);
+                            x.Save(finalPath);
+                        }
+
+                        //If it is a text file
                         if (f.fileType == 2)
                         {
-                            File.WriteAllBytes(downloadPath, f.fileData);
+                            File.WriteAllBytes(finalPath, f.fileData);
                         }
                     }
                 }
+            }
+            else
+            {
+                Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder");
             }
         }
     }
