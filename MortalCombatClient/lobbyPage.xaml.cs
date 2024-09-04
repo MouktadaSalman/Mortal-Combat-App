@@ -53,7 +53,6 @@ namespace MortalCombatClient
             string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
             curPlayer.JoinedLobbyName = selectedLobbyName;
 
-
             Lobby lobby = GetLobbyUsingName(selectedLobbyName);
 
             if (lobby != null)
