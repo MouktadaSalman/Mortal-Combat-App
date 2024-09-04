@@ -19,6 +19,8 @@ namespace MortalCombatDataServer
         private readonly LobbyDatabase _lobbyDatabase = LobbyDatabase.Instance;
         // to add a player to the selected existing lobby
 
+        private readonly MessageDatabase _messageDatabase = MessageDatabase.Instance;
+
         void DataInterface.GetNumOfPlayers(out int numOfPlayers)
         {
             numOfPlayers = _playerDatabase._players.Count;
@@ -55,9 +57,9 @@ namespace MortalCombatDataServer
             foundLobbyName = _lobbyDatabase.GetLobbyNameByIndex(index);
         }
 
-        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime)
+        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType)
         {
-            Message message = new Message(sender, recipent, content, messageType, dateTime);    
+            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType);    
             
         }
 
@@ -65,7 +67,19 @@ namespace MortalCombatDataServer
         {
             lobbyCount = _lobbyDatabase._lobbies[index].PlayerCount;
         }
-        
+
+
+        List<MessageDatabase.Message> DataInterface.GetMessagesForLobby(string LobbyName)
+        {
+            return _messageDatabase.GetMessagesForRecipient(LobbyName); 
+        }
+
+
+        List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string recipent)
+        {
+            return _messageDatabase.GetMessagesForRecipient(recipent);
+        }
+
         void DataInterface.DeleteLobby(int index)
         {
             _lobbyDatabase._lobbies.RemoveAt(index);
@@ -76,7 +90,7 @@ namespace MortalCombatDataServer
         //    _lobbyDatabase.RemoveLobby(lobbyToDelete);
         //}
 
-        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime)
+        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType)
         {
             throw new NotImplementedException();
         }

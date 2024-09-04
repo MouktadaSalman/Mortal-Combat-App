@@ -40,10 +40,18 @@ namespace DataServer
         //void RemovePlayerFromServer(string pUserName, Player playerToRemove);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
+        void CreateMessage(string sender, string recipent, object content, int messageType);
 
         [OperationContract]
-        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
+        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType);
+
+        [OperationContract]
+
+        List<MessageDatabase.Message> GetPrivateMessages(string recipent);
+
+
+        List<MessageDatabase.Message> GetMessagesForLobby(string lobbyName);
+
 
         [OperationContract]
         List<string> GetAllLobbyNames();
