@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Mortal_Combat_Data_Library
+
 {
+    [DataContract]
     public class MessageDatabase
     {
         /*
@@ -13,6 +16,7 @@ namespace Mortal_Combat_Data_Library
          * _messages: contains all the messages
          * Instance: allows a single instance of the message database
          */
+        [DataMember]
         private readonly List<Message> _messages;
 
         

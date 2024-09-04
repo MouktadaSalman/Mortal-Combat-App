@@ -25,10 +25,19 @@ namespace MortalCombatBusinessServer
         //void RemovePlayerFromServer(string pUserName);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
+        void SendPrivateMessage(string sender, string recipent, object content);
 
-        //[OperationContract]
-        //void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
+        [OperationContract]
+        List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
+
+
+        [OperationContract]
+        List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
+
+        [OperationContract]
+        void DistributeMessageToLobby(string lobbyName, string sender, object content);
+
+        
 
         [OperationContract]
         List<string> GetAllLobbyNames();
