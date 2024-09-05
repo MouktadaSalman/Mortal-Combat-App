@@ -27,6 +27,7 @@ namespace MortalCombatClient
         private BusinessInterface duplexFoob;
         private Player curPlayer; 
         private Lobby curLobby;
+        private List<Player> playersInLobby;
         public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
@@ -36,9 +37,36 @@ namespace MortalCombatClient
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
-            ((MainWindow)Application.Current.MainWindow).UpdateCallbackContext(this);
+         
+                playersInLobby = new List<Player>();
+              
+            ((MainWindow)Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
 
+            
             Task task = loadLobbyMessagesAsync();
+            
+        }
+
+
+        public void RefreshLists()
+        {
+            playersInLobby.Clear();
+            onlinePlayers.Items.Clear();
+            foreach (string playerName in duplexFoob.GetPlayersInLobby(curLobby))
+            {
+
+
+                if (!onlinePlayers.Items.Contains(playerName))
+                {
+                    onlinePlayers.Items.Add(playerName);
+                }
+                
+
+                Player player = new Player(playerName, curLobby.LobbyName);
+                playersInLobby.Add(player);
+
+            }
+
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
@@ -53,8 +81,16 @@ namespace MortalCombatClient
             messageBox.Clear();
         }
 
+        private void sendMessageButton_Click (object sender, RoutedEventArgs e)
+        {
+           string recipent = onlinePlayers.SelectedItem.ToString();
+           privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+           NavigationService.Navigate(nextPage);
+        }
+
         public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
+
             MessagesListBox.Items.Clear();
             Task task = loadLobbyMessagesAsync();
         }
@@ -67,8 +103,8 @@ namespace MortalCombatClient
 
         public async Task loadLobbyMessagesAsync()
         {
-            
-            
+
+            RefreshLists();
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
@@ -87,7 +123,13 @@ namespace MortalCombatClient
         {
             curPlayer.JoinedLobbyName = "Main";
             curLobby.PlayerCount--;
+
+            onlinePlayers.Items.Remove(curPlayer);
+            playersInLobby.Remove(curPlayer);
             NavigationService.GoBack();            
         }
+
+
+
     }
 }

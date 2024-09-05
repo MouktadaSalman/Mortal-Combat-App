@@ -54,6 +54,7 @@ namespace MortalCombatBusinessServer
         }
         public void AddPlayertoLobby(Player player, string lobbyName)
         {
+            data.AddPlayerToLobby(player, lobbyName);
             PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
 
 
@@ -165,7 +166,7 @@ namespace MortalCombatBusinessServer
 
         /*
          * Method for sending a private message between 2 players (sender, recipent).
-         * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType, DateTime mDateTime)
+         * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType)
          * 
          */
 
@@ -258,6 +259,9 @@ namespace MortalCombatBusinessServer
             return data.GetAllLobbyNames();
         }
 
-       
+       public List<string> GetPlayersInLobby(Lobby lobby)
+        {
+            return data.GetAllPlayersInlobby(lobby);
+        }
     }
 }

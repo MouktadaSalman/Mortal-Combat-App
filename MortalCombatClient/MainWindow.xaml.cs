@@ -25,17 +25,17 @@ namespace MortalCombatClient
 
         private BusinessInterface duplexFoob;
         
-        private callbacks lobbyCallbacks;
+        private callbacks Callbacks;
 
         public MainWindow()
         {
             InitializeComponent();
 
 
-             lobbyCallbacks = new callbacks(null);
+             Callbacks = new callbacks(null, null);
 
 
-            InstanceContext callbackInstance = new InstanceContext(lobbyCallbacks);
+            InstanceContext callbackInstance = new InstanceContext(Callbacks);
 
             DuplexChannelFactory<BusinessInterface> channelFactory;
             NetTcpBinding tcp = new NetTcpBinding();
@@ -53,9 +53,14 @@ namespace MortalCombatClient
         }
 
 
-        public void UpdateCallbackContext(inLobbyPage lobbyPage)
+        public void UpdateLobbyCallbackContext(inLobbyPage lobbyPage)
         {
-            lobbyCallbacks.UpdateLobbyPage(lobbyPage);
+            Callbacks.UpdateLobbyPage(lobbyPage);
+        }
+
+        public void UpdatePrivateCallbackContext(privateMessagePage privateMessagePage)
+        {
+            Callbacks.UpdatePrivatePage(privateMessagePage);
         }
     }
 }

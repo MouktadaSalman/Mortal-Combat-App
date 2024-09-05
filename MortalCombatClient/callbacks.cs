@@ -15,16 +15,26 @@ namespace MortalCombatClient
     {
         private inLobbyPage _inLobbyPage;
         private MessageDatabase.Message message;
-
-        public callbacks(inLobbyPage nInLobbyPage)
+        private privateMessagePage _privateMessagePage;
+        public callbacks(inLobbyPage nInLobbyPage, privateMessagePage privateMessagePage)
         {
             _inLobbyPage = nInLobbyPage;
+            _privateMessagePage = privateMessagePage;
         }
 
         public void UpdateLobbyPage(inLobbyPage lobbyPage)
         {
             _inLobbyPage = lobbyPage;
+
         }
+
+        public void UpdatePrivatePage(privateMessagePage privateMessagePage) 
+        {
+
+            _privateMessagePage = privateMessagePage;
+        }
+            
+
         public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
         {
             message.Sender = sender;
@@ -39,7 +49,14 @@ namespace MortalCombatClient
 
         public void ReceivePrivateMessage(string sender, string lobbyName, string content)
         {
-            throw new NotImplementedException();
+            message.Sender = sender;
+            message.Recipent = lobbyName;
+            message.Content = content;
+
+            _privateMessagePage.Dispatcher.Invoke(() =>
+            {
+                _privateMessagePage.showMessage(message.ToString());
+            });
         }
 
         

@@ -61,6 +61,10 @@ namespace MortalCombatBusinessServer
         List<string> GetAllLobbyNames();
 
         [OperationContract]
+
+        List<string> GetPlayersInLobby(Lobby lobby);
+
+        [OperationContract]
         void CheckUsernameValidity(string username, out bool isValid);
 
         [OperationContract]

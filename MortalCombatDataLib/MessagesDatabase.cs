@@ -67,6 +67,20 @@ namespace Mortal_Combat_Data_Library
             return recipientMessages;
         }
 
+
+        public List<Message> GetPrivateMessagesForRecipient(string sender, string recipent)
+        {
+            List<Message> pRecipientMessages = new List<Message>();
+            foreach (Message message in _messages)
+            {
+                if (message.Recipent.Equals(recipent) && message.Sender.Equals(sender))
+                {
+                    pRecipientMessages.Add(message);
+                }
+            }
+            return pRecipientMessages;
+        }
+
         /*
          * Method: GetAllMessages
          * Description: Retrieves all messages in the database.

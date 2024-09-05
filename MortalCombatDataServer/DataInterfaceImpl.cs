@@ -36,6 +36,11 @@ namespace MortalCombatDataServer
             _playerDatabase._players.Add(player);
         }
 
+        void DataInterface.AddPlayerToLobby(Player player, string lobbyName)
+        {
+            _lobbyDatabase.AddPlayerToLobby(player, lobbyName);
+        }
+
         void DataInterface.AddLobbyToServer(Lobby lobby)
         {
             _lobbyDatabase._lobbies.Add(lobby);
@@ -110,6 +115,19 @@ namespace MortalCombatDataServer
             }
 
             return lobbyNames;
+        }
+
+       List<string> DataInterface.GetAllPlayersInlobby(Lobby lobby)
+        {
+            List<string> playerNames = new List<string>();
+
+            foreach (string p in _lobbyDatabase.GetPlayersInLobby(lobby))
+            {
+                playerNames.Add(p);
+            }
+
+
+            return playerNames;
         }
     }
 }
