@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="callbacks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -120,6 +121,14 @@
     <ProjectReference Include="..\MortalCombatBusinessServer\MortalCombatBusinessServer.csproj">
       <Project>{e7c19c98-5396-4d89-a6b4-78a316d6761b}</Project>
       <Name>MortalCombatBusinessServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MortalCombatDataLib\MortalCombatDataLib.csproj">
+      <Project>{277cd80f-d4ba-47a9-81aa-ee5d4264a285}</Project>
+      <Name>MortalCombatDataLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MortalCombatDataServer\MortalCombatDataServer.csproj">
+      <Project>{a3854e1e-902d-474c-900e-6f972b5c53e3}</Project>
+      <Name>MortalCombatDataServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

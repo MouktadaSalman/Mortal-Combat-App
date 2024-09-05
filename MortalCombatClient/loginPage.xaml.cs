@@ -14,27 +14,70 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
+using Mortal_Combat_Data_Library;
+using System.ServiceModel.Configuration;
 
 namespace MortalCombatClient
 {
+    //public delegate Player CreatePlayer(string pUserName);
     /// <summary>
     /// Interaction logic for loginPage.xaml
     /// </summary>
     public partial class loginPage : Page
     {
-        private BusinessInterface foob;
+        private BusinessInterface duplexFoob;
 
-        public loginPage()
+        public loginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
-
-            
+            this.duplexFoob = inDuplexFoob;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-        //foob.AddPlayerToServer(UsernameBox.Text.ToString());
-            NavigationService.Navigate(new lobbyPage());
+            string username = UsernameBox.Text.ToString();
+
+            //Task<Player> task = new Task<Player>(() => CreatePlayer(username));
+            //task.Start();
+
+            //Player curPlayer = await task;
+
+            if (usernameIsValid(username))
+            {
+                Player player = CreatePlayer(username);
+                
+                NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
+            }
+            else
+            {
+                return;
+            }
         }
+
+        public bool usernameIsValid(string pUserName)
+        {
+            if (UsernameBox.Text == "")
+            {
+                MessageBox.Show("Please enter a username");
+            }
+            bool isValid;
+
+            duplexFoob.CheckUsernameValidity(pUserName, out isValid);
+
+            if (!isValid)
+            {
+                MessageBox.Show("Username already Taken");
+                return false;
+            }
+            return true;
+        }
+
+        private Player CreatePlayer(string pUserName)
+        {
+            Player newPlayer = new Player(pUserName, "Main");
+            duplexFoob.AddPlayerToServer(newPlayer);
+            return newPlayer;
+        }
+
     }
 }

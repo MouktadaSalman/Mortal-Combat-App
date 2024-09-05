@@ -12,29 +12,55 @@ namespace DataServer
     public interface DataInterface
     {
         [OperationContract]
+        void GetNumOfPlayers(out int numOfPlayers);
+
+        [OperationContract]
+        void GetNumOfLobbies(out int numOfLobbies);
+
+        [OperationContract]
+        void AddPlayerToServer(Player player);
+
+        [OperationContract]
+        void AddLobbyToServer(Lobby lobby);
+
+        [OperationContract]
         void CreateLobby(string lobbyName);
 
         [OperationContract]
-        void AddPlayerToServer(string pUserName);
+        void GetPlayerForIndex(int index, out string foundUsername);
 
         [OperationContract]
-        void RemovePlayerFromServer(string pUserName, Player playerToRemove);
+        void GetLobbyForIndex(int index, out string foundLobbyName);
+
+        //[OperationContract]
+        //void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+
+
+        //[OperationContract]
+        //void RemovePlayerFromServer(string pUserName, Player playerToRemove);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime);
+        void CreateMessage(string sender, string recipent, object content, int messageType);
 
         [OperationContract]
-        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime);
+        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+
+        List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
         [OperationContract]
-        Player GetPlayerUsingUsername(string username);
+        List<MessageDatabase.Message> GetMessagesForLobby(string sender, string lobbyName);
+
 
         [OperationContract]
-        Lobby GetLobbyUsingName(string lobbyName);
+        List<string> GetAllLobbyNames();
 
+        [OperationContract]
+        void GetPlayersInLobbyCount(int index, out int lobbyCount);
+
+        [OperationContract]
+        void DeleteLobby(int index);
     }
 }
 

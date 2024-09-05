@@ -18,6 +18,11 @@ namespace MortalCombatBusinessServer
             //This represents a tcp/ip binding in the Windows network stack
             NetTcpBinding tcp = new NetTcpBinding();
 
+            tcp.SendTimeout = TimeSpan.FromMinutes(5);
+            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+
             //Bind server to the implementation of DataServer
             host = new ServiceHost(typeof(BusinessInterfaceImpl));
 

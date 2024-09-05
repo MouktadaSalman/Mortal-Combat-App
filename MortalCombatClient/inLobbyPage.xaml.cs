@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Mortal_Combat_Data_Library;
 
 namespace MortalCombatClient
 {
@@ -23,33 +24,70 @@ namespace MortalCombatClient
     public partial class inLobbyPage : Page
     {
 
-        private BusinessInterface foob;
-        public inLobbyPage(string lobbyName)
+        private BusinessInterface duplexFoob;
+        private Player curPlayer; 
+        private Lobby curLobby;
+        public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
 
+            duplexFoob = inDuplexFoob;
+            curPlayer = player;
+            curLobby = lobby;
+            lobbyNameTextBox.Text = player.JoinedLobbyName;
 
-            lobbyNameTextBox.Text = lobbyName;
+            ((MainWindow)Application.Current.MainWindow).UpdateCallbackContext(this);
+
+            Task task = loadLobbyMessagesAsync();
         }
-
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            
+            string messageContent = messageBox.Text;
 
+            duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+            
+            
+            showMessage($"{curPlayer.Username}: {messageContent}");
+            messageBox.Clear();
         }
 
+        public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessagesListBox.Items.Clear();
+            Task task = loadLobbyMessagesAsync();
+        }
+
+        public void showMessage(string message)
+        {
+            
+            MessagesListBox.Items.Add(message);
+        }
+
+        public async Task loadLobbyMessagesAsync()
+        {
+            
+            
+            var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
+            foreach (var message in lobbyMessages)
+            {
+
+               showMessage(message.ToString());
+            }
+        }
 
         // Still unsure on how to handle file sharing...
-        private void selectFilesButton_Click(Object sender, RoutedEventArgs e)
+        private void selectFilesButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
         private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-
-            NavigationService.GoBack();
-            
+            curPlayer.JoinedLobbyName = "Main";
+            curLobby.PlayerCount--;
+            NavigationService.GoBack();            
         }
     }
 }

@@ -21,10 +21,10 @@ namespace Mortal_Combat_Data_Library
         public string Username { get; set; }
 
         [DataMember]
-        public bool isInLobby{ get; set; } // do we actually need this? we can just have the list of player in each lobby through the lobby class
+        public string JoinedLobbyName { get; set; }
 
         [DataMember]        
-        public DateTime timeJoinedToLobby { get; }
+        public DateTime timeJoinedToLobby { get; set; }
 
         /* 
          * Method: Player
@@ -33,10 +33,10 @@ namespace Mortal_Combat_Data_Library
          *              the default values for 
          * Parameters: username (string)
          */
-        public Player(string username)
+        public Player(string username, string lobbyName)
         {
             this.Username = username;
-            isInLobby = false;
+            JoinedLobbyName = lobbyName;
             timeJoinedToLobby = DateTime.Now;
         }
 

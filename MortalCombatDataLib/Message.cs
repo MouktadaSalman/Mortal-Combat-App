@@ -26,7 +26,7 @@ namespace Mortal_Combat_Data_Library
         //object for now as var did not work
         public object content { get; set; }
         private int messageType { get; set; }
-        public DateTime timeOfMessage { get; set; }
+       
 
 
         /*
@@ -40,7 +40,7 @@ namespace Mortal_Combat_Data_Library
             recipent = "";
             content = null;
             messageType = 0;
-            timeOfMessage = DateTime.Now;
+            
         }
 
         /*
@@ -54,15 +54,15 @@ namespace Mortal_Combat_Data_Library
          * 
          */
 
-        public Message(string sender, string recipent, object content, int messageType, DateTime timeOfMessage)
+        public Message(string sender, string recipent, object content, int messageType)
         {
 
             this.sender = sender;
             this.recipent = recipent;
             this.content = content;
             this.messageType = messageType;
-            timeOfMessage = DateTime.Now;
-            this.timeOfMessage = timeOfMessage;
+            
+         
         }
 
 
@@ -76,7 +76,7 @@ namespace Mortal_Combat_Data_Library
          */
         public string GetMessageDetails()
         {
-            return $"Sender: {sender} Recipent: {recipent} Content:  {content} Time of the message:  {timeOfMessage}";
+            return $"Sender: {sender} Recipent: {recipent} Content:  {content} ";
         }
 
 

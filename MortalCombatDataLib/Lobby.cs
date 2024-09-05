@@ -29,14 +29,14 @@ namespace Mortal_Combat_Data_Library
 
         [DataMember]
         public string LobbyName { get; set; }
+        public int PlayerCount { get; set; }
 
-        [DataMember]
-
-        //Changed from private to public so it could be used in BusinessImp line 141
-        public List<Player> _players;
+        //[DataMember]       
+        //public List<Player> _players;
 
         [DataMember]
         private List<Message> _messages;
+
 
         /* 
          * Method: Lobby
@@ -48,9 +48,14 @@ namespace Mortal_Combat_Data_Library
         public Lobby(string lobbyName)
         {
             this.LobbyName = lobbyName;
-            _players = new List<Player>();
+            //_players = new List<Player>();
             _messages = new List<Message>();
         }
+
+        //public string GetUsernameByIndex(int index)
+        //{
+        //    return _players[index].Username;
+        //}
 
         /* 
          * Method: AddPlayer
@@ -58,10 +63,11 @@ namespace Mortal_Combat_Data_Library
          * Parameters: player (Player)
          * Result: none
          */
-        public void AddPlayer(Player player)
-        {
-            _players.Add(player);
-        }
+        //public void AddPlayer(Player player)
+        //{
+
+        //    _players.Add(player);
+        //}
 
         /* 
          * Method: RemovePlayer
@@ -69,30 +75,30 @@ namespace Mortal_Combat_Data_Library
          * Parameters: playerName (string)
          * Result: none
          */
-        public void RemovePlayer(string playerName)
-        {
-            //Create a temp as placeholder for player
-            Player temp = null;
-            foreach (Player player in _players)
-            {
-                //If there is a matching player currently in lobby
-                if(player.Username == playerName) 
-                {            
-                    temp = player; 
-                    break; 
-                }
-            }
+        //public void RemovePlayer(string playerName)
+        //{
+        //    //Create a temp as placeholder for player
+        //    Player temp = null;
+        //    foreach (Player player in _players)
+        //    {
+        //        //If there is a matching player currently in lobby
+        //        if(player.Username.Equals(playerName)) 
+        //        {            
+        //            temp = player; 
+        //            break; 
+        //        }
+        //    }
 
-            if (temp == null)
-            {
-                //Going to throw an actual custom exception
-                Console.WriteLine("MissingPlayerError:: Player not found in lobby");
-            }
-            else
-            {
-                _players.Remove(temp);
-            }
-        }
+        //    if (temp == null)
+        //    {
+        //        //Going to throw an actual custom exception
+        //        Console.WriteLine("MissingPlayerError:: Player not found in lobby");
+        //    }
+        //    else
+        //    {
+        //        _players.Remove(temp);
+        //    }
+        //}
 
         /* 
          * Method: AddMessage
@@ -111,9 +117,9 @@ namespace Mortal_Combat_Data_Library
          * Parameters: none
          * Result: count (int)
          */
-        public int GetPlayerCount()
-        {
-            return _players.Count; 
-        }
+        //public int GetPlayerCount()
+        //{
+        //    return _players.Count; 
+        //}
     }
 }

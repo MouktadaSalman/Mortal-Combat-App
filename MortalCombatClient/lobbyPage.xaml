@@ -15,7 +15,9 @@
         <TextBox Name="NewLobbyName" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="259" Margin="202,0,0,56" Height="28" />
         <TextBox Text="Choose from the following lobbies" HorizontalAlignment="Left" Height="23" Margin="106,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="452" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" />
         <TextBox HorizontalAlignment="Left" Height="28" Margin="238,326,0,0" Text="or Create your own lobby" VerticalAlignment="Top" Width="188" IsEnabled="False" TextAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic"/>
-        <Button x:Name="logOutButton" Content="Log Out" HorizontalAlignment="Left" Height="23" Margin="27,29,0,0" VerticalAlignment="Top" Width="74" Click="LogOutButton_Click"/>
+        <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Left" Height="23" Margin="27,29,0,0" VerticalAlignment="Top" Width="74" Click="LogOutButton_Click"/>
+        <Button Name="RefreshButton" Content="Refresh Lobbies List" HorizontalAlignment="Left" Margin="273,411,0,0" VerticalAlignment="Top" Width="118" Click="RefreshButton_Click"/>
+        <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="563,261,0,0" VerticalAlignment="Top" Width="100" Click="DeleteButton_Click"/>
 
 
     </Grid>

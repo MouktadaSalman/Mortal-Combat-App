@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MortalCombatDataServer
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
 
     // Add the implementation of the DataInterface
     internal class DataInterfaceImpl : DataInterface
@@ -18,65 +18,98 @@ namespace MortalCombatDataServer
         private readonly PlayerDatabase _playerDatabase = PlayerDatabase.Instance;
         private readonly LobbyDatabase _lobbyDatabase = LobbyDatabase.Instance;
         // to add a player to the selected existing lobby
-        void DataInterface.AddPlayerToServer(string pUserName) 
+
+        private readonly MessageDatabase _messageDatabase = MessageDatabase.Instance;
+
+        void DataInterface.GetNumOfPlayers(out int numOfPlayers)
         {
-            _playerDatabase.AddNewPlayerToServer(pUserName);
+            numOfPlayers = _playerDatabase._players.Count;
+        }
+
+        void DataInterface.GetNumOfLobbies(out int numOfLobbies)
+        {
+            numOfLobbies = _lobbyDatabase._lobbies.Count;
+        }
+
+        void DataInterface.AddPlayerToServer(Player player) 
+        {
+            _playerDatabase._players.Add(player);
+        }
+
+        void DataInterface.AddLobbyToServer(Lobby lobby)
+        {
+            _lobbyDatabase._lobbies.Add(lobby);
         }
 
         void DataInterface.CreateLobby(string lobbyName)
         {
-            _lobbyDatabase.CreateLobby(lobbyName);
+            Lobby lobby = new Lobby(lobbyName);
+            _lobbyDatabase.AddNewLobbyToServer(lobby);
         }
 
-        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType, DateTime dateTime)
+        void DataInterface.GetPlayerForIndex(int index, out string foundUsername)
         {
-            Message message = new Message(sender, recipent, content, messageType, dateTime);    
+            foundUsername = _playerDatabase.GetUsernameByIndex(index);
+        }
+        
+        void DataInterface.GetLobbyForIndex(int index, out string foundLobbyName)
+        {
+            foundLobbyName = _lobbyDatabase.GetLobbyNameByIndex(index);
+        }
+
+        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType)
+        {
+            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType);    
             
         }
 
-        void DataInterface.DeleteLobby(string lobbyName, Lobby lobbyToDelete)
+        void DataInterface.GetPlayersInLobbyCount(int index, out int lobbyCount)
         {
-            _lobbyDatabase.RemoveLobby(lobbyToDelete);
+            lobbyCount = _lobbyDatabase._lobbies[index].PlayerCount;
         }
 
-        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType, DateTime dateTime)
+
+        List<MessageDatabase.Message> DataInterface.GetMessagesForLobby(string sender, string LobbyName)
+        {
+            return _messageDatabase.GetMessagesForRecipient(sender, LobbyName); 
+        }
+
+
+        List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string sender,string recipent)
+        {
+            return _messageDatabase.GetMessagesForRecipient(sender,recipent);
+        }
+
+        void DataInterface.DeleteLobby(int index)
+        {
+            _lobbyDatabase._lobbies.RemoveAt(index);
+        }
+
+        //void DataInterface.DeleteLobby(string lobbyName, Lobby lobbyToDelete)
+        //{
+        //    _lobbyDatabase.RemoveLobby(lobbyToDelete);
+        //}
+
+        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType)
         {
             throw new NotImplementedException();
         }
 
-        void DataInterface.RemovePlayerFromServer(string pUserName, Player playerToRemove)
-        {
-            _playerDatabase.RemovePlayerFromServer(playerToRemove);
-        }
+        //void DataInterface.RemovePlayerFromServer(string pUserName, Player playerToRemove)
+        //{
+        //    _playerDatabase.RemovePlayerFromServer(playerToRemove);
+        //}
 
-        Player DataInterface.GetPlayerUsingUsername(string username)
+        List<string> DataInterface.GetAllLobbyNames()
         {
-            List<Player> players = _playerDatabase.GetPlayers();
+            List<string> lobbyNames = new List<string>();
 
-            // loop throught all players in database and return the player that matches the imported username
-            foreach (Player p in players)
+            foreach(Lobby l in _lobbyDatabase.GetLobbies())
             {
-                if (p.Username == username)
-                {
-                    return p;
-                }
+                lobbyNames.Add(l.LobbyName);
             }
-            return null; // player with imported username doesn't exist
-        }
-        
-        Lobby DataInterface.GetLobbyUsingName(string lobbyName)
-        {
-            List<Lobby> lobbies = _lobbyDatabase.GetLobbies();
 
-            // find the lobby that matches the imported lobby name and return it
-            foreach (Lobby l in lobbies)
-            {
-                if (l.LobbyName == lobbyName)
-                {
-                    return l;
-                }
-            }
-            return null; // no lobby exists with the imported lobby name
+            return lobbyNames;
         }
     }
 }
