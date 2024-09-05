@@ -53,12 +53,12 @@ namespace Mortal_Combat_Data_Library
          * Parameters: recipient (string)
          * Result: List of messages for the recipient.
          */
-        public List<Message> GetMessagesForRecipient(string sender, string recipent)
+        public List<Message> GetMessagesForRecipient(string recipent)
         {
             List<Message> recipientMessages = new List<Message>();
             foreach (Message message in _messages)
             {
-                if (message.Recipent.Equals(recipent) && message.Sender.Equals(sender))
+                if (message.Recipent.Equals(recipent))
                 {
                     recipientMessages.Add(message);
                 }

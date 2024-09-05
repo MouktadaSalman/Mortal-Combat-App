@@ -35,7 +35,7 @@ namespace Mortal_Combat_Data_Library
         //public List<Player> _players;
 
         [DataMember]
-        private List<Message> _messages;
+        private List<MessageDatabase.Message> _messages;
 
 
         /* 
@@ -49,7 +49,7 @@ namespace Mortal_Combat_Data_Library
         {
             this.LobbyName = lobbyName;
             //_players = new List<Player>();
-            _messages = new List<Message>();
+            _messages = new List<MessageDatabase.Message>();
         }
 
         //public string GetUsernameByIndex(int index)
@@ -106,7 +106,7 @@ namespace Mortal_Combat_Data_Library
          * Parameters: message (Message)
          * Result: none
          */
-        public void AddMessage(Message message) 
+        public void AddMessage(MessageDatabase.Message message) 
         {
             _messages.Add(message);
         }

@@ -71,13 +71,13 @@ namespace MortalCombatDataServer
 
         List<MessageDatabase.Message> DataInterface.GetMessagesForLobby(string sender, string LobbyName)
         {
-            return _messageDatabase.GetMessagesForRecipient(sender, LobbyName); 
+            return _messageDatabase.GetMessagesForRecipient(LobbyName); 
         }
 
 
         List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string sender,string recipent)
         {
-            return _messageDatabase.GetMessagesForRecipient(sender,recipent);
+            return _messageDatabase.GetMessagesForRecipient(recipent);
         }
 
         void DataInterface.DeleteLobby(int index)

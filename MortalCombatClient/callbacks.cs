@@ -9,6 +9,8 @@ using System.Windows.Markup;
 
 namespace MortalCombatClient
 {
+
+    //this is the implemntation for the rest of methods in BusinessInterface, under PlayerCallBack interface
     public class callbacks : PlayerCallback
     {
         private inLobbyPage _inLobbyPage;
