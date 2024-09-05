@@ -18,10 +18,10 @@ namespace MortalCombatBusinessServer
     public class BusinessInterfaceImpl : BusinessInterface
     {
 
-        private ConcurrentDictionary<string, Lobby> allLobbies = new ConcurrentDictionary<string, Lobby>();
-      
+        private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string,List<PlayerCallback>>();
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
-    
+
+        
         private DataInterface data;
         public BusinessInterfaceImpl() 
         {
@@ -42,6 +42,35 @@ namespace MortalCombatBusinessServer
         public void AddLobbyToServer(Lobby lobby)
         {
             data.AddLobbyToServer(lobby);
+
+
+            if (!allLobbies.ContainsKey(lobby.LobbyName))
+            {
+                allLobbies[lobby.LobbyName] = new List<PlayerCallback>();
+                Console.WriteLine($" {lobby.LobbyName} created  in dictionary ");
+            }
+            
+
+        }
+        public void AddPlayertoLobby(Player player, string lobbyName)
+        {
+            PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
+
+
+            if( allLobbies.ContainsKey(lobbyName))
+            {
+                var playerCallbacks = allLobbies[lobbyName];
+
+
+                if (!playerCallbacks.Contains(callback))
+                {
+                    playerCallbacks.Add(callback);
+                }
+
+
+
+            }
+            allPlayerCallback.TryAdd(player.Username, callback);
         }
 
         public void CheckUsernameValidity(string username, out bool isValid)
@@ -161,7 +190,7 @@ namespace MortalCombatBusinessServer
                 var callback = allPlayerCallback[recipent];
                 MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
 
-                callback.ReceivePrivateMessage(message);
+                callback.ReceivePrivateMessage(message.Sender, message.Recipent, message.Content);
             }
 
         }
@@ -182,12 +211,23 @@ namespace MortalCombatBusinessServer
         public void NotifyDistributedMessages(string lobbyName, string sender, string content)
         {
 
-            if (allPlayerCallback.ContainsKey(lobbyName))
+            if (allLobbies.ContainsKey(lobbyName))
             {
-                var callback = allPlayerCallback[lobbyName];
+                var playerCallbacks = allLobbies[lobbyName];
                 MessageDatabase.Message message = new MessageDatabase.Message(sender, lobbyName, content, 1);
 
-                callback.ReceivePrivateMessage(message);
+                //Notify all players in the lobby
+                foreach (var callback in playerCallbacks)
+                {
+                    try
+                    {
+                        callback.ReceiveLobbyMessage(message.Sender, message.Recipent, message.Content);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error sending message to client: {ex.Message}");
+                    }
+                }
             }
         }
 

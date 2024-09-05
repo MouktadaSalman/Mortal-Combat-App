@@ -25,12 +25,12 @@ namespace MortalCombatClient
     /// </summary>
     public partial class loginPage : Page
     {
-        private BusinessInterface foob;
+        private BusinessInterface duplexFoob;
 
-        public loginPage(BusinessInterface inFoob)
+        public loginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
-            this.foob = inFoob;
+            this.duplexFoob = inDuplexFoob;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -46,7 +46,7 @@ namespace MortalCombatClient
             {
                 Player player = CreatePlayer(username);
                 
-                NavigationService.Navigate(new lobbyPage(foob, player));             
+                NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
             }
             else
             {
@@ -62,7 +62,7 @@ namespace MortalCombatClient
             }
             bool isValid;
 
-            foob.CheckUsernameValidity(pUserName, out isValid);
+            duplexFoob.CheckUsernameValidity(pUserName, out isValid);
 
             if (!isValid)
             {
@@ -75,7 +75,7 @@ namespace MortalCombatClient
         private Player CreatePlayer(string pUserName)
         {
             Player newPlayer = new Player(pUserName, "Main");
-            foob.AddPlayerToServer(newPlayer);
+            duplexFoob.AddPlayerToServer(newPlayer);
             return newPlayer;
         }
 

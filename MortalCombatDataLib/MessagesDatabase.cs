@@ -85,16 +85,16 @@ namespace Mortal_Combat_Data_Library
         public class Message
         {
             [DataMember]
-            public string Sender { get; }
+            public string Sender { get; set; }
 
             [DataMember]
-            public string Recipent { get; }
+            public string Recipent { get; set; }
 
             [DataMember]
-            public string Content { get; }
+            public string Content { get; set; }
 
             [DataMember]
-            public int MessageType { get; }  // maybe we could have this set 1 in default for normal messages,
+            public int MessageType { get; set; }  // maybe we could have this set 1 in default for normal messages,
                                              // however if it is a file we set it to 2, in the message chat
           
 
@@ -116,7 +116,7 @@ namespace Mortal_Combat_Data_Library
             // IDK just maybe we will use it for debugging later on similar to the one in message.cs
             public override string ToString()
             {
-                return $"Message{{sender='{Sender}', recipient='{Recipent}', content='{Content}', messageType={MessageType}}}";
+                return $"{Sender}: {Content}";
             }
         }
     }

@@ -27,7 +27,7 @@ namespace MortalCombatClient
     /// </summary>
     public partial class lobbyPage : Page
     {
-        private BusinessInterface foob;
+        private BusinessInterface duplexFoob;
         private string curLobbyName;
         private inLobbyPage nextPage;
         private Player curPlayer;
@@ -37,7 +37,7 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-            foob = inFoob;
+            duplexFoob = inFoob;
             curPlayer = player;
 
             if (lobbiesInServer == null)
@@ -60,7 +60,7 @@ namespace MortalCombatClient
 
                 if (lobby != null)
                 {
-                    nextPage = new inLobbyPage(foob, curPlayer, lobby);
+                    nextPage = new inLobbyPage(duplexFoob, curPlayer, lobby);
                     lobby.PlayerCount++;
                     NavigationService.Navigate(nextPage);
                 }
@@ -81,7 +81,7 @@ namespace MortalCombatClient
                 Lobby lobby = CreateLobby(createdLobbyName);
                 curPlayer.JoinedLobbyName = createdLobbyName;                
                 lobby.PlayerCount++;
-                nextPage = new inLobbyPage(foob, curPlayer, lobby);
+                nextPage = new inLobbyPage(duplexFoob, curPlayer, lobby);
 
                 LobbyRoomList.Items.Add(curLobbyName);
                 NavigationService.Navigate(nextPage);
@@ -110,7 +110,7 @@ namespace MortalCombatClient
         {
             string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
             bool lobbyHasPlayers;
-            foob.DeleteLobby(selectedLobbyName, out lobbyHasPlayers);
+            duplexFoob.DeleteLobby(selectedLobbyName, out lobbyHasPlayers);
             if (lobbyHasPlayers)
             {
                 MessageBox.Show("Lobby has players, cannot delete");
@@ -145,7 +145,7 @@ namespace MortalCombatClient
             }
             bool isValid;
 
-            foob.CheckLobbyNameValidity(inLobbyName, out isValid);
+            duplexFoob.CheckLobbyNameValidity(inLobbyName, out isValid);
 
             if (!isValid)
             {
@@ -158,7 +158,7 @@ namespace MortalCombatClient
         public Lobby CreateLobby(string lobbyName)
         {
             Lobby newLobby = new Lobby(lobbyName);
-            foob.AddLobbyToServer(newLobby);
+            duplexFoob.AddLobbyToServer(newLobby);
             lobbiesInServer.Add(newLobby);
             return newLobby;
         }
@@ -168,7 +168,7 @@ namespace MortalCombatClient
 
             LobbyRoomList.Items.Clear();
             lobbiesInServer.Clear();
-            foreach (string lobbyName in foob.GetAllLobbyNames())
+            foreach (string lobbyName in duplexFoob.GetAllLobbyNames())
             {
 
                 LobbyRoomList.Items.Add(lobbyName.ToString());

@@ -24,76 +24,58 @@ namespace MortalCombatClient
     public partial class inLobbyPage : Page
     {
 
-        private BusinessInterface foob;
+        private BusinessInterface duplexFoob;
         private Player curPlayer; 
         private Lobby curLobby;
-        public inLobbyPage(BusinessInterface inFoob, Player player, Lobby lobby)
+        public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
 
-            foob = inFoob;
+            duplexFoob = inDuplexFoob;
             curPlayer = player;
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
-            InitializeComponent();
+            ((MainWindow)Application.Current.MainWindow).UpdateCallbackContext(this);
 
-            //duplex channel with getting callbacks
-            var callbackInstance = new InstanceContext(new callbacks(this));
-
-            DuplexChannelFactory<BusinessInterface> channelFactory;
-            NetTcpBinding tcp = new NetTcpBinding();
-
-            tcp.SendTimeout = TimeSpan.FromMinutes(5);
-            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
-            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
-            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
-
-
-
-            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, new EndpointAddress(URL));
-            foob = channelFactory.CreateChannel();
-
-
-            //LoadLobbyMessagesAsync();
+            Task task = loadLobbyMessagesAsync();
         }
-
-
-
-
-
-
-
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            
             string messageContent = messageBox.Text;
 
-            foob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
-
-            showMessage(messageBox.Text);
+            duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+            
+            
+            showMessage($"{curPlayer.Username}: {messageContent}");
             messageBox.Clear();
+        }
+
+        public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessagesListBox.Items.Clear();
+            Task task = loadLobbyMessagesAsync();
         }
 
         public void showMessage(string message)
         {
-            MessagesListBox.Items.Add($"{curPlayer.Username}: {message}");
+            
+            MessagesListBox.Items.Add(message);
         }
 
-
-       
-
-        public async Task LoadLobbyMessagesAsync()
+        public async Task loadLobbyMessagesAsync()
         {
-            var lobbyMessages = await Task.Run(() =>foob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
+            
+            
+            var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
 
                showMessage(message.ToString());
             }
         }
-
 
         // Still unsure on how to handle file sharing...
         private void selectFilesButton_Click(object sender, RoutedEventArgs e)

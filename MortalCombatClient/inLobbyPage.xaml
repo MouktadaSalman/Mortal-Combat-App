@@ -19,6 +19,7 @@
         <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="22" Margin="43,39,0,0" VerticalAlignment="Top" Width="81" Click="leaveLobbyButton_Click"/>
 
         <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="25" Margin="587,396,0,0" VerticalAlignment="Top" Width="84" Click="selectFilesButton_Click"/>
-        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="24" Margin="129,10,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False"/>
+        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="23" Margin="129,11,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False" TextAlignment="Center"/>
+        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="23" Margin="263,11,0,0" VerticalAlignment="Top" Width="130"/>
     </Grid>
 </Page>
