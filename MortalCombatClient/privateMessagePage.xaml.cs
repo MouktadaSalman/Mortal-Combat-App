@@ -25,7 +25,6 @@ namespace MortalCombatClient
         private BusinessInterface duplexFoob;
         private Player curPlayer;
         private string messageRecipent;
-
         public privateMessagePage(BusinessInterface inDupexFoob, Player player, string recipent)
         {
             InitializeComponent();
@@ -35,15 +34,11 @@ namespace MortalCombatClient
 
             curPlayer = player;
 
-           
-            playerNameTextBox.Text = recipent;
             messageRecipent = recipent;
+            playerNameTextBox.Text = recipent;
 
             ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(this);
 
-            Task task = loadLobbyMessagesAsync();
-
-            
         }
 
 
@@ -56,8 +51,6 @@ namespace MortalCombatClient
 
             showMessage($"{curPlayer.Username}: {messageContent}");
             messageBox.Clear();
-
-           
         }
 
         public void showMessage(string message)

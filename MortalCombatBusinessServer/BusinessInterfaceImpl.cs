@@ -69,14 +69,8 @@ namespace MortalCombatBusinessServer
 
 
             }
-
-           PlayerCallbackManager.Instance.AddPlayerCallback(player.Username, callback);
-
-
+            allPlayerCallback.TryAdd(player.Username, callback);
         }
-
-        
-
 
         public void CheckUsernameValidity(string username, out bool isValid)
         {
@@ -173,7 +167,7 @@ namespace MortalCombatBusinessServer
         public void SendPrivateMessage(string sender, string recipent, object content)
         {
             data.CreateMessage(sender, recipent, content, 1);
-            
+
             NotifyPrivatePlayer(sender, recipent, content.ToString());
         }
 
@@ -184,20 +178,12 @@ namespace MortalCombatBusinessServer
 
         public void NotifyPrivatePlayer(string sender, string recipent, string content)
         {
-
-            PlayerCallbackManager.Instance.ListAllPlayersInCallbacks();
-
-            var callback = PlayerCallbackManager.Instance.GetPlayerCallback(recipent);
-
-            if (callback != null)
+           if (allPlayerCallback.ContainsKey(recipent))
             {
+                var callback = allPlayerCallback[recipent];
                 MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
-                
 
-                callback.ReceivePrivateMessage(sender, recipent, content);
-            } else
-            {
-                Console.WriteLine("error notifying");
+                callback.ReceivePrivateMessage(message.Sender, message.Recipent, message.Content);
             }
 
         }

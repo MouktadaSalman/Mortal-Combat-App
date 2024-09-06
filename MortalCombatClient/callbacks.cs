@@ -14,10 +14,9 @@ namespace MortalCombatClient
     public class callbacks : PlayerCallback
     {
         private inLobbyPage _inLobbyPage;
+        private MessageDatabase.Message message;
         private privateMessagePage _privateMessagePage;
-        private bool _isLobbyPageActive;
-
-        public callbacks(inLobbyPage nInLobbyPage = null, privateMessagePage privateMessagePage = null)
+        public callbacks(inLobbyPage nInLobbyPage, privateMessagePage privateMessagePage)
         {
             _inLobbyPage = nInLobbyPage;
             _privateMessagePage = privateMessagePage;
@@ -26,35 +25,40 @@ namespace MortalCombatClient
         public void UpdateLobbyPage(inLobbyPage lobbyPage)
         {
             _inLobbyPage = lobbyPage;
-            _isLobbyPageActive = true; 
+
         }
 
-        public void UpdatePrivatePage(privateMessagePage privateMessagePage)
+        public void UpdatePrivatePage(privateMessagePage privateMessagePage) 
         {
+
             _privateMessagePage = privateMessagePage;
-            _isLobbyPageActive = false;
         }
+            
 
         public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
         {
-            if (_isLobbyPageActive && _inLobbyPage != null)
+            message.Sender = sender;
+            message.Recipent = lobbyName;
+            message.Content = content;
+
+            _inLobbyPage.Dispatcher.Invoke(() =>
             {
-                _inLobbyPage.Dispatcher.Invoke(() =>
-                {
-                    _inLobbyPage.showMessage($"{sender}: {content}");
-                });
-            }
+                _inLobbyPage.showMessage(message.ToString());
+            });
         }
 
-        public void ReceivePrivateMessage(string sender, string recipient, string content)
+        public void ReceivePrivateMessage(string sender, string lobbyName, string content)
         {
-            if (!_isLobbyPageActive && _privateMessagePage != null)
+            message.Sender = sender;
+            message.Recipent = lobbyName;
+            message.Content = content;
+
+            _privateMessagePage.Dispatcher.Invoke(() =>
             {
-                _privateMessagePage.Dispatcher.Invoke(() =>
-                {
-                    _privateMessagePage.showMessage($"{sender}: {content}");
-                });
-            }
+                _privateMessagePage.showMessage(message.ToString());
+            });
         }
+
+        
     }
 }
