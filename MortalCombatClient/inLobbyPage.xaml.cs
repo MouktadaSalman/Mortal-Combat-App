@@ -110,6 +110,7 @@ namespace MortalCombatClient
             block.Inlines.Add(new Run(message.Sender + ": "));
 
             //Setup hyperlink
+            //Hyperlink link = new Hyperlink(new Run(message.FileName));
             Hyperlink link = new Hyperlink(new Run(message.FileName))
             {
                 NavigateUri = new Uri(message.Uri)
@@ -117,6 +118,9 @@ namespace MortalCombatClient
 
             //Combine both componenets
             block.Inlines.Add(link);
+
+            //Direct a method when link is clicked
+            link.RequestNavigate += HandleRequestNavigate;
 
             MessagesListBox.Items.Add(block);
         }
@@ -186,6 +190,10 @@ namespace MortalCombatClient
                 //Send hyperlink info through
                 await Task.Run(() =>
                 {
+                    //Upload file
+                    duplexFoob.UploadFile(filePath);
+
+                    //Create info of message
                     duplexFoob.DistributeMessageToLobbyF(curLobby.LobbyName, curPlayer.Username, messageContent);
                 });
             }
@@ -196,11 +204,17 @@ namespace MortalCombatClient
         }
 
         //Handle hyper-link selection
-        private void HandleRequestNavigate(object sender, RoutedEventArgs e)
+        private void HandleRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            var link = (Hyperlink)sender;
-            var uri = link.NavigateUri.ToString();
-            Process.Start(uri);
+            //Extracting the filename from the URI
+            string[] uri = e.Uri.OriginalString.Split('/');
+
+            string fileName = uri.Last();
+
+            //Download the file
+            duplexFoob.DownloadFile(fileName);
+
+            //Process handled
             e.Handled = true;
         }
 
@@ -213,8 +227,5 @@ namespace MortalCombatClient
             playersInLobby.Remove(curPlayer);
             NavigationService.GoBack();            
         }
-
-
-
     }
 }
