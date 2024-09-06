@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mortal_Combat_Data_Library;
+using Microsoft.Win32;
+using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 namespace MortalCombatClient
 {
@@ -113,10 +116,43 @@ namespace MortalCombatClient
             }
         }
 
-        // Still unsure on how to handle file sharing...
         private void selectFilesButton_Click(object sender, RoutedEventArgs e)
         {
+            //To extract file path
+            string filePath = string.Empty;
 
+            //Setting up file filters
+            string filter = "All Files (*.*)|*.*" +
+                            "Text Files (*.txt)|*.txt" +
+                            "Image Files|";
+
+            var imageCodes = ImageCodecInfo.GetImageEncoders();
+
+            foreach(var code in imageCodes)
+            {
+                filter += code.FilenameExtension + ";";
+            }
+
+            using (var opf = new System.Windows.Forms.OpenFileDialog())
+            {
+                opf.Filter = filter;
+                opf.FilterIndex = 2;
+                opf.RestoreDirectory = true;
+
+                if (opf.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = opf.FileName;
+                }
+            }
+
+            if (filePath != null)
+            {
+                System.Windows.MessageBox.Show("File path is: " + filePath);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Failed to extract file path");
+            }
         }
 
         private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
