@@ -72,20 +72,16 @@ namespace MortalCombatClient
         {
             string messageContent = messageBox.Text;
 
-               
-                await Task.Run(() =>
-                {
-                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
-                });
-
-            
-            MessagesListBox.Items.Clear();
-            Task task = loadLobbyMessagesAsync();
+            await Task.Run(() =>
+            {
+                duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+            });
 
             messageBox.Clear();
+
         }
 
-        
+
 
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
         {
