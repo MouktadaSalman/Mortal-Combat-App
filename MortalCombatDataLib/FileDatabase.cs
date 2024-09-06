@@ -4,7 +4,7 @@
  *              to server and vice-versa
  * Author: Jauhar
  * ID: 21494299
- * Version: 1.0.0.2
+ * Version: 1.0.1.1
  */
 
 using System;
@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Runtime.Versioning;
 
 
 namespace MortalCombatDataLib
@@ -22,16 +23,10 @@ namespace MortalCombatDataLib
     {
         /* Class fields:
          * _files -> contains all the uploaded file byte data
-         * _imageFormats -> all the acceptable image formats
          * Instance -> to all a single instance of the file database
          */
         private readonly List<FileData> _files;
         public static FileDatabase Instance { get; } = new FileDatabase();
-
-        private readonly string[] _imageFormats =
-        {
-            "ai", "dwg","jpeg", "jpg", "png", "gif", "webp", "bmp", "svg", "eps", "raw", "tiff", "heif", "heic", "indd", "psd"
-        };
 
         /* Constructor: FileDatabase
          * Description: The private constructor of the database
@@ -81,6 +76,27 @@ namespace MortalCombatDataLib
             return imageData;
         }
 
+        /* Method: CheckFile
+         * Description: Checks if the file already exists
+         * Parameters: fileName (string)
+         * Result: exist (bool)
+         */
+        private bool CheckFile(string fName)
+        {
+            //false by default
+            bool exist = false;
+
+            foreach(var f in _files)
+            {
+                if(f.fileName == fName)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+            return exist;
+        }
+
         /* Method: UploadFile
          * Description: Upload text files from clients
          * Parameters: imagePath (string)
@@ -94,31 +110,32 @@ namespace MortalCombatDataLib
             int fType;
             
             //Extract file name
-            string[] path = filePath.Split('/');
+            string[] path = filePath.Split('\\');
             fName = path.Last();
 
             //Extract file format
             string[] format = fName.Split('.');
             fFormat = format.Last();
 
-            //Check if its a text file
-            if (fFormat == "txt")
+            if(CheckFile(fName))
             {
-                //Add valid text file
-                fType = 2;
-                _files.Add(new FileData(fName, fFormat, fType, FileToBytes(filePath)));
-            }
-
-            //Check if file an accepted image
-            foreach (string f in _imageFormats)
-            {
-                if (f == fFormat)
+                //Check if its a text file
+                if (fFormat == "txt")
+                {
+                    //Add valid text file
+                    fType = 2;
+                    _files.Add(new FileData(fName, fFormat, fType, FileToBytes(filePath)));
+                }
+                else
                 {
                     //Add valid image data upload
                     fType = 1;
                     _files.Add(new FileData(fName, fFormat, fType, ImageToBytes(filePath)));
-                    break;
                 }
+            }
+            else
+            {
+                Console.WriteLine("FileExistence:: File already available in database");
             }
         }
 
@@ -130,13 +147,13 @@ namespace MortalCombatDataLib
         public void DownloadFile(string fileName)
         {
             //Get the path to the downloads folder
-            string downloadPath = @"";
-            downloadPath = Path.Combine(downloadPath, fileName);
+            string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
 
             if (downloadPath != @"")
             {
                 string finalPath = Path.Combine(downloadPath, fileName);
-                foreach (FileData f in _files)
+                Console.WriteLine(downloadPath + " vs " + "C:\\Users\\mjauh\\Downloads");
+                foreach (var f in _files)
                 {
                     if (f.fileName == fileName)
                     {

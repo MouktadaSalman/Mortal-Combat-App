@@ -39,7 +39,10 @@ namespace DataServer
         //void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, object content, int messageType);
+        void CreateMessage(string sender, string recipent, string content, int messageType);
+
+        [OperationContract]
+        void CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType);
 
         [OperationContract]
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType);
@@ -60,8 +63,13 @@ namespace DataServer
         void DeleteLobby(int index);
 
         [OperationContract]
-
         List<string> GetAllPlayersInlobby(Lobby lobby);
+
+        [OperationContract]
+        void UploadFile(string filePath);
+
+        [OperationContract]
+        void DownloadFile(string fileName);
     }
 }
 

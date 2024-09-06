@@ -25,7 +25,7 @@ namespace MortalCombatBusinessServer
 
         //Private Messaging methods so far..
         [OperationContract]        
-        void SendPrivateMessage(string sender, string recipent, object content); 
+        void SendPrivateMessage(string sender, string recipent, string content); 
      
         [OperationContract]
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
@@ -35,13 +35,19 @@ namespace MortalCombatBusinessServer
 
         //lobby Messaging methods so far..
         [OperationContract]
-        void DistributeMessageToLobby(string lobbyName, string sender, object content);
+        void DistributeMessageToLobby(string lobbyName, string sender, string content);
+
+        [OperationContract]
+        void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content);
 
         [OperationContract]
         List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
 
         [OperationContract]
         void NotifyDistributedMessages(string lobbyName, string sender, string content);
+
+        [OperationContract]
+        void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content);
 
         [OperationContract]
         List<string> GetAllLobbyNames();
@@ -59,6 +65,12 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DeleteLobby(string lobbyName, out bool doesHavePlayers);
 
+        [OperationContract]
+        void UploadFile(string filePath);
+
+        [OperationContract]
+        void DownloadFile(string filePath);
+
     }
 
     public interface PlayerCallback
@@ -68,5 +80,8 @@ namespace MortalCombatBusinessServer
 
         [OperationContract(IsOneWay = true)]
         void ReceiveLobbyMessage(string sender, string lobbyName, string content);
+
+        [OperationContract(IsOneWay = true)]
+        void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content);
     }
 }

@@ -22,24 +22,17 @@ namespace Mortal_Combat_Data_Library
         
         public static readonly MessageDatabase Instance = new MessageDatabase();
 
-        /*
-         * Constructor: MessageDatabase
+        /* Constructor: MessageDatabase
          * Description: The private constructor of the database.
-         * 
          */
         private MessageDatabase()
         {
             _messages = new List<Message>();
         }
 
-
-
-
-        /*
-         * Method: SaveMessage
+        /* Method: SaveMessage
          * Description: just stores the message in the db.
          * Parameters: sender (string), recipient (string), content (string), messageType (int)
-         * 
          */
         public void SaveMessage(string sender, string recipent, string content, int messageType)
         {
@@ -47,13 +40,21 @@ namespace Mortal_Combat_Data_Library
             _messages.Add(newMessage);
         }
 
-        /*
-         * Method: GetMessagesForRecipient
+        /* Method: SaveMessage
+         * Description: just stores the message in the db.
+         * Parameters: sender (string), recipient (string), content (FileLinkBlock), messageType (int)
+         */
+        public void SaveMessage(string sender, string recipent, FileLinkBlock content, int messageType)
+        {
+            Message newMessage = new Message(sender, recipent, content, messageType);
+            _messages.Add(newMessage);
+        }
+
+        /* Method: GetMessagesForRecipient
          * Description: Retrieves all messages sent to a specific recipient.
          * Parameters: recipient (string)
          * Result: List of messages for the recipient.
          */
-
         public List<Message> GetMessagesForRecipient(string recipent)
         {
             List<Message> recipientMessages = new List<Message>();
@@ -106,7 +107,10 @@ namespace Mortal_Combat_Data_Library
             public string Recipent { get; set; }
 
             [DataMember]
-            public object Content { get; set; }
+            public string Content { get; set; }
+
+            [DataMember]
+            public FileLinkBlock ContentF { get; set; }
 
             [DataMember]
             public int MessageType { get; set; }  // maybe we could have this set 1 in default for normal messages,
@@ -118,7 +122,7 @@ namespace Mortal_Combat_Data_Library
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (string), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, object content, int messageType)
+            public Message(string sender, string recipient, string content, int messageType)
             {
                 Sender = sender;
                 Recipent = recipient;
@@ -127,12 +131,52 @@ namespace Mortal_Combat_Data_Library
                 
             }
 
+            /*
+             * Constructor: Message
+             * Description: Creates a new message instance.
+             * Parameters: sender (string), recipient (string), content (FileLinkBlock), messageType (int), timestamp (DateTime)
+             */
+            public Message(string sender, string recipient, FileLinkBlock content, int messageType)
+            {
+                Sender = sender;
+                Recipent = recipient;
+                ContentF = content;
+                MessageType = messageType;
+
+            }
+
 
             // IDK just maybe we will use it for debugging later on similar to the one in message.cs
             public override string ToString()
             {
                 return $"{Sender}: {Content}";
             }
+        }
+
+        /* 
+         * Inner Class: FileLinkBlock
+         * Description: To hold all the info of a hyper-linked
+         *              message (file-sharing)
+         * Author: Jauhar
+         * ID: 21494299
+         * Version: 1.0.1.1
+         */
+        [DataContract]
+        public class FileLinkBlock
+        {
+            /* Class fields:
+             * Sender -> the sender of the file-sharing
+             * FileName -> name of the file to be shared
+             * Uri -> the URI link of hyper-link
+             */
+            [DataMember]
+            public string Sender { get; set; }
+
+            [DataMember]
+            public string FileName { get; set; }
+
+            [DataMember]
+            public string Uri { get; set; }
         }
     }
 }

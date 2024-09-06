@@ -160,7 +160,7 @@ namespace MortalCombatBusinessServer
 
 
         // Handle private messages
-        public void SendPrivateMessage(string sender, string recipent, object content)
+        public void SendPrivateMessage(string sender, string recipent, string content)
         {
             data.CreateMessage(sender, recipent, content, 1);
 
@@ -190,31 +190,38 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        // Distribute messages to the lobby
-        public void DistributeMessageToLobby(string lobbyName, string sender, object content)
+        //------Distribute messages to the lobby (Both text + hyper-links)-------//
+        public void DistributeMessageToLobby(string lobbyName, string sender, string content)
         {
             data.CreateMessage(sender, lobbyName, content, 1);
             NotifyDistributedMessages(lobbyName, sender, content.ToString());
         }
+
+        public void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
+        {
+            data.CreateMessageF(sender, lobbyName, content, 2);
+            NotifyDistributedMessagesF(lobbyName, sender, content);
+        }
+        //-----------------------------------------------------------------------//
 
         public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)
         {
             return data.GetMessagesForLobby(sender, recipent);
         }
 
+        //----------------Notify both text + hyper-links messages----------------//
         public void NotifyDistributedMessages(string lobbyName, string sender, string content)
         {
             if (allLobbies.ContainsKey(lobbyName))
             {
                 var playerCallbacks = allLobbies[lobbyName];
-                MessageDatabase.Message message = new MessageDatabase.Message(sender, lobbyName, content, 1);
 
                 // Notify all players in the lobby
                 foreach (var callback in playerCallbacks)
                 {
                     try
                     {
-                        callback.ReceiveLobbyMessage(message.Sender, message.Recipent, message.Content.ToString());
+                        callback.ReceiveLobbyMessage(sender, lobbyName, content.ToString());
                     }
                     catch (Exception ex)
                     {
@@ -223,6 +230,28 @@ namespace MortalCombatBusinessServer
                 }
             }
         }
+
+        public void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
+        {
+            if (allLobbies.ContainsKey(lobbyName))
+            {
+                var playerCallbacks = allLobbies[lobbyName];
+
+                // Notify all players in the lobby
+                foreach (var callback in playerCallbacks)
+                {
+                    try
+                    {
+                        callback.ReceiveLobbyMessageF(sender, lobbyName, content);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error sending message to client: {ex.Message}");
+                    }
+                }
+            }
+        }
+        //----------------------------------------------------------------------//
 
         // Remove player from the server
         public void RemovePlayerFromServer(string pUserName)
@@ -242,6 +271,17 @@ namespace MortalCombatBusinessServer
         public List<string> GetPlayersInLobby(Lobby lobby)
         {
             return data.GetAllPlayersInlobby(lobby);
+        }
+
+        //File sharing functionalities
+        public void UploadFile(string filePath)
+        {
+            data.UploadFile(filePath);
+        }
+
+        public void DownloadFile(string fileName)
+        {
+            data.DownloadFile(fileName);
         }
     }
 }

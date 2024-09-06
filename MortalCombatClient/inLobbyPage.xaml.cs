@@ -15,6 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mortal_Combat_Data_Library;
+using Microsoft.Win32;
+using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace MortalCombatClient
 {
@@ -39,7 +43,7 @@ namespace MortalCombatClient
          
             playersInLobby = new List<Player>();
               
-            ((MainWindow)Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
+            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
 
             
             Task task = loadLobbyMessagesAsync();
@@ -76,7 +80,7 @@ namespace MortalCombatClient
             {
                 duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
             });
-
+            
             messageBox.Clear();
 
         }
@@ -134,14 +138,90 @@ namespace MortalCombatClient
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
-               showMessage(message.ToString());
+                if(message.MessageType == 1)
+                {
+                    showMessage(message.ToString());
+                }
+                else if(message.MessageType == 2)
+                {
+                    showLink(message.ContentF);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Encountered an unkown message type");
+                }
             }
         }
 
-        // Still unsure on how to handle file sharing...
-        private void selectFilesButton_Click(object sender, RoutedEventArgs e)
+        private async void selectFilesButton_Click(object sender, RoutedEventArgs e)
         {
+            //To extract file path + filename
+            string filePath = string.Empty;
+            string fileName = string.Empty;
 
+            //Setting up file filters
+            string filter = "Text Files (*.txt)|*.txt|" +
+                            "Image Files|";
+
+            var imageCodes = ImageCodecInfo.GetImageEncoders();
+
+            foreach(var code in imageCodes)
+            {
+                filter += code.FilenameExtension + ";";
+            }
+
+            using (var opf = new System.Windows.Forms.OpenFileDialog())
+            {
+                opf.Filter = filter;
+                opf.FilterIndex = 2;
+                opf.RestoreDirectory = true;
+
+                if (opf.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = opf.FileName;
+                }
+            }
+
+            if (filePath != null)
+            {
+                string[] f = filePath.Split('\\');
+                fileName = f.Last();
+
+                //Assign hyper-link info
+                var messageContent = new MessageDatabase.FileLinkBlock();
+                messageContent.Sender = curPlayer.Username;
+                messageContent.FileName = fileName;
+                messageContent.Uri = "http://MortalCombatDataServer/FileDatabase/" + fileName;
+
+                //Send hyperlink info through
+                await Task.Run(() =>
+                {
+                    //Upload file
+                    duplexFoob.UploadFile(filePath);
+
+                    //Create info of message
+                    duplexFoob.DistributeMessageToLobbyF(curLobby.LobbyName, curPlayer.Username, messageContent);
+                });
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Failed to extract file path");
+            }
+        }
+
+        //Handle hyper-link selection
+        private void HandleRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            //Extracting the filename from the URI
+            string[] uri = e.Uri.OriginalString.Split('/');
+
+            string fileName = uri.Last();
+
+            //Download the file
+            duplexFoob.DownloadFile(fileName);
+
+            //Process handled
+            e.Handled = true;
         }
 
         private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
@@ -153,8 +233,5 @@ namespace MortalCombatClient
             playersInLobby.Remove(curPlayer);
             NavigationService.GoBack();            
         }
-
-
-
     }
 }
