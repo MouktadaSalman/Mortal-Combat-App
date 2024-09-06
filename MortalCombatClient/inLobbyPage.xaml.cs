@@ -68,14 +68,26 @@ namespace MortalCombatClient
 
         }
 
-        private void sendButton_Click(object sender, RoutedEventArgs e)
-        {            
+        private async void sendButton_Click(object sender, RoutedEventArgs e)
+        {
             string messageContent = messageBox.Text;
-            duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+
+               
+                await Task.Run(() =>
+                {
+                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+                });
+
+                
+                
+                    showMessage($"{curPlayer.Username}: {messageContent}");
                     
-            showMessage($"{curPlayer.Username}: {messageContent}");
+                
             messageBox.Clear();
+
         }
+
+        
 
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
         {
@@ -92,8 +104,10 @@ namespace MortalCombatClient
         }
 
         public void showMessage(string message)
-        {            
-            MessagesListBox.Items.Add(message);
+        {
+           
+                MessagesListBox.Items.Add(message);
+           
         }
 
         public async Task loadLobbyMessagesAsync()
