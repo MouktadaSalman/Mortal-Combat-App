@@ -64,10 +64,14 @@ namespace MortalCombatDataServer
             foundLobbyName = _lobbyDatabase.GetLobbyNameByIndex(index);
         }
 
-        void DataInterface.CreateMessage(string sender, string recipent, object content, int messageType)
+        void DataInterface.CreateMessage(string sender, string recipent, string content, int messageType)
         {
-            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType);    
-            
+            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType);
+        }
+
+        void DataInterface.CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType)
+        {
+            _messageDatabase.SaveMessage(sender, recipent, content, messageType);
         }
 
         void DataInterface.GetPlayersInLobbyCount(int index, out int lobbyCount)

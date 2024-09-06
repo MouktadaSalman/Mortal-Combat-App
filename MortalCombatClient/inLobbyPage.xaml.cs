@@ -75,23 +75,15 @@ namespace MortalCombatClient
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
             string messageContent = messageBox.Text;
-
-               
-                await Task.Run(() =>
-                {
-                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
-                });
-
-                
-                
-                    showMessage($"{curPlayer.Username}: {messageContent}");
-                    
-                
+            
+            await Task.Run(() =>
+            {
+                duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+            });
+            
             messageBox.Clear();
 
         }
-
-        
 
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
         {
@@ -109,9 +101,24 @@ namespace MortalCombatClient
 
         public void showMessage(string message)
         {
-           
-                MessagesListBox.Items.Add(message);
-           
+            MessagesListBox.Items.Add(message);
+        }
+
+        public void showLink(MessageDatabase.FileLinkBlock message)
+        {
+            TextBlock block = new TextBlock();
+            block.Inlines.Add(new Run(message.Sender + ": "));
+
+            //Setup hyperlink
+            Hyperlink link = new Hyperlink(new Run(message.FileName))
+            {
+                NavigateUri = new Uri(message.Uri)
+            };
+
+            //Combine both componenets
+            block.Inlines.Add(link);
+
+            MessagesListBox.Items.Add(block);
         }
 
         public async Task loadLobbyMessagesAsync()
@@ -121,19 +128,29 @@ namespace MortalCombatClient
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
-               showMessage(message.ToString());
+                if(message.MessageType == 1)
+                {
+                    showMessage(message.ToString());
+                }
+                else if(message.MessageType == 2)
+                {
+                    showLink(message.ContentF);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Encountered an unkown message type");
+                }
             }
         }
 
-        private void selectFilesButton_Click(object sender, RoutedEventArgs e)
+        private async void selectFilesButton_Click(object sender, RoutedEventArgs e)
         {
             //To extract file path + filename
             string filePath = string.Empty;
             string fileName = string.Empty;
 
             //Setting up file filters
-            string filter = "All Files (*.*)|*.*|" +
-                            "Text Files (*.txt)|*.txt|" +
+            string filter = "Text Files (*.txt)|*.txt|" +
                             "Image Files|";
 
             var imageCodes = ImageCodecInfo.GetImageEncoders();
@@ -160,18 +177,17 @@ namespace MortalCombatClient
                 string[] f = filePath.Split('\\');
                 fileName = f.Last();
 
-                //Hyper-link initialization
-                Run fileRun = new Run(fileName);
-                Hyperlink hyper = new Hyperlink(fileRun);
+                //Assign hyper-link info
+                var messageContent = new MessageDatabase.FileLinkBlock();
+                messageContent.Sender = curPlayer.Username;
+                messageContent.FileName = fileName;
+                messageContent.Uri = "http://MortalCombatDataServer/FileDatabase/" + fileName;
 
-                //Send hyper-link
-                var messageContent = hyper;
-
-                duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
-
-                showMessage($"{curPlayer.Username}: {messageContent}");
-
-                System.Windows.MessageBox.Show("File path is: " + filePath);
+                //Send hyperlink info through
+                await Task.Run(() =>
+                {
+                    duplexFoob.DistributeMessageToLobbyF(curLobby.LobbyName, curPlayer.Username, messageContent);
+                });
             }
             else
             {

@@ -46,6 +46,17 @@ namespace MortalCombatClient
             }
         }
 
+        public void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content)
+        {
+            if (_isLobbyPageActive && _inLobbyPage != null)
+            {
+                _inLobbyPage.Dispatcher.Invoke(() =>
+                {
+                    _inLobbyPage.showLink(content);
+                });
+            }
+        }
+
         public void ReceivePrivateMessage(string sender, string recipient, string content)
         {
             if (!_isLobbyPageActive && _privateMessagePage != null)
