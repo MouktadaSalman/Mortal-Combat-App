@@ -79,12 +79,9 @@ namespace MortalCombatClient
                 });
 
                 
-                
-                    showMessage($"{curPlayer.Username}: {messageContent}");
-                    
-                
-            messageBox.Clear();
+             
 
+            messageBox.Clear();
         }
 
         
@@ -104,10 +101,11 @@ namespace MortalCombatClient
         }
 
         public void showMessage(string message)
-        {
-           
+        {            
+            Dispatcher.Invoke(() =>
+            {
                 MessagesListBox.Items.Add(message);
-           
+            });
         }
 
         public async Task loadLobbyMessagesAsync()
