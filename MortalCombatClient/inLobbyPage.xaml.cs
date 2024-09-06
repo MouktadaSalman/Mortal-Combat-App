@@ -102,10 +102,34 @@ namespace MortalCombatClient
         }
 
         public void showMessage(string message)
-        {            
+        {
             Dispatcher.Invoke(() =>
             {
                 MessagesListBox.Items.Add(message);
+            });
+        }
+
+        public void showLink(MessageDatabase.FileLinkBlock message)
+        {
+            TextBlock block = new TextBlock();
+            block.Inlines.Add(new Run(message.Sender + ": "));
+
+            //Setup hyperlink
+            //Hyperlink link = new Hyperlink(new Run(message.FileName));
+            Hyperlink link = new Hyperlink(new Run(message.FileName))
+            {
+                NavigateUri = new Uri(message.Uri)
+            };
+
+            //Combine both componenets
+            block.Inlines.Add(link);
+
+            //Direct a method when link is clicked
+            link.RequestNavigate += HandleRequestNavigate;
+
+            Dispatcher.Invoke(() =>
+            {
+                MessagesListBox.Items.Add(block);
             });
         }
 
