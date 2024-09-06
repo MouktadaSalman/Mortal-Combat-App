@@ -148,11 +148,11 @@ namespace MortalCombatDataLib
         {
             //Get the path to the downloads folder
             string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
-            downloadPath = Path.Combine(downloadPath, fileName);
 
             if (downloadPath != @"")
             {
                 string finalPath = Path.Combine(downloadPath, fileName);
+                Console.WriteLine(downloadPath + " vs " + "C:\\Users\\mjauh\\Downloads");
                 foreach (var f in _files)
                 {
                     if (f.fileName == fileName)
