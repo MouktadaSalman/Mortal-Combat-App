@@ -106,7 +106,7 @@ namespace Mortal_Combat_Data_Library
             public string Recipent { get; set; }
 
             [DataMember]
-            public string Content { get; set; }
+            public object Content { get; set; }
 
             [DataMember]
             public int MessageType { get; set; }  // maybe we could have this set 1 in default for normal messages,
@@ -118,7 +118,7 @@ namespace Mortal_Combat_Data_Library
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (string), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, string content, int messageType)
+            public Message(string sender, string recipient, object content, int messageType)
             {
                 Sender = sender;
                 Recipent = recipient;
