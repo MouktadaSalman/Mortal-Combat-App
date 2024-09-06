@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="BusinessInterface.cs" />
     <Compile Include="BusinessInterfaceImpl.cs" />
+    <Compile Include="PlayerCallbackManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
