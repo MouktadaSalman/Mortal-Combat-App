@@ -9,37 +9,52 @@ using System.Windows.Markup;
 
 namespace MortalCombatClient
 {
+
+    //this is the implemntation for the rest of methods in BusinessInterface, under PlayerCallBack interface
     public class callbacks : PlayerCallback
     {
         private inLobbyPage _inLobbyPage;
-        private MessageDatabase.Message message;
+        private privateMessagePage _privateMessagePage;
+        private bool _isLobbyPageActive;
 
-        public callbacks(inLobbyPage nInLobbyPage)
+        public callbacks(inLobbyPage nInLobbyPage = null, privateMessagePage privateMessagePage = null)
         {
             _inLobbyPage = nInLobbyPage;
+            _privateMessagePage = privateMessagePage;
         }
 
         public void UpdateLobbyPage(inLobbyPage lobbyPage)
         {
             _inLobbyPage = lobbyPage;
+            _isLobbyPageActive = true; 
         }
+
+        public void UpdatePrivatePage(privateMessagePage privateMessagePage)
+        {
+            _privateMessagePage = privateMessagePage;
+            _isLobbyPageActive = false;
+        }
+
         public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
         {
-            message.Sender = sender;
-            message.Recipent = lobbyName;
-            message.Content = content;
-
-            _inLobbyPage.Dispatcher.Invoke(() =>
+            if (_isLobbyPageActive && _inLobbyPage != null)
             {
-                _inLobbyPage.showMessage(message.ToString());
-            });
+                _inLobbyPage.Dispatcher.Invoke(() =>
+                {
+                    _inLobbyPage.showMessage($"{sender}: {content}");
+                });
+            }
         }
 
-        public void ReceivePrivateMessage(string sender, string lobbyName, string content)
+        public void ReceivePrivateMessage(string sender, string recipient, string content)
         {
-            throw new NotImplementedException();
+            if (!_isLobbyPageActive && _privateMessagePage != null)
+            {
+                _privateMessagePage.Dispatcher.Invoke(() =>
+                {
+                    _privateMessagePage.showMessage($"{sender}: {content}");
+                });
+            }
         }
-
-        
     }
 }

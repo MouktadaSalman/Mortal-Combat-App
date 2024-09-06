@@ -21,6 +21,9 @@ namespace DataServer
         void AddPlayerToServer(Player player);
 
         [OperationContract]
+        void AddPlayerToLobby(Player player, string lobbyName);
+
+        [OperationContract]
         void AddLobbyToServer(Lobby lobby);
 
         [OperationContract]
@@ -55,6 +58,10 @@ namespace DataServer
 
         [OperationContract]
         void DeleteLobby(int index);
+
+        [OperationContract]
+
+        List<string> GetAllPlayersInlobby(Lobby lobby);
     }
 }
 

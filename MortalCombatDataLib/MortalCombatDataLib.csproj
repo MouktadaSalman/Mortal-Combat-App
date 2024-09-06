@@ -52,7 +52,6 @@
     <Compile Include="FileDatabase.cs" />
     <Compile Include="LobbyDatabase.cs" />
     <Compile Include="Lobby.cs" />
-    <Compile Include="Message.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
