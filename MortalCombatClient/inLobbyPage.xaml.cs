@@ -81,8 +81,6 @@ namespace MortalCombatClient
 
         }
 
-
-
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
         {
            string recipent = onlinePlayers.SelectedItem.ToString();
