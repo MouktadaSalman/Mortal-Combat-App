@@ -43,15 +43,13 @@ namespace MortalCombatBusinessServer
         {
             data.AddLobbyToServer(lobby);
 
-
             if (!allLobbies.ContainsKey(lobby.LobbyName))
             {
                 allLobbies[lobby.LobbyName] = new List<PlayerCallback>();
                 Console.WriteLine($" {lobby.LobbyName} created  in dictionary ");
             }
-            
-
         }
+
         public void AddPlayertoLobby(Player player, string lobbyName)
         {
             data.AddPlayerToLobby(player, lobbyName);
@@ -71,8 +69,14 @@ namespace MortalCombatBusinessServer
 
 
             }
-            allPlayerCallback.TryAdd(player.Username, callback);
+
+           PlayerCallbackManager.Instance.AddPlayerCallback(player.Username, callback);
+
+
         }
+
+        
+
 
         public void CheckUsernameValidity(string username, out bool isValid)
         {
@@ -142,9 +146,6 @@ namespace MortalCombatBusinessServer
         }
 
 
-
-
-
         //public void DeleteLobby(string lobbyName)
         //{
         //    Lobby lobby = data.GetLobbyUsingName(lobbyName);
@@ -169,13 +170,10 @@ namespace MortalCombatBusinessServer
          * Parameters: (string mSender, string mRecipent, object mContent, int mMessageType)
          * 
          */
-
-
-
         public void SendPrivateMessage(string sender, string recipent, object content)
         {
             data.CreateMessage(sender, recipent, content, 1);
-
+            
             NotifyPrivatePlayer(sender, recipent, content.ToString());
         }
 
@@ -186,12 +184,20 @@ namespace MortalCombatBusinessServer
 
         public void NotifyPrivatePlayer(string sender, string recipent, string content)
         {
-           if (allPlayerCallback.ContainsKey(recipent))
-            {
-                var callback = allPlayerCallback[recipent];
-                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
 
-                callback.ReceivePrivateMessage(message.Sender, message.Recipent, message.Content);
+            PlayerCallbackManager.Instance.ListAllPlayersInCallbacks();
+
+            var callback = PlayerCallbackManager.Instance.GetPlayerCallback(recipent);
+
+            if (callback != null)
+            {
+                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
+                
+
+                callback.ReceivePrivateMessage(sender, recipent, content);
+            } else
+            {
+                Console.WriteLine("error notifying");
             }
 
         }
@@ -202,8 +208,6 @@ namespace MortalCombatBusinessServer
         {
             data.CreateMessage(sender, lobbyName, content, 1);
             NotifyDistributedMessages(lobbyName, sender, content.ToString());
-
-
         }
 
         public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)
@@ -213,7 +217,6 @@ namespace MortalCombatBusinessServer
 
         public void NotifyDistributedMessages(string lobbyName, string sender, string content)
         {
-
             if (allLobbies.ContainsKey(lobbyName))
             {
                 var playerCallbacks = allLobbies[lobbyName];
@@ -233,26 +236,6 @@ namespace MortalCombatBusinessServer
                 }
             }
         }
-
-
-
-        //public void RemovePlayerFromServer(string pUserName)
-        //{
-        //    Player player = data.GetPlayerUsingUsername(pUserName);
-
-        //    // remove player with imported username if they exist.
-        //    if (player != null)
-        //    {
-        //        data.RemovePlayerFromServer(pUserName, player);
-        //        Console.WriteLine($"Player with username \"{pUserName}\" " +
-        //                              $"Removed from the server");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Username has already been taken. " +
-        //            "Try a different username");
-        //    }
-        //}
 
         public List<string> GetAllLobbyNames()
         {
