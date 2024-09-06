@@ -263,5 +263,16 @@ namespace MortalCombatBusinessServer
         {
             return data.GetAllPlayersInlobby(lobby);
         }
+
+        //File sharing functionalities
+        public void UploadFile(string filePath)
+        {
+            data.UploadFile(filePath);
+        }
+
+        public void DownloadFile(string fileName)
+        {
+            data.DownloadFile(fileName);
+        }
     }
 }

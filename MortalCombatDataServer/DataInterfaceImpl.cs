@@ -1,5 +1,6 @@
 ﻿using DataServer;
 using Mortal_Combat_Data_Library;
+using MortalCombatDataLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace MortalCombatDataServer
         // to add a player to the selected existing lobby
 
         private readonly MessageDatabase _messageDatabase = MessageDatabase.Instance;
+        private readonly FileDatabase _fileDatabase = FileDatabase.Instance;
 
         void DataInterface.GetNumOfPlayers(out int numOfPlayers)
         {
@@ -128,6 +130,16 @@ namespace MortalCombatDataServer
 
 
             return playerNames;
+        }
+
+        void DataInterface.UploadFile(string filePath)
+        {
+            _fileDatabase.UploadFile(filePath);
+        }
+
+        void DataInterface.DownloadFile(string fileName)
+        {
+            _fileDatabase.DownloadFile(fileName);
         }
     }
 }

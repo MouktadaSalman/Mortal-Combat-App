@@ -66,8 +66,13 @@ namespace DataServer
         void DeleteLobby(int index);
 
         [OperationContract]
-
         List<string> GetAllPlayersInlobby(Lobby lobby);
+
+        [OperationContract]
+        void UploadFile(string filePath);
+
+        [OperationContract]
+        void DownloadFile(string fileName);
     }
 }
 
