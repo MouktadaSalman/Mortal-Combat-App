@@ -9,15 +9,15 @@
       Title="lobbyPage"  Height="450" Width="800">
 
     <Grid>
-        <ListBox Name="LobbyRoomList" HorizontalAlignment="Left" VerticalAlignment="Top" Width="452" Height="257" Margin="106,57,0,0"/>
-        <Button Content="Join Lobby" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Click="JoinLobbyButton_Click" Margin="563,294,0,0"/>
-        <Button Content="Create Lobby" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"  Margin="0,374,234,0" Click=" CreateLobbyButton_Click" RenderTransformOrigin="0.525,0.679"/>
-        <TextBox Name="NewLobbyName" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="259" Margin="202,0,0,56" Height="28" />
-        <TextBox Text="Choose from the following lobbies" HorizontalAlignment="Left" Height="23" Margin="106,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="452" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" />
-        <TextBox HorizontalAlignment="Left" Height="28" Margin="238,326,0,0" Text="or Create your own lobby" VerticalAlignment="Top" Width="188" IsEnabled="False" TextAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic"/>
-        <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Left" Height="23" Margin="27,29,0,0" VerticalAlignment="Top" Width="74" Click="LogOutButton_Click"/>
-        <Button Name="RefreshButton" Content="Refresh Lobbies List" HorizontalAlignment="Left" Margin="273,411,0,0" VerticalAlignment="Top" Width="118" Click="RefreshButton_Click"/>
-        <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="563,261,0,0" VerticalAlignment="Top" Width="100" Click="DeleteButton_Click"/>
+        <ListBox Name="LobbyRoomList" HorizontalAlignment="Left" VerticalAlignment="Top" Width="583" Height="264" Margin="97,70,0,0" FontFamily="Algerian" FontSize="16"/>
+        <Button Content="Join Lobby" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Click="JoinLobbyButton_Click" Margin="686,310,0,0" FontFamily="Algerian" FontSize="16"/>
+        <Button Content="Create Lobby" HorizontalAlignment="Right" VerticalAlignment="Top" Width="136"  Margin="0,370,136,0" Click=" CreateLobbyButton_Click" RenderTransformOrigin="0.525,0.679" FontFamily="Algerian" FontSize="16"/>
+        <TextBox Name="NewLobbyName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="260" Margin="264,367,0,0" Height="28" FontFamily="Algerian" FontSize="16" />
+        <TextBox Text="Choose from the following lobbies" HorizontalAlignment="Left" Height="23" Margin="97,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="583" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
+        <TextBox HorizontalAlignment="Left" Height="28" Margin="274,339,0,0" Text="or Create your own lobby" VerticalAlignment="Top" Width="238" IsEnabled="False" TextAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic" Background="{x:Null}" FontFamily="Algerian" BorderBrush="{x:Null}" Foreground="White" FontSize="16"/>
+        <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Left" Height="23" Margin="10,7,0,0" VerticalAlignment="Top" Width="79" Click="LogOutButton_Click" FontFamily="Algerian" FontSize="16"/>
+        <Button Name="RefreshButton" Content="Refresh Lobbies List" HorizontalAlignment="Center" Margin="0,410,0,0" VerticalAlignment="Top" Width="202" Click="RefreshButton_Click" FontFamily="Algerian" FontSize="16" Height="29"/>
+        <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="686,277,0,0" VerticalAlignment="Top" Width="100" Click="DeleteButton_Click" FontFamily="Algerian" FontSize="16"/>
 
 
     </Grid>

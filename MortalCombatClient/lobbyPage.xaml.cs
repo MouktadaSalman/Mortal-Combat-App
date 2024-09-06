@@ -45,7 +45,9 @@ namespace MortalCombatClient
                 lobbiesInServer = new List<Lobby>();
             }
 
-            RefreshLobbyList();
+            
+
+            RefreshLists();
         }
 
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
@@ -54,7 +56,7 @@ namespace MortalCombatClient
             {
                 string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
                 curPlayer.JoinedLobbyName = selectedLobbyName;
-
+                duplexFoob.AddPlayertoLobby(curPlayer, selectedLobbyName);
 
                 Lobby lobby = GetLobbyUsingName(selectedLobbyName);
 
@@ -83,6 +85,7 @@ namespace MortalCombatClient
                 lobby.PlayerCount++;
                 nextPage = new inLobbyPage(duplexFoob, curPlayer, lobby);
 
+                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
                 LobbyRoomList.Items.Add(curLobbyName);
                 NavigationService.Navigate(nextPage);
             }
@@ -91,7 +94,7 @@ namespace MortalCombatClient
                 return;
             }
 
-            RefreshLobbyList();
+            RefreshLists();
         }
 
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
@@ -103,7 +106,7 @@ namespace MortalCombatClient
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            RefreshLobbyList();
+            RefreshLists();
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -122,7 +125,7 @@ namespace MortalCombatClient
                 curPlayer.JoinedLobbyName = "Main";
             }
 
-            RefreshLobbyList();
+            RefreshLists();
         }
 
         public Lobby GetLobbyUsingName(string lobbyName)
@@ -163,9 +166,9 @@ namespace MortalCombatClient
             return newLobby;
         }
 
-        public void RefreshLobbyList()
+        public void RefreshLists()
         {
-
+            
             LobbyRoomList.Items.Clear();
             lobbiesInServer.Clear();
             foreach (string lobbyName in duplexFoob.GetAllLobbyNames())

@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="loginPage"  Height="450" Width="800">
     <Grid>
-        <Button Content="Login" HorizontalAlignment="Center" Margin="0,255,0,0" VerticalAlignment="Top" Height="31" Width="152" Click="Button_Click"/>
-        <TextBox Name="UsernameBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Username" VerticalAlignment="Center" Width="460" Height="50"/>
-        <TextBlock HorizontalAlignment="Center" Margin="0,168,0,0" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Top" Height="27" Width="344"/>
+        <Button Content="Login" HorizontalAlignment="Center" Margin="0,293,0,0" VerticalAlignment="Top" Height="35" Width="196" Click="Button_Click" FontSize="22" FontFamily="Algerian"/>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Center" Height="30" Width="612" FontFamily="Algerian" FontSize="22" TextAlignment="Center"/>
+        <TextBox x:Name="UsernameBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="538" Height="33" Margin="0,245,0,0" FontSize="20" FontFamily="Algerian" Background="{x:Null}" BorderBrush="Black" TextAlignment="Center" SelectionOpacity="1"/>
 
     </Grid>
 </Page>

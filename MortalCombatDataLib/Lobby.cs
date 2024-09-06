@@ -35,7 +35,10 @@ namespace Mortal_Combat_Data_Library
         //public List<Player> _players;
 
         [DataMember]
-        private List<Message> _messages;
+        private List<MessageDatabase.Message> _messages;
+
+        [DataMember]
+        private List<string> _playerInLobby;
 
 
         /* 
@@ -49,7 +52,8 @@ namespace Mortal_Combat_Data_Library
         {
             this.LobbyName = lobbyName;
             //_players = new List<Player>();
-            _messages = new List<Message>();
+            _messages = new List<MessageDatabase.Message>();
+            _playerInLobby = new List<string>();
         }
 
         //public string GetUsernameByIndex(int index)
@@ -63,11 +67,11 @@ namespace Mortal_Combat_Data_Library
          * Parameters: player (Player)
          * Result: none
          */
-        //public void AddPlayer(Player player)
-        //{
+        public void AddPlayer(Player player)
+        {
 
-        //    _players.Add(player);
-        //}
+            _playerInLobby.Add(player.Username);
+        }
 
         /* 
          * Method: RemovePlayer
@@ -106,7 +110,7 @@ namespace Mortal_Combat_Data_Library
          * Parameters: message (Message)
          * Result: none
          */
-        public void AddMessage(Message message) 
+        public void AddMessage(MessageDatabase.Message message) 
         {
             _messages.Add(message);
         }
@@ -121,5 +125,11 @@ namespace Mortal_Combat_Data_Library
         //{
         //    return _players.Count; 
         //}
+
+
+        public List<string> GetPlayersInLobby()
+        {
+            return _playerInLobby;
+        }
     }
 }

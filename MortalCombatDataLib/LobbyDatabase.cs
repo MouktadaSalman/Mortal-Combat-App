@@ -49,14 +49,14 @@ namespace Mortal_Combat_Data_Library
             _lobbies.Add(newLobby);
         }
 
-        //public void AddPlayerToLobby(Player player, string lobbyName)
-        //{
-        //    Lobby lobby = GetLobby(lobbyName);
+        public void AddPlayerToLobby(Player player, string lobbyName)
+        {
+            Lobby lobby = GetLobby(lobbyName);
 
-        //    Console.WriteLine($"Adding player {player.Username} to lobby: " + lobbyName);
+            
 
-        //    lobby._players.Add(player);
-        //}
+        lobby.AddPlayer(player);
+        }
 
         /* Method: CreateLobby
          * Description: Create a lobby
@@ -129,6 +129,12 @@ namespace Mortal_Combat_Data_Library
         public List<Lobby> GetLobbies()
         {
             return _lobbies;
+        }
+
+        public List<string> GetPlayersInLobby(Lobby lobby)
+        {
+            lobby = GetLobby(lobby.LobbyName);
+            return lobby.GetPlayersInLobby();
         }
 
         public Lobby GetLobby(string lobbyName)

@@ -23,10 +23,10 @@ namespace MortalCombatClient
     /// </summary>
     public partial class inLobbyPage : Page
     {
-
         private BusinessInterface duplexFoob;
         private Player curPlayer; 
         private Lobby curLobby;
+        private List<Player> playersInLobby;
         public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
@@ -36,43 +36,86 @@ namespace MortalCombatClient
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
-            ((MainWindow)Application.Current.MainWindow).UpdateCallbackContext(this);
+         
+            playersInLobby = new List<Player>();
+              
+            ((MainWindow)Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
 
+            
             Task task = loadLobbyMessagesAsync();
+            
         }
 
-        private void sendButton_Click(object sender, RoutedEventArgs e)
+
+        public void RefreshLists()
         {
-            
+            playersInLobby.Clear();
+            onlinePlayers.Items.Clear();
+            foreach (string playerName in duplexFoob.GetPlayersInLobby(curLobby))
+            {
+
+
+                if (!onlinePlayers.Items.Contains(playerName))
+                {
+                    onlinePlayers.Items.Add(playerName);
+                }
+                
+
+                Player player = new Player(playerName, curLobby.LobbyName);
+                playersInLobby.Add(player);
+
+            }
+
+        }
+
+        private async void sendButton_Click(object sender, RoutedEventArgs e)
+        {
             string messageContent = messageBox.Text;
 
-            duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+               
+                await Task.Run(() =>
+                {
+                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+                });
+
             
-            
-            showMessage($"{curPlayer.Username}: {messageContent}");
+            MessagesListBox.Items.Clear();
+            Task task = loadLobbyMessagesAsync();
+
             messageBox.Clear();
+        }
+
+        
+
+        private void sendMessageButton_Click (object sender, RoutedEventArgs e)
+        {
+           string recipent = onlinePlayers.SelectedItem.ToString();
+           privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+           NavigationService.Navigate(nextPage);
         }
 
         public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
+
             MessagesListBox.Items.Clear();
             Task task = loadLobbyMessagesAsync();
         }
 
         public void showMessage(string message)
-        {
-            
-            MessagesListBox.Items.Add(message);
+        {            
+            Dispatcher.Invoke(() =>
+            {
+                MessagesListBox.Items.Add(message);
+            });
         }
 
         public async Task loadLobbyMessagesAsync()
         {
-            
-            
+
+            RefreshLists();
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
-
                showMessage(message.ToString());
             }
         }
@@ -87,7 +130,13 @@ namespace MortalCombatClient
         {
             curPlayer.JoinedLobbyName = "Main";
             curLobby.PlayerCount--;
+
+            onlinePlayers.Items.Remove(curPlayer);
+            playersInLobby.Remove(curPlayer);
             NavigationService.GoBack();            
         }
+
+
+
     }
 }

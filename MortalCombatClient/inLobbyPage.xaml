@@ -9,17 +9,20 @@
       Title="inLobbyPage"   Height="450" Width="800">
 
     <Grid>
-        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="542" Height="319" Margin="0,39,0,0"/>
+        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="542" Height="319" Margin="227,44,0,0" FontSize="14"/>
 
 
-        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="129,363,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="453" FontStyle="Italic"/>
-        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="25" Margin="587,363,0,0" VerticalAlignment="Top" Width="84" Click="sendButton_Click"/>
+        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="227,368,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="453" FontStyle="Italic"/>
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="25" Margin="685,368,0,0" VerticalAlignment="Top" Width="84" Click="sendButton_Click" FontFamily="Algerian" FontSize="16"/>
 
 
-        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="22" Margin="43,39,0,0" VerticalAlignment="Top" Width="81" Click="leaveLobbyButton_Click"/>
+        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="22" Margin="10,10,0,0" VerticalAlignment="Top" Width="103" Click="leaveLobbyButton_Click" FontSize="14" FontFamily="Algerian"/>
 
-        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="25" Margin="587,396,0,0" VerticalAlignment="Top" Width="84" Click="selectFilesButton_Click"/>
-        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="23" Margin="129,11,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False" TextAlignment="Center"/>
-        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="23" Margin="263,11,0,0" VerticalAlignment="Top" Width="130"/>
+        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="25" Margin="685,401,0,0" VerticalAlignment="Top" Width="105" Click="selectFilesButton_Click" FontSize="16" FontFamily="Algerian"/>
+        <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="23" Margin="227,16,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False" TextAlignment="Center" FontFamily="Algerian" FontSize="16"/>
+        <Button x:Name="loadMessagesButton" Content="Refresh" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="23" Margin="361,16,0,0" VerticalAlignment="Top" Width="130" FontFamily="Algerian" FontSize="16"/>
+        <ListBox x:Name="onlinePlayers" HorizontalAlignment="Left" Height="264" Margin="46,70,0,0" VerticalAlignment="Top" Width="174" FontSize="14" FontFamily="Algerian"/>
+        <TextBox Text="Online Players" HorizontalAlignment="Left" Height="23" Margin="46,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="174" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
+        <Button x:Name="sendMessageButton" Content="Open chat" HorizontalAlignment="Left" Height="28" Margin="46,339,0,0" VerticalAlignment="Top" Width="174" FontSize="16" FontFamily="Algerian" Click="sendMessageButton_Click"/>
     </Grid>
 </Page>

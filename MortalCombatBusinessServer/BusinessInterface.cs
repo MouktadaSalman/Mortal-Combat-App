@@ -21,44 +21,34 @@ namespace MortalCombatBusinessServer
         void AddLobbyToServer(Lobby lobby);
 
         [OperationContract]
-
         void AddPlayertoLobby(Player player, string lobbyName);
 
-        //[OperationContract]
-        //void RemovePlayerFromServer(string pUserName);
-
-
         //Private Messaging methods so far..
-        [OperationContract]
-        
-        void SendPrivateMessage(string sender, string recipent, object content);
-
-      
+        [OperationContract]        
+        void SendPrivateMessage(string sender, string recipent, object content); 
      
         [OperationContract]
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
-
         [OperationContract]
         void NotifyPrivatePlayer(string sender, string recipent, string content);
-
-
 
         //lobby Messaging methods so far..
         [OperationContract]
         void DistributeMessageToLobby(string lobbyName, string sender, object content);
 
-
         [OperationContract]
         List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
-
 
         [OperationContract]
         void NotifyDistributedMessages(string lobbyName, string sender, string content);
 
-
         [OperationContract]
         List<string> GetAllLobbyNames();
+
+        [OperationContract]
+
+        List<string> GetPlayersInLobby(Lobby lobby);
 
         [OperationContract]
         void CheckUsernameValidity(string username, out bool isValid);

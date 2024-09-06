@@ -53,17 +53,32 @@ namespace Mortal_Combat_Data_Library
          * Parameters: recipient (string)
          * Result: List of messages for the recipient.
          */
-        public List<Message> GetMessagesForRecipient(string sender, string recipent)
+
+        public List<Message> GetMessagesForRecipient(string recipent)
         {
             List<Message> recipientMessages = new List<Message>();
             foreach (Message message in _messages)
             {
-                if (message.Recipent.Equals(recipent) && message.Sender.Equals(sender))
+                if (message.Recipent.Equals(recipent))
                 {
                     recipientMessages.Add(message);
                 }
             }
             return recipientMessages;
+        }
+
+
+        public List<Message> GetPrivateMessagesForRecipient(string sender, string recipent)
+        {
+            List<Message> pRecipientMessages = new List<Message>();
+            foreach (Message message in _messages)
+            {
+                if (message.Recipent.Equals(recipent) && message.Sender.Equals(sender))
+                {
+                    pRecipientMessages.Add(message);
+                }
+            }
+            return pRecipientMessages;
         }
 
         /*
@@ -91,7 +106,7 @@ namespace Mortal_Combat_Data_Library
             public string Recipent { get; set; }
 
             [DataMember]
-            public string Content { get; set; }
+            public object Content { get; set; }
 
             [DataMember]
             public int MessageType { get; set; }  // maybe we could have this set 1 in default for normal messages,
@@ -103,7 +118,7 @@ namespace Mortal_Combat_Data_Library
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (string), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, string content, int messageType)
+            public Message(string sender, string recipient, object content, int messageType)
             {
                 Sender = sender;
                 Recipent = recipient;
