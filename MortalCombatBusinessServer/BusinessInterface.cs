@@ -48,6 +48,8 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DistributeMessageToLobby(string lobbyName, string sender, object content);
 
+        [OperationContract]
+        void DistributeHyperlinkToLobby(string lobbyName, string sender, object content);
 
         [OperationContract]
         List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);

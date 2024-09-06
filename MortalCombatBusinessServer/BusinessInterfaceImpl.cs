@@ -202,8 +202,12 @@ namespace MortalCombatBusinessServer
         {
             data.CreateMessage(sender, lobbyName, content, 1);
             NotifyDistributedMessages(lobbyName, sender, content.ToString());
+        }
 
-
+        public void DistributeHyperlinkToLobby(string lobbyName, string sender, object content)
+        {
+            data.CreateMessage(sender, lobbyName, content, 2);
+            NotifyDistributedMessages(lobbyName, sender, content);
         }
 
         public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)

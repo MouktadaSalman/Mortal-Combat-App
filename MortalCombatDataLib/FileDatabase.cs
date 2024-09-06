@@ -110,7 +110,7 @@ namespace MortalCombatDataLib
             int fType;
             
             //Extract file name
-            string[] path = filePath.Split('/');
+            string[] path = filePath.Split('\\');
             fName = path.Last();
 
             //Extract file format
