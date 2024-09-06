@@ -38,10 +38,6 @@ namespace DataServer
         //[OperationContract]
         //void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
 
-
-        //[OperationContract]
-        //void RemovePlayerFromServer(string pUserName, Player playerToRemove);
-
         [OperationContract]
         void CreateMessage(string sender, string recipent, object content, int messageType);
 
@@ -49,12 +45,10 @@ namespace DataServer
         void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType);
 
         [OperationContract]
-
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
 
         [OperationContract]
         List<MessageDatabase.Message> GetMessagesForLobby(string sender, string lobbyName);
-
 
         [OperationContract]
         List<string> GetAllLobbyNames();
