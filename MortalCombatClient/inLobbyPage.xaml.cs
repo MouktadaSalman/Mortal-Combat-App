@@ -101,7 +101,10 @@ namespace MortalCombatClient
 
         public void showMessage(string message)
         {
-            MessagesListBox.Items.Add(message);
+            Dispatcher.Invoke(() =>
+            {
+                MessagesListBox.Items.Add(message);
+            });
         }
 
         public void showLink(MessageDatabase.FileLinkBlock message)
@@ -122,7 +125,10 @@ namespace MortalCombatClient
             //Direct a method when link is clicked
             link.RequestNavigate += HandleRequestNavigate;
 
-            MessagesListBox.Items.Add(block);
+            Dispatcher.Invoke(() =>
+            {
+                MessagesListBox.Items.Add(block);
+            });
         }
 
         public async Task loadLobbyMessagesAsync()
