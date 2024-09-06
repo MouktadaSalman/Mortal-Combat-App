@@ -37,7 +37,7 @@ namespace MortalCombatClient
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
          
-                playersInLobby = new List<Player>();
+            playersInLobby = new List<Player>();
               
             ((MainWindow)Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
 
@@ -78,8 +78,9 @@ namespace MortalCombatClient
                     duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
                 });
 
-                
-             
+            
+            MessagesListBox.Items.Clear();
+            Task task = loadLobbyMessagesAsync();
 
             messageBox.Clear();
         }
