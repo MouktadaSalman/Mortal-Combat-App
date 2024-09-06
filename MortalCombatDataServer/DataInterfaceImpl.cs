@@ -82,7 +82,7 @@ namespace MortalCombatDataServer
 
         List<MessageDatabase.Message> DataInterface.GetPrivateMessages(string sender,string recipent)
         {
-            return _messageDatabase.GetMessagesForRecipient(recipent);
+            return _messageDatabase.GetPrivateMessagesForRecipient(sender, recipent);
         }
 
         void DataInterface.DeleteLobby(int index)
