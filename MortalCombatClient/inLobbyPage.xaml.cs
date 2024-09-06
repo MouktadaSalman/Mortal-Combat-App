@@ -23,10 +23,10 @@ namespace MortalCombatClient
     /// </summary>
     public partial class inLobbyPage : Page
     {
-
         private BusinessInterface duplexFoob;
         private Player curPlayer; 
         private Lobby curLobby;
+
         public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
@@ -42,13 +42,10 @@ namespace MortalCombatClient
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
-        {
-            
+        {            
             string messageContent = messageBox.Text;
-
             duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
-            
-            
+                    
             showMessage($"{curPlayer.Username}: {messageContent}");
             messageBox.Clear();
         }
@@ -60,19 +57,15 @@ namespace MortalCombatClient
         }
 
         public void showMessage(string message)
-        {
-            
+        {            
             MessagesListBox.Items.Add(message);
         }
 
         public async Task loadLobbyMessagesAsync()
         {
-            
-            
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
-
                showMessage(message.ToString());
             }
         }
