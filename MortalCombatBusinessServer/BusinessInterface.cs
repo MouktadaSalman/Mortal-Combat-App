@@ -59,12 +59,6 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DeleteLobby(string lobbyName, out bool doesHavePlayers);
 
-        [OperationContract]
-        void UploadFile(string filePath);
-
-        [OperationContract]
-        void DownloadFile(string filePath);
-
     }
 
     public interface PlayerCallback
