@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Markup;
 
 namespace MortalCombatClient
@@ -37,24 +35,13 @@ namespace MortalCombatClient
             _isLobbyPageActive = false;
         }
 
-        public void ReceiveLobbyMessage(string sender, string lobbyName, object content, int type)
+        public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
         {
             if (_isLobbyPageActive && _inLobbyPage != null)
             {
                 _inLobbyPage.Dispatcher.Invoke(() =>
                 {
-                    if(type == 1)
-                    {
-                        _inLobbyPage.showMessage($"{sender}: {content}");
-                    }
-                    else if(type == 2)
-                    {
-                        _inLobbyPage.showLink((TextBlock)content);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Encountered an unkown message type");
-                    }
+                    _inLobbyPage.showMessage($"{sender}: {content}");
                 });
             }
         }

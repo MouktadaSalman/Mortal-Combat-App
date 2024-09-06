@@ -35,13 +35,13 @@ namespace MortalCombatBusinessServer
 
         //lobby Messaging methods so far..
         [OperationContract]
-        void DistributeMessageToLobby(string lobbyName, string sender, object content, int type);
+        void DistributeMessageToLobby(string lobbyName, string sender, object content);
 
         [OperationContract]
         List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
 
         [OperationContract]
-        void NotifyDistributedMessages(string lobbyName, string sender, object content, int type);
+        void NotifyDistributedMessages(string lobbyName, string sender, string content);
 
         [OperationContract]
         List<string> GetAllLobbyNames();
@@ -67,6 +67,6 @@ namespace MortalCombatBusinessServer
         void ReceivePrivateMessage(string sender, string lobbyName, string content);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveLobbyMessage(string sender, string lobbyName, object content, int type);
+        void ReceiveLobbyMessage(string sender, string lobbyName, string content);
     }
 }

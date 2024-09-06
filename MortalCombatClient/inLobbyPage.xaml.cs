@@ -75,11 +75,17 @@ namespace MortalCombatClient
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
             string messageContent = messageBox.Text;
+
                
-            await Task.Run(() =>
-            {
-                 duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent, 1);
-            });
+                await Task.Run(() =>
+                {
+                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+                });
+
+                
+                
+                    showMessage($"{curPlayer.Username}: {messageContent}");
+                    
                 
             messageBox.Clear();
 
@@ -108,14 +114,6 @@ namespace MortalCombatClient
            
         }
 
-        public void showLink(TextBlock inlink)
-        {
-            var item = new ListBoxItem();
-            item.Content = inlink;
-
-            MessagesListBox.Items.Add(item);
-        }
-
         public async Task loadLobbyMessagesAsync()
         {
 
@@ -123,15 +121,7 @@ namespace MortalCombatClient
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
-                if(message.MessageType == 1)
-                {
-                    showMessage(message.ToString());
-                }
-                else if(message.MessageType == 2)
-                {
-                    showLink((TextBlock)message.Content);
-                }
-               
+               showMessage(message.ToString());
             }
         }
 
@@ -167,30 +157,19 @@ namespace MortalCombatClient
 
             if (filePath != null)
             {
-                //Set a TextBlock' to allow text + hyper-link on same line
-                TextBlock messageContent = new TextBlock();
-                Run pSender = new Run(curPlayer.Username + ": ");
-
                 string[] f = filePath.Split('\\');
                 fileName = f.Last();
 
                 //Hyper-link initialization
-                Hyperlink hyper = new Hyperlink(new Run(fileName))
-                {
-                    NavigateUri = new Uri("https://MortalCombatDataServer/FileDatabase/" + fileName)
-                };
-
+                Run fileRun = new Run(fileName);
+                Hyperlink hyper = new Hyperlink(fileRun);
 
                 //Send hyper-link
-                messageContent.Inlines.Add(pSender);
-                messageContent.Inlines.Add(hyper);
+                var messageContent = hyper;
 
-                //store TextBlock type of message content to an 'object' placeholder
-                object ob = messageContent;
-                //showLink((TextBlock)ob);
-                duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, ob, 2);
+                duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
 
-                
+                showMessage($"{curPlayer.Username}: {messageContent}");
 
                 System.Windows.MessageBox.Show("File path is: " + filePath);
             }

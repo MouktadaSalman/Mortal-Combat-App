@@ -191,22 +191,10 @@ namespace MortalCombatBusinessServer
         }
 
         // Distribute messages to the lobby
-        public void DistributeMessageToLobby(string lobbyName, string sender, object content, int type)
+        public void DistributeMessageToLobby(string lobbyName, string sender, object content)
         {
-            if(type == 1)
-            {
-                data.CreateMessage(sender, lobbyName, content.ToString(), type);
-            }
-            else if(type == 2)
-            {
-                data.CreateMessage(sender, lobbyName, content, type);
-            }
-            else
-            {
-                Console.WriteLine("Unrecognisable messsage type");
-            }
-
-            NotifyDistributedMessages(lobbyName, sender, content, type);
+            data.CreateMessage(sender, lobbyName, content, 1);
+            NotifyDistributedMessages(lobbyName, sender, content.ToString());
         }
 
         public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)
@@ -214,31 +202,19 @@ namespace MortalCombatBusinessServer
             return data.GetMessagesForLobby(sender, recipent);
         }
 
-        public void NotifyDistributedMessages(string lobbyName, string sender, object content, int type)
+        public void NotifyDistributedMessages(string lobbyName, string sender, string content)
         {
             if (allLobbies.ContainsKey(lobbyName))
             {
                 var playerCallbacks = allLobbies[lobbyName];
-
-                MessageDatabase.Message message = null;
-
-                //General string message
-                if(type == 1)
-                {
-                    message = new MessageDatabase.Message(sender, lobbyName, content.ToString(), 1);
-                }
-                //File link message
-                else if(type == 2)
-                {
-                    message = new MessageDatabase.Message(sender, lobbyName, content, 2);
-                }
+                MessageDatabase.Message message = new MessageDatabase.Message(sender, lobbyName, content, 1);
 
                 // Notify all players in the lobby
                 foreach (var callback in playerCallbacks)
                 {
                     try
                     {
-                        callback.ReceiveLobbyMessage(message.Sender, message.Recipent, message.Content, message.MessageType);
+                        callback.ReceiveLobbyMessage(message.Sender, message.Recipent, message.Content.ToString());
                     }
                     catch (Exception ex)
                     {
