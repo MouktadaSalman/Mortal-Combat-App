@@ -91,6 +91,7 @@ namespace MortalCombatClient
         {
            string recipent = onlinePlayers.SelectedItem.ToString();
            privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+         
            NavigationService.Navigate(nextPage);
         }
 

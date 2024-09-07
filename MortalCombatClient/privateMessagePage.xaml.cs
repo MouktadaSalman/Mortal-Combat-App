@@ -41,7 +41,7 @@ namespace MortalCombatClient
 
             ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(this);
 
-            Task task = loadLobbyMessagesAsync();
+            Task task = loadMessagesAsync();
 
             
         }
@@ -70,10 +70,10 @@ namespace MortalCombatClient
         {
 
             MessagesListBox.Items.Clear();
-            Task task = loadLobbyMessagesAsync();
+            Task task = loadMessagesAsync();
         }
 
-        public async Task loadLobbyMessagesAsync()
+        public async Task loadMessagesAsync()
         {
 
             var Messages = await Task.Run(() => duplexFoob.GetPrivateMessages(curPlayer.Username, messageRecipent));

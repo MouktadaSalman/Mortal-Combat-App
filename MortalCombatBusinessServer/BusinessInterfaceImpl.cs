@@ -13,6 +13,7 @@ namespace MortalCombatBusinessServer
         // A ConcurrentDictionary to manage all player callbacks per instance
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
+        private ConcurrentDictionary<string, PlayerCallback> allPrivatePlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
 
         private DataInterface data;
 
@@ -177,9 +178,9 @@ namespace MortalCombatBusinessServer
         {
             ListAllPlayersInCallbacks();
 
-            if (allPlayerCallback.ContainsKey(recipent))
+            if (allPrivatePlayerCallback.ContainsKey(recipent))
             {
-                var callback = allPlayerCallback[recipent];
+                var callback = allPrivatePlayerCallback[recipent];
                 MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
 
                 callback.ReceivePrivateMessage(message.Sender, message.Recipent, message.Content.ToString());
