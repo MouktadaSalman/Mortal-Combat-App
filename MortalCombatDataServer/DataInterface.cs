@@ -69,7 +69,7 @@ namespace DataServer
         void UploadFile(string filePath);
 
         [OperationContract]
-        void DownloadFile(string fileName);
+        void RetrieveFile(string fileName, out byte[] fData, out int fType);
     }
 }
 

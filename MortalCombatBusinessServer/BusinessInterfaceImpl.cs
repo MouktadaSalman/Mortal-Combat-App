@@ -3,6 +3,9 @@ using Mortal_Combat_Data_Library;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.ServiceModel;
 
 namespace MortalCombatBusinessServer
@@ -281,16 +284,52 @@ namespace MortalCombatBusinessServer
 
         public void DownloadFile(string fileName)
         {
-            data.DownloadFile(fileName);
+            //Initialize values
+            byte[] fData = null;
+            int fType = 0;
+
+            //Get the path to the apps downloads folder
+            string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
+                                        "MortalCombatDownloads");
+
+            //If the app downloads folder doesn't exist yet... create it
+            if (!Directory.Exists(downloadPath)) { Directory.CreateDirectory(downloadPath); }
+
+            //Check iff app still encounters issues in pathing the custom downloads folder
+            if (Directory.Exists(downloadPath))
+            {
+                //Set the final path
+                string finalPath = Path.Combine(downloadPath, fileName);
+
+                //Extract file details
+                data.RetrieveFile(fileName, out fData, out fType);
+
+                //If its an image
+                if (fType == 1)
+                {
+                    // Using MemoryStream for image conversion
+                    using (MemoryStream ms = new MemoryStream(fData))
+                    {
+                        using (Image image = Image.FromStream(ms))
+                        {
+                            image.Save(finalPath); // Save using the provided file name (already has extension in its name)
+                            Console.WriteLine($"Image saved to: {finalPath}");
+                        }
+                    }
+                }
+                //If it is a text file
+                else if (fType == 2)
+                {
+                    File.WriteAllBytes(finalPath, fData);
+                    Console.WriteLine($"File saved to: {finalPath}");
+                }
+                //If encountered unknown filetype
+                else { Console.WriteLine("Encountered unkown file type"); }
+
+                //Open the file explorer to show it has been downloaded
+                Process.Start("explorer.exe", downloadPath);
+            }
+            else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }
     }
 }
-
-
-
-
-
-
-
-
-

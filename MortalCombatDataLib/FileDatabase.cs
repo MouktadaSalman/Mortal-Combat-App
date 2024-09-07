@@ -64,13 +64,16 @@ namespace MortalCombatDataLib
         {
             byte[] imageData = null;
 
-            Image image = Image.FromFile(imagePath);
-
-            if (image != null)
+            // Load the image from the file
+            using (Image image = Image.FromFile(imagePath))
             {
-                ImageConverter _iConvert = new ImageConverter();
-
-                var imageByte = (byte[])_iConvert.ConvertTo(image, typeof(byte[]));
+                // Ensure the image is not null
+                if (image != null)
+                {
+                    // Use ImageConverter to convert the image to a byte array
+                    ImageConverter _iConvert = new ImageConverter();
+                    imageData = (byte[])_iConvert.ConvertTo(image, typeof(byte[]));
+                }
             }
 
             return imageData;
@@ -117,7 +120,7 @@ namespace MortalCombatDataLib
             string[] format = fName.Split('.');
             fFormat = format.Last();
 
-            if(CheckFile(fName))
+            if(!CheckFile(fName))
             {
                 //Check if its a text file
                 if (fFormat == "txt")
@@ -144,38 +147,18 @@ namespace MortalCombatDataLib
          * Parameters: fileName (string)
          * Result:
          */
-        public void DownloadFile(string fileName)
+        public void RetrieveFile(string fileName, out byte[] data, out int type)
         {
-            //Get the path to the downloads folder
-            string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"Downloads");
+            data = null;
+            type = 0;
 
-            if (downloadPath != @"")
+            foreach (var f in _files)
             {
-                string finalPath = Path.Combine(downloadPath, fileName);
-                Console.WriteLine(downloadPath + " vs " + "C:\\Users\\mjauh\\Downloads");
-                foreach (var f in _files)
+                if (f.fileName == fileName)
                 {
-                    if (f.fileName == fileName)
-                    {
-                        //If it is an image
-                        if (f.fileType == 1) 
-                        {
-                            ImageConverter converter = new ImageConverter();
-                            Image x = (Bitmap)converter.ConvertFrom(f.fileData);
-                            x.Save(finalPath);
-                        }
-
-                        //If it is a text file
-                        if (f.fileType == 2)
-                        {
-                            File.WriteAllBytes(finalPath, f.fileData);
-                        }
-                    }
+                    data = f.fileData;
+                    type = f.fileType;
                 }
-            }
-            else
-            {
-                Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder");
             }
         }
     }

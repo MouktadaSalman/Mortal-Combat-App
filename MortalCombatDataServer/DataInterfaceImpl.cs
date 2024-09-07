@@ -141,9 +141,9 @@ namespace MortalCombatDataServer
             _fileDatabase.UploadFile(filePath);
         }
 
-        void DataInterface.DownloadFile(string fileName)
+        void DataInterface.RetrieveFile(string fileName, out byte[] fData, out int fType)
         {
-            _fileDatabase.DownloadFile(fileName);
+            _fileDatabase.RetrieveFile(fileName, out fData, out fType);
         }
     }
 }
