@@ -327,7 +327,7 @@ namespace MortalCombatBusinessServer
                 else { Console.WriteLine("Encountered unkown file type"); }
 
                 //Open the file explorer to show it has been downloaded
-                Process.Start("explorer.exe", downloadPath);
+                Process.Start("explorer.exe", finalPath);
             }
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }
