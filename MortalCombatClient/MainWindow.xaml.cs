@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: MainWindow
+ * Description: 
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,9 +38,7 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-
-             Callbacks = new callbacks(null, null);
-
+            Callbacks = new callbacks(null, null);
 
             InstanceContext callbackInstance = new InstanceContext(Callbacks);
 
@@ -51,7 +56,6 @@ namespace MortalCombatClient
 
             MainFrame.NavigationService.Navigate(new loginPage(duplexFoob));
         }
-
 
         public void UpdateLobbyCallbackContext(inLobbyPage lobbyPage)
         {

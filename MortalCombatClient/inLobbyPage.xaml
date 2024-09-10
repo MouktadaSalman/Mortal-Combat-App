@@ -22,7 +22,8 @@
         <TextBox x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="23" Margin="227,16,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="129" IsEnabled="False" TextAlignment="Center" FontFamily="Algerian" FontSize="16"/>
         <Button x:Name="loadMessagesButton" Content="Refresh" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="23" Margin="361,16,0,0" VerticalAlignment="Top" Width="130" FontFamily="Algerian" FontSize="16"/>
         <ListBox x:Name="onlinePlayers" HorizontalAlignment="Left" Height="264" Margin="46,70,0,0" VerticalAlignment="Top" Width="174" FontSize="14" FontFamily="Algerian"/>
-        <TextBox Text="Online Players" HorizontalAlignment="Left" Height="23" Margin="46,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="174" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
+        <TextBox Text="Online Players" HorizontalAlignment="Left" Height="23" Margin="41,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="153" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
         <Button x:Name="sendMessageButton" Content="Open chat" HorizontalAlignment="Left" Height="28" Margin="46,339,0,0" VerticalAlignment="Top" Width="174" FontSize="16" FontFamily="Algerian" Click="sendMessageButton_Click"/>
+        <TextBox  x:Name="onlinePlayersCount" HorizontalAlignment="Left" Height="28" Margin="194,42,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="26" RenderTransformOrigin="-0.138,-0.162" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
     </Grid>
 </Page>

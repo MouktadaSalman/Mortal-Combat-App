@@ -1,13 +1,10 @@
 ﻿/*
  * Module: PlayerDatabase
- * Description: Responsible for handling the different
- *              Player operations for the entire server.
- * Authors: Ahmed, Mouktada, Jauhar
- * ID: 20640266, , 21494299
+ * Description: The operations to store and retrieve player data
+ * Authors: Mouktada
+ * ID: 20640266
  * Version: 1.0.0.3
  */
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +16,16 @@ namespace Mortal_Combat_Data_Library
     public class PlayerDatabase
     {
         /* Class fields:
-         * lobbies -> the list of players in the server in the menu
+         * _players -> the list of players in the entire server
+         * Instance -> allows a single instance of the player database
          */
         public readonly List<Player> _players;
         public static PlayerDatabase Instance { get; } = new PlayerDatabase();
 
+        /* Method: PlayerDatabase
+         * Description: Static constructor to instantiate instance
+         *              of the player database
+         */
         static PlayerDatabase() { }
 
         /* Method: PlayerDatabase
@@ -36,67 +38,22 @@ namespace Mortal_Combat_Data_Library
             _players = new List<Player>();
         }
 
+        /* Method: GetUsernameByIndex
+         * Description: Get the username by index
+         * Parameters: index (int)
+         */
         public string GetUsernameByIndex(int index)
         {
             return _players[index].Username;
         }
-        
+
+        /* Method: GetJoinedLobbyNameByIndex
+         * Description: Get the joined lobby name by index
+         * Parameters: index (int)
+         */
         public string GetJoinedLobbyNameByIndex(int index)
         {
             return _players[index].JoinedLobbyName;
         }
-
-        /* Method: AddNewPlayer
-         * Description: Add a new player to the list of players
-         * Parameter: playerUserName (string)
-         * Result: none
-         */
-        //public void AddNewPlayerToServer(string playerUserName)
-        //{
-        //    //Create new lobby
-        //    Player newPlayer = new Player(playerUserName);
-
-        //    //Add new lobby
-        //    _players.Add(newPlayer);
-        //}
-
-        /* Method: RemovePlayer
-         * Description: remove a player from the list of players in the server
-         * Parameter: playerUserName (string)
-         * Result: none
-         */
-        //public void RemovePlayerFromServer(Player playerToRemove)
-        //{            
-        //    _players.Remove(playerToRemove);                
-        //}
-
-        /* Method: GetPlayer
-         * Description: Return a player based on their username 
-         * Parameter: playerUserName (string)
-         * Result: Player
-         */
-        //public Player GetPlayer(string playerUsername) 
-        //{
-
-        //    foreach (Player p in _players)
-        //    {
-        //        if (p.Username.Equals(playerUsername))
-        //        {
-        //            return p;
-        //        }
-        //    }
-        //    Console.WriteLine($" Player with username ( {playerUsername} ) does not exist!!");
-        //    return null;
-        //}
-
-        //public List<Player> GetPlayers() 
-        //{
-        //    return _players;
-        //}
-
-        //public string GetPlayerUserByIndex(int index)
-        //{
-        //    return _players[index].Username;
-        //}
     }
 }

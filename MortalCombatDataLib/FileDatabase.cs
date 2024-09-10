@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Runtime.Versioning;
 
-
 namespace MortalCombatDataLib
 {
     public class FileDatabase
@@ -51,7 +50,6 @@ namespace MortalCombatDataLib
                 var binaryRead = new BinaryReader(fs);
                 fileData = binaryRead.ReadBytes((int)fs.Length);
             }
-
             return fileData;
         }
 
@@ -75,7 +73,6 @@ namespace MortalCombatDataLib
                     imageData = (byte[])_iConvert.ConvertTo(image, typeof(byte[]));
                 }
             }
-
             return imageData;
         }
 

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: loginPage
+ * Description: This module is responsible for the login functionality of the game. It allows players to login to the game.
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,14 +32,25 @@ namespace MortalCombatClient
     /// </summary>
     public partial class loginPage : Page
     {
+        /* Class Fields:
+         * duplexFoob -> the business interface
+         */
         private BusinessInterface duplexFoob;
 
+        /* Constructor: loginPage
+         * Description: The constructor of the login page
+         * Parameters: inDuplexFoob (BusinessInterface)
+         */
         public loginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
             this.duplexFoob = inDuplexFoob;
         }
 
+        /* Method: Button_Click
+         * Description: When the button is clicked, the username is checked for validity and a player is created 
+         * Parameters: snender (object), e (RoutedEventArgs)
+         */
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text.ToString();
@@ -46,7 +64,7 @@ namespace MortalCombatClient
             {
                 Player player = CreatePlayer(username);
                 
-                NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
+                NavigationService.Navigate(new lobbyPage(duplexFoob, player));         
             }
             else
             {
@@ -54,6 +72,11 @@ namespace MortalCombatClient
             }
         }
 
+        /* Method: usernameIsValid
+         * Description: Checks if the username is valid
+         * Parameters: pUserName (string)
+         * Result: bool
+         */
         public bool usernameIsValid(string pUserName)
         {
             if (UsernameBox.Text == "")
@@ -72,6 +95,11 @@ namespace MortalCombatClient
             return true;
         }
 
+        /* Method: CreatePlayer
+         * Description: Creates a player
+         * Parameters: pUserName (string)
+         * Result: Player
+         */
         private Player CreatePlayer(string pUserName)
         {
             Player newPlayer = new Player(pUserName, "Main");

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: DataInterface
+ * Description: An interface for the operations to store and retrieve data from the data tier 
+ * Author: Jauhar, Mouktada, Ahmed
+ * ID: 21494299, 20640266, 21467369
+ * Version: 1.0.0.1
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -33,10 +40,7 @@ namespace DataServer
         void GetPlayerForIndex(int index, out string foundUsername);
 
         [OperationContract]
-        void GetLobbyForIndex(int index, out string foundLobbyName);
-
-        //[OperationContract]
-        //void DeleteLobby(string lobbyName, Lobby lobbyToDelete);
+        void GetLobbyForIndex(int index, out Lobby foundLobbyName);
 
         [OperationContract]
         void CreateMessage(string sender, string recipent, string content, int messageType);

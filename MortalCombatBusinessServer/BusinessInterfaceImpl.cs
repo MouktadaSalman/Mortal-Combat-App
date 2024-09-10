@@ -1,4 +1,11 @@
-﻿using DataServer;
+﻿/* 
+ * Module: File
+ * Description: The business logic for the Mortal Combat game
+ * Author: Jauhar, Mouktada, Ahmed
+ * ID: 21494299, 20640266, 21467369
+ * Version: 1.0.0.1
+ */
+using DataServer;
 using Mortal_Combat_Data_Library;
 using System;
 using System.Collections.Concurrent;
@@ -13,12 +20,19 @@ namespace MortalCombatBusinessServer
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     public class BusinessInterfaceImpl : BusinessInterface
     {
-        // A ConcurrentDictionary to manage all player callbacks per instance
+        /* Class Fields:
+         * allPlayerCallbacks ->   
+         * allLobbies -> 
+         * data -> 
+         */
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
 
         private DataInterface data;
 
+        /* Constructor: BusinessInterfaceImpl
+         * Description: The constructor of the business interface
+         */
         public BusinessInterfaceImpl()
         {
             // Set up communication with the Data layer
@@ -29,13 +43,19 @@ namespace MortalCombatBusinessServer
             data = dataFactory.CreateChannel();
         }
 
-        // Add a player to the server and their callback to the allPlayerCallback dictionary
+        /* Method: CreatePlayer
+         * Description: Calls the data layer to create a player
+         * Parameters: pUserName (string)
+         */
         public void AddPlayerToServer(Player player)
         {
             data.AddPlayerToServer(player);
         }
 
-        // Add lobby to the server and ensure it's in the allLobbies dictionary
+        /* Method: AddLobbyToServer
+         * Description: Calls the data layer to add a lobby, also adds the lobby to the dictionary of callbacks
+         * Parameters: lobby (Lobby)
+         */
         public void AddLobbyToServer(Lobby lobby)
         {
             data.AddLobbyToServer(lobby);
@@ -47,7 +67,10 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        // Add player to a lobby and store their callback
+        /* Method: AddPlayertoLobby
+         * Description: Calls the data layer to add a player to a lobby then adds the player to the dictionary of callbacks
+         * Parameters: player (Player), lobbyName (string)
+         */
         public void AddPlayertoLobby(Player player, string lobbyName)
         {
             data.AddPlayerToLobby(player, lobbyName);
@@ -75,7 +98,9 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        // List all players in the local instance's allPlayerCallback dictionary
+        /* Method: ListAllPlayersInCallbacks
+        * Description: lists all players in the dictionary of callbacks
+        */
         public void ListAllPlayersInCallbacks()
         {
             if (allPlayerCallback.Count > 0)
@@ -92,15 +117,20 @@ namespace MortalCombatBusinessServer
             }
         }
 
-
-
+        /* Method: CheckUsernameValidity
+         * Description: Checks if the username is valid
+         * Parameters: username (string), isValid (bool)
+         * Result: isValid (bool)
+         */
         public void CheckUsernameValidity(string username, out bool isValid)
         {
             int numOfPlayers;
             string foundUsername;
-            isValid = true;
+            isValid = true; // Username is valid by default
 
             data.GetNumOfPlayers(out numOfPlayers);
+
+            // Check if the username already exists by comparing it with all the usernames in the database
             for (int i = 0; i < numOfPlayers; i++)
             {
                 data.GetPlayerForIndex(i, out foundUsername);
@@ -108,61 +138,63 @@ namespace MortalCombatBusinessServer
                 if (username.Equals(foundUsername))
                 {
                     Console.WriteLine($"username: {foundUsername}, already exists, try a different username!!");
-                    isValid = false;
+                    isValid = false; // Username is not valid, it already exists
                     return;
                 }
             }
         }
 
+        /* Method: CheckLobbyNameValidity
+         * Description: Checks if the lobby name is valid
+         * Parameters: lobbyName (string), isValid (bool)
+         * Result: isValid (bool)
+         */
         public void CheckLobbyNameValidity(string lobbyName, out bool isValid)
         {
             int numOfLobbies;
-            string foundLobbyName;
-            isValid = true;
+            Lobby foundLobbyName;
+            isValid = true; // Lobby name is valid by default
 
             data.GetNumOfLobbies(out numOfLobbies);
+
+            // Check if the lobby name already exists by comparing it with all the lobby names in the database
             for (int i = 0; i < numOfLobbies; i++)
             {
                 data.GetLobbyForIndex(i, out foundLobbyName);
 
-                if (lobbyName.Equals(foundLobbyName))
+                if (lobbyName.Equals(foundLobbyName.LobbyName))
                 {
-                    Console.WriteLine($"Lobby name: {foundLobbyName}, already exists, try a different name for the lobby!!");
-                    isValid = false;
+                    Console.WriteLine($"Lobby name: {foundLobbyName.LobbyName}, already exists, try a different name for the lobby!!");
+                    isValid = false; // Lobby name is not valid, it already exists
                     return;
                 }
             }
         }
 
-        public void DeleteLobby(string lobbyName, out bool doesHavePlayers)
+        /* Method: DeleteLobby
+        * Description: Deletes a lobby if it has no players
+        * Parameters: lobbyName (string), doesHavePlayers (bool)
+        * Result: doesHavePlayers (bool)
+        */
+        public void DeleteLobby(string lobbyName)
         {
-            int numOfLobbies;
-            string foundLobbyName;
-            doesHavePlayers = false;
-
-            data.GetNumOfLobbies(out numOfLobbies);
+            data.GetNumOfLobbies(out int numOfLobbies);
             for (int i = 0; i < numOfLobbies; i++)
             {
-                data.GetLobbyForIndex(i, out foundLobbyName);
-                if (lobbyName.Equals(foundLobbyName))
+                data.GetLobbyForIndex(i, out Lobby foundLobbyName);
+
+                // Check if the passed in lobby name still exists by comparing it with all the lobby names in the database
+                if (lobbyName.Equals(foundLobbyName.LobbyName))
                 {
-                    int lobbyCount;
-                    data.GetPlayersInLobbyCount(i, out lobbyCount);
-                    if (lobbyCount > 0)
-                    {
-                        doesHavePlayers = true;
-                        return;
-                    }
-                    else
-                    {
-                        data.DeleteLobby(i);
-                    }
+                    data.DeleteLobby(i); // Delete the lobby                    
                 }
             }
         }
 
-
-        // Handle private messages
+        /* Method: SendPrivateMessage
+        * Description: Calls the data layer to create a private message then notifies the recipient
+        * Parameters: sender (string), recipent (string), content (string)
+        */
         public void SendPrivateMessage(string sender, string recipent, string content)
         {
             data.CreateMessage(sender, recipent, content, 1);
@@ -170,12 +202,20 @@ namespace MortalCombatBusinessServer
             NotifyPrivatePlayer(sender, recipent, content.ToString());
         }
 
+        /* Method: GetPrivateMessages
+        * Description: Calls the data layer to get private messages
+        * Parameters: sender (string), recipent (string)
+        * Result: List of private messages
+        */
         public List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent)
         {
             return data.GetPrivateMessages(sender, recipent);
         }
 
-        // Notify private players using their callback
+        /* Method: NotifyPrivatePlayer
+        * Description: Notifies the recipient of a private message
+        * Parameters: sender (string), recipent (string), content (string)
+        */
         public void NotifyPrivatePlayer(string sender, string recipent, string content)
         {
             ListAllPlayersInCallbacks();
@@ -194,12 +234,20 @@ namespace MortalCombatBusinessServer
         }
 
         //------Distribute messages to the lobby (Both text + hyper-links)-------//
+        /* Method: DistributeMessageToLobby
+        * Description: Calls the data layer to create a text message then notifies all players in the lobby
+        * Parameters: sender (string), recipent (string), content (string)
+        */
         public void DistributeMessageToLobby(string lobbyName, string sender, string content)
         {
             data.CreateMessage(sender, lobbyName, content, 1);
             NotifyDistributedMessages(lobbyName, sender, content.ToString());
         }
 
+        /* Method: DistributeMessageToLobbyF
+        * Description: Calls the data layer to create a hyper-link message then notifies all players in the lobby
+        * Parameters: sender (string), recipent (string), content (MessageDatabase.FileLinkBlock)
+        */
         public void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
         {
             data.CreateMessageF(sender, lobbyName, content, 2);
@@ -207,12 +255,20 @@ namespace MortalCombatBusinessServer
         }
         //-----------------------------------------------------------------------//
 
+        /* Method: GetDistributedMessages
+        * Description: Calls the data layer to get messages for the lobby
+        * Parameters: sender (string), recipent (string)
+        */
         public List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent)
         {
             return data.GetMessagesForLobby(sender, recipent);
         }
 
         //----------------Notify both text + hyper-links messages----------------//
+        /* Method: NotifyDistributedMessages
+        * Description: Notifies all players in the lobby of a text message
+        * Parameters: sender (string), recipent (string), content (string)
+        */
         public void NotifyDistributedMessages(string lobbyName, string sender, string content)
         {
             if (allLobbies.ContainsKey(lobbyName))
@@ -234,6 +290,10 @@ namespace MortalCombatBusinessServer
             }
         }
 
+        /* Method: NotifyDistributedMessagesF
+        * Description: Notifies all players in the lobby of a hyper-link message
+        * Parameters: sender (string), recipent (string), content (MessageDatabase.FileLinkBlock)
+        */
         public void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
         {
             if (allLobbies.ContainsKey(lobbyName))
@@ -256,32 +316,50 @@ namespace MortalCombatBusinessServer
         }
         //----------------------------------------------------------------------//
 
-        // Remove player from the server
-        public void RemovePlayerFromServer(string pUserName)
+        /* Method: RemovePlayerFromServer
+        * Description: Removes a player from the dictionary of callbacks
+        * Parameters: pUsername (string)
+        */
+        public void RemovePlayerFromServer(string pUsername)
         {
-            if (allPlayerCallback.ContainsKey(pUserName))
+            if (allPlayerCallback.ContainsKey(pUsername))
             {
-                allPlayerCallback.TryRemove(pUserName, out _);
-                Console.WriteLine($"Player {pUserName} removed from allPlayerCallback.");
+                allPlayerCallback.TryRemove(pUsername, out _);
+                Console.WriteLine($"Player {pUsername} removed from allPlayerCallback.");
             }
         }
 
+        /* Method: GetAllLobbyNames
+        * Description: Calls the data layer to get all lobby names
+        * Returns: List of all lobby names
+        */
         public List<string> GetAllLobbyNames()
         {
             return data.GetAllLobbyNames();
         }
 
+        /* Method: GetPlayersInLobby
+        * Description: Calls the data layer to get all players in a lobby
+        * Returns: List of all lobby names
+        */
         public List<string> GetPlayersInLobby(Lobby lobby)
         {
             return data.GetAllPlayersInlobby(lobby);
         }
 
-        //File sharing functionalities
+        /* Method: UploadFile
+        * Description: Calls the data layer to upload a file using it's path
+        * Parameters: filePath (string)
+        */
         public void UploadFile(string filePath)
         {
             data.UploadFile(filePath);
         }
 
+        /* Method: DownloadFile
+        * Description: Downloads a file using it's name
+        * Parameters: fileName (string)
+        */
         public void DownloadFile(string fileName)
         {
             //Initialize values
@@ -327,7 +405,7 @@ namespace MortalCombatBusinessServer
                 else { Console.WriteLine("Encountered unkown file type"); }
 
                 //Open the file explorer to show it has been downloaded
-                Process.Start("explorer.exe", downloadPath);
+                Process.Start("explorer.exe", finalPath);
             }
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: Player
+ * Description: The operations to store and retrieve player data
+ * Author: Mouktada
+ * ID: 20640266
+ * Version: 1.0.0.1
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +20,7 @@ namespace Mortal_Combat_Data_Library
     {
         /* Class fields:
          * Username -> the username of the player
-         * isInLobby -> To check if a player is already inside a lobby
+         * JoinedLobbyName -> the name of the lobby the player joined
          * DateTime -> to save the time and date of when the player joins the lobby
          */
 
@@ -31,7 +38,7 @@ namespace Mortal_Combat_Data_Library
          * Description: The constructor method of the class,
          *              sets the username to the parameter and 
          *              the default values for 
-         * Parameters: username (string)
+         * Parameters: username (string), lobbyName (string)
          */
         public Player(string username, string lobbyName)
         {

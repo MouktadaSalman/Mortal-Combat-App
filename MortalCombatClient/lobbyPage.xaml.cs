@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: lobbyPage
+ * Description: This module is responsible for the lobby functionality of the game. It allows players to create, join, and leave lobbies.
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -17,8 +24,6 @@ using MortalCombatBusinessServer;
 using MortalCombatDataServer;
 using Mortal_Combat_Data_Library;
 using System.ServiceModel.Channels;
-
-
 
 namespace MortalCombatClient
 {
@@ -45,8 +50,6 @@ namespace MortalCombatClient
                 lobbiesInServer = new List<Lobby>();
             }
 
-            
-
             RefreshLists();
         }
 
@@ -57,16 +60,15 @@ namespace MortalCombatClient
                 string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
                 curPlayer.JoinedLobbyName = selectedLobbyName;
                 duplexFoob.AddPlayertoLobby(curPlayer, selectedLobbyName);
+                RefreshLists();
 
                 Lobby lobby = GetLobbyUsingName(selectedLobbyName);
 
                 if (lobby != null)
                 {
-                    nextPage = new inLobbyPage(duplexFoob, curPlayer, lobby);
                     lobby.PlayerCount++;
-                    NavigationService.Navigate(nextPage);
+                    NavigationService.Navigate(new inLobbyPage(duplexFoob, curPlayer, lobby));
                 }
-
             } else
             {
                 MessageBox.Show("Choose one of the lobbies then click 'Join' \n Note: If there are no lobbies, you can create one");
@@ -81,19 +83,20 @@ namespace MortalCombatClient
             if (LobbyNameIsValid(createdLobbyName))
             {
                 Lobby lobby = CreateLobby(createdLobbyName);
+
                 curPlayer.JoinedLobbyName = createdLobbyName;                
                 lobby.PlayerCount++;
-                nextPage = new inLobbyPage(duplexFoob, curPlayer, lobby);
 
                 duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
                 LobbyRoomList.Items.Add(curLobbyName);
-                NavigationService.Navigate(nextPage);
+                lobbiesInServer.Add(lobby);
+
+                NavigationService.Navigate(new inLobbyPage(duplexFoob, curPlayer, lobby));
             }
             else
             {
                 return;
             }
-
             RefreshLists();
         }
 
@@ -111,26 +114,38 @@ namespace MortalCombatClient
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
-            bool lobbyHasPlayers;
-            duplexFoob.DeleteLobby(selectedLobbyName, out lobbyHasPlayers);
-            if (lobbyHasPlayers)
+            if (LobbyRoomList.SelectedItem == null)
             {
-                MessageBox.Show("Lobby has players, cannot delete");
+                MessageBox.Show("Please select a lobby to delete");
                 return;
             }
+
+            string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
+            RefreshLists();
+
+            Lobby lobby = GetLobbyUsingName(selectedLobbyName);
+            lobby.CheckForPlayersInLobby();
+
+            if (lobby.HasPlayers)
+            {
+                MessageBox.Show("Lobby has players in it. \nCannot delete lobby");
+            }
+            else
+            {
+                duplexFoob.DeleteLobby(selectedLobbyName);
+                lobbiesInServer.Remove(lobby);
+            }                        
 
             if (!curPlayer.JoinedLobbyName.Equals("Main"))
             {
                 curPlayer.JoinedLobbyName = "Main";
             }
-
             RefreshLists();
         }
 
         public Lobby GetLobbyUsingName(string lobbyName)
         {
-            foreach (var lobby in lobbiesInServer)
+            foreach (Lobby lobby in lobbiesInServer)
             {
                 if (lobby.LobbyName.Equals(lobbyName))
                 {
@@ -167,8 +182,7 @@ namespace MortalCombatClient
         }
 
         public void RefreshLists()
-        {
-            
+        {            
             LobbyRoomList.Items.Clear();
             lobbiesInServer.Clear();
             foreach (string lobbyName in duplexFoob.GetAllLobbyNames())
@@ -178,15 +192,7 @@ namespace MortalCombatClient
 
                 Lobby lobby = new Lobby(lobbyName);
                 lobbiesInServer.Add(lobby);
-            }
-
-            //foreach (Lobby l in lobbiesInServer)
-            //{
-            //    if (!LobbyRoomList.Items.Contains(l.LobbyName))
-            //    {
-            //        LobbyRoomList.Items.Add(l.LobbyName);
-            //    }
-            //}
+            }            
         }
     }
 }
