@@ -90,51 +90,51 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        public void CheckLobbyNameValidity(string lobbyName, out bool isValid)
-        {
-            int numOfLobbies;
-            Lobby foundLobbyName;
-            isValid = true;
 
-            data.GetNumOfLobbies(out numOfLobbies);
+        /* Method: CheckLobbyNameValidity
+         * Description: Checks if the lobby name is valid
+         * Parameters: lobbyName (string), isValid (bool)
+         * Result: isValid (bool)
+         */
+        public void CheckLobbyNameValidity(string lobbyName)
+        {
+            data.GetNumOfLobbies(out int numOfLobbies);
+
+            // Check if the lobby name already exists by comparing it with all the lobby names in the database
             for (int i = 0; i < numOfLobbies; i++)
             {
-                data.GetLobbyForIndex(i, out foundLobbyName);
-
-               
-                if (lobbyName.Equals(foundLobbyName.LobbyName))
+                data.GetLobbyForIndex(i, out Lobby foundLobby);
+                
+                if (lobbyName.Equals(foundLobby.LobbyName))
                 {
-                    Console.WriteLine($"Lobby name: {foundLobbyName}, already exists, try a different name for the lobby!!");
-                    isValid = false;
-                    return;
+                    Console.WriteLine($"Lobby name: {foundLobby.LobbyName}, already exists, try a different name for the lobby!!");
+                    throw new FaultException<LobbyNameAlreadyExistsFault>(new LobbyNameAlreadyExistsFault()
+                    { Issue = "Lobby name already exists" });
                 }
             }
         }
 
         public void DeleteLobby(string lobbyName, out bool doesHavePlayers)
         {
-            int numOfLobbies;
-            Lobby foundLobbyName;
-            doesHavePlayers = false;
 
-            data.GetNumOfLobbies(out numOfLobbies);
+            bool lobbyHasPlayers = false;
+            data.GetNumOfLobbies(out int numOfLobbies);
+
             for (int i = 0; i < numOfLobbies; i++)
             {
                 data.GetLobbyForIndex(i, out foundLobbyName);
                 if (lobbyName.Equals(foundLobbyName.LobbyName))
                 {
-                    int lobbyCount;
-                    data.GetPlayersInLobbyCount(i, out lobbyCount);
-                    if (lobbyCount > 0)
-                    {
-                        doesHavePlayers = true;
-                        return;
-                    }
-                    else
-                    {
-                        data.DeleteLobby(i);
-                    }
+
+                    data.DeleteLobby(foundLobbyName, out lobbyHasPlayers); // Delete the lobby                    
+                    break;
                 }
+
+            }
+            if (lobbyHasPlayers)
+            {
+                throw new FaultException<PlayersStilInLobbyFault>(new PlayersStilInLobbyFault()
+                { Issue = "Players still in lobby" });
             }
         }
 
