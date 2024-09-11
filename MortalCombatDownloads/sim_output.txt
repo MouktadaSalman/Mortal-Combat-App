@@ -1,0 +1,137 @@
+
++===============[New Day]===============+
+
+Days: 0
+Bank: $15000
+Available: 50
+Servicing: 0
+Ready: 0
+
++===============[New Day]===============+
+
+Days: 1
+Bank: $15000
+Available: 50
+Servicing: 0
+Ready: 0
+
++===============[New Day]===============+
+
+Days: 2
+Bank: $15000
+Available: 50
+Servicing: 0
+Ready: 0
+
++===============[New Day]===============+
+
+Days: 3
+Bank: $15000
+Available: 50
+Servicing: 0
+Ready: 0
+
++===============[New Day]===============+
+PURCHASE-IN-STORE
+DELIVERY
+
+Days: 4
+Bank: $11000
+Available: 59
+Servicing: 0
+Ready: 0
+
++===============[New Day]===============+
+PURCHASE-IN-STORE
+PURCHASE-ONLINE byjbjrc@rnk.ive
+PURCHASE-ONLINE vofoy@sdcpco.cbz
+
+Days: 5
+Bank: $14000
+Available: 56
+Servicing: 0
+Ready: 2
+
++===============[New Day]===============+
+
+Days: 6
+Bank: $14000
+Available: 56
+Servicing: 0
+Ready: 2
+
++===============[New Day]===============+
+DROP-OFF eqyjho@tuuuyc.hre
+
+Days: 7
+Bank: $14000
+Available: 56
+Servicing: 1
+Ready: 2
+
++===============[New Day]===============+
+PURCHASE-ONLINE rmzrr@fyyvwj.nsh
+PURCHASE-ONLINE vvv@cdh.rem
+PURCHASE-ONLINE hdc@miui.wgx
+PURCHASE-ONLINE fjhx@dfm.mam
+PURCHASE-IN-STORE
+PURCHASE-ONLINE sskcl@mpwnu.zbx
+PURCHASE-ONLINE yucic@nywxkbx.muo
+
+Days: 8
+Bank: $21000
+Available: 49
+Servicing: 1
+Ready: 8
+
++===============[New Day]===============+
+
+Days: 9
+Bank: $21000
+Available: 49
+Servicing: 0
+Ready: 9
+
++===============[New Day]===============+
+PURCHASE-IN-STORE
+PURCHASE-ONLINE jbuuzxz@xqnnnot.fkf
+
+Days: 10
+Bank: $23000
+Available: 47
+Servicing: 0
+Ready: 10
+
++===============[New Day]===============+
+PURCHASE-ONLINE jphfx@lfoz.gux
+
+Days: 11
+Bank: $24000
+Available: 46
+Servicing: 0
+Ready: 11
+
++===============[New Day]===============+
+PICK-UP hdc@miui.wgx
+
+Days: 12
+Bank: $24000
+Available: 46
+Servicing: 0
+Ready: 10
+
++===============[New Day]===============+
+Fail: Invalid message
+
+
+Days: 13
+Bank: $24000
+Available: 46
+Servicing: 0
+Ready: 10
+
+FAILURE:
+|-> Invalid message (parsing error)
+
+Total number of input messages: 18
+Total number of failures: 1
