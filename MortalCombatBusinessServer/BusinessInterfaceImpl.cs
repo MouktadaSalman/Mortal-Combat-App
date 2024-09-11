@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 
 namespace MortalCombatBusinessServer
@@ -16,6 +17,7 @@ namespace MortalCombatBusinessServer
         // A ConcurrentDictionary to manage all player callbacks per instance
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
+        private ConcurrentDictionary<string, List<MessageDatabase.Message>> pendingMessages = new ConcurrentDictionary<string, List<MessageDatabase.Message>>();
 
         private DataInterface data;
 
@@ -47,33 +49,7 @@ namespace MortalCombatBusinessServer
             }
         }
 
-        // Add player to a lobby and store their callback
-        public void AddPlayertoLobby(Player player, string lobbyName)
-        {
-            data.AddPlayerToLobby(player, lobbyName);
-
-            PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
-
-            if (allLobbies.ContainsKey(lobbyName))
-            {
-                var playerCallbacks = allLobbies[lobbyName];
-
-                if (!playerCallbacks.Contains(callback))
-                {
-                    playerCallbacks.Add(callback);
-                }
-            }
-
-            if (!allPlayerCallback.ContainsKey(player.Username))
-            {
-                allPlayerCallback.TryAdd(player.Username, callback);
-                Console.WriteLine($"Player {player.Username} added to allPlayerCallback.");
-            }
-            else
-            {
-                Console.WriteLine($"Player {player.Username} already exists in allPlayerCallback.");
-            }
-        }
+        
 
         // List all players in the local instance's allPlayerCallback dictionary
         public void ListAllPlayersInCallbacks()
@@ -163,33 +139,170 @@ namespace MortalCombatBusinessServer
 
 
         // Handle private messages
-        public void SendPrivateMessage(string sender, string recipent, string content)
+        public void AddPlayertoLobby(Player player, string lobbyName)
         {
-            data.CreateMessage(sender, recipent, content, 1);
-
-            NotifyPrivatePlayer(sender, recipent, content.ToString());
-        }
-
-        public List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent)
-        {
-            return data.GetPrivateMessages(sender, recipent);
-        }
-
-        // Notify private players using their callback
-        public void NotifyPrivatePlayer(string sender, string recipent, string content)
-        {
-            ListAllPlayersInCallbacks();
-
-            if (allPlayerCallback.ContainsKey(recipent))
+            if (player == null)
             {
-                var callback = allPlayerCallback[recipent];
-                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
+                throw new ArgumentNullException(nameof(player));
+            }
 
-                callback.ReceivePrivateMessage(message.Sender, message.Recipent, message.Content.ToString());
+            if (string.IsNullOrEmpty(lobbyName))
+            {
+                throw new ArgumentException("Lobby name cannot be null or empty", nameof(lobbyName));
+            }
+
+            // Ensure the lobby exists
+            if (!allLobbies.ContainsKey(lobbyName))
+            {
+                allLobbies[lobbyName] = new List<PlayerCallback>();
+                Console.WriteLine($"{lobbyName} created in dictionary");
+            }
+
+            data.AddPlayerToLobby(player, lobbyName);
+
+            PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
+
+            var playerCallbacks = allLobbies[lobbyName];
+
+            if (!playerCallbacks.Contains(callback))
+            {
+                playerCallbacks.Add(callback);
+            }
+            
+
+            if (allPlayerCallback.TryAdd(player.Username, callback))
+            {
+                Console.WriteLine($"Player {player.Username} added to allPlayerCallback.");
+                // Deliver any pending messages
+                DeliverPendingMessages(player.Username);
             }
             else
             {
-                Console.WriteLine($"Error: not notifying private player {sender} |{recipent}|{content}");
+                Console.WriteLine($"Player {player.Username} already exists in allPlayerCallback.");
+            }
+        }
+
+        public void SendPrivateMessage(string sender, string recipient, string content)
+        {
+            data.CreateMessage(sender, recipient, content, 1);
+
+            if (allPlayerCallback.TryGetValue(recipient, out PlayerCallback callback))
+            {
+                NotifyPrivatePlayer(sender, recipient, content);
+            }
+            else
+            {
+                // Store the message for later delivery
+                pendingMessages.AddOrUpdate(recipient,
+                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                    (key, existingList) =>
+                    {
+                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                        return existingList;
+                    });
+                Console.WriteLine($"Message from {sender} to {recipient} stored for later delivery.");
+            }
+        }
+
+        private void DeliverPendingMessages(string username)
+        {
+            if (pendingMessages.TryRemove(username, out List<MessageDatabase.Message> messages))
+            {
+                foreach (var message in messages)
+                {
+                    NotifyPrivatePlayer(message.Sender, message.Recipent, message.Content.ToString());
+                }
+                Console.WriteLine($"Delivered {messages.Count} pending messages to {username}");
+            }
+        }
+
+        public void NotifyPrivatePlayer(string sender, string recipient, string content)
+        {
+            if (allPlayerCallback.TryGetValue(recipient, out PlayerCallback callback))
+            {
+                try
+                {
+                    callback.ReceivePrivateMessage(sender, recipient, content);
+                    Console.WriteLine($"Private message sent from {sender} to {recipient}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error sending private message to {recipient}: {ex.Message}");
+                    // Store the message for later delivery
+                    pendingMessages.AddOrUpdate(recipient,
+                        new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                        (key, existingList) =>
+                        {
+                            existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                            return existingList;
+                        });
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Recipient {recipient} not found in active callbacks. Message from {sender} stored for later delivery.");
+                // Store the message for later delivery
+                pendingMessages.AddOrUpdate(recipient,
+                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                    (key, existingList) =>
+                    {
+                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                        return existingList;
+                    });
+            }
+        }
+
+
+        public void StorePrivateMessage(string sender, string recipient, string content)
+        {
+            try
+            {
+                // Store the message in the database
+                data.CreateMessage(sender, recipient, content, 1); // Assuming 1 is the type for private messages
+
+                Console.WriteLine($"Stored private message from {sender} to {recipient}");
+
+                // If the recipient is exists, notify them
+                if (allPlayerCallback.TryGetValue(recipient, out PlayerCallback callback))
+                {
+                    try
+                    {
+                        callback.ReceivePrivateMessage(sender, recipient, content);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error notifying recipient {recipient}: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error storing private message: {ex.Message}");
+                throw;
+            }
+        }
+
+        public List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2)
+        {
+            try
+            {
+                // Retrieve messages where user1 is sender and user2 is recipient
+                var messages1 = data.GetPrivateMessages(user1, user2);
+
+                // Retrieve messages where user2 is sender and user1 is recipient
+                var messages2 = data.GetPrivateMessages(user2, user1);
+
+                // Combine and sort the messages by timestamp
+                var allMessages = messages1.Concat(messages2)
+                    
+                    .ToList();
+
+                return allMessages;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving private messages: {ex.Message}");
+                throw;
             }
         }
 
@@ -327,7 +440,7 @@ namespace MortalCombatBusinessServer
                 else { Console.WriteLine("Encountered unkown file type"); }
 
                 //Open the file explorer to show it has been downloaded
-                Process.Start("explorer.exe", downloadPath);
+                Process.Start("explorer.exe", finalPath);
             }
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }

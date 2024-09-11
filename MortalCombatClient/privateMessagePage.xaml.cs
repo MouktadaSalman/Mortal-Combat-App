@@ -24,70 +24,97 @@ namespace MortalCombatClient
     {
         private BusinessInterface duplexFoob;
         private Player curPlayer;
-        private string messageRecipent;
+        public string MessageRecipient { get; private set; }
 
-        public privateMessagePage(BusinessInterface inDupexFoob, Player player, string recipent)
+        public privateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
         {
             InitializeComponent();
 
-
-            duplexFoob = inDupexFoob;
-
+            duplexFoob = inDuplexFoob;
             curPlayer = player;
+      
+            playerNameTextBox.Text = recipient;
+            MessageRecipient = recipient;
 
-           
-            playerNameTextBox.Text = recipent;
-            messageRecipent = recipent;
-
-            ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(this);
-
-            Task task = loadLobbyMessagesAsync();
-
-            
+            ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
+            LoadChatHistory();
         }
 
-
-
-        private void sendButton_Click(object sender, RoutedEventArgs e)
+        private void LoadChatHistory()
         {
-           string messageContent = messageBox.Text;
-
-            duplexFoob.SendPrivateMessage(curPlayer.Username, messageRecipent, messageContent);
-
-            showMessage($"{curPlayer.Username}: {messageContent}");
-            messageBox.Clear();
-
-           
-        }
-
-        public void showMessage(string message)
-        {
-
-            MessagesListBox.Items.Add(message);
-        }
-
-        public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            MessagesListBox.Items.Clear();
-            Task task = loadLobbyMessagesAsync();
-        }
-
-        public async Task loadLobbyMessagesAsync()
-        {
-
-            var Messages = await Task.Run(() => duplexFoob.GetPrivateMessages(curPlayer.Username, messageRecipent));
-            foreach (var message in Messages)
+            var messages = duplexFoob.GetPrivateMessages(curPlayer.Username, MessageRecipient);
+            foreach (var message in messages)
             {
-
-                showMessage(message.ToString());
+                AddMessageToListBox($"{message.Sender}: {message.Content}");
             }
         }
 
-
-        private void leaveChatButton_Click(Object sender, RoutedEventArgs e)
+        private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.GoBack();
+            try
+            {
+                string messageContent = messageBox.Text;
+                duplexFoob.SendPrivateMessage(curPlayer.Username, MessageRecipient, messageContent);
+                AddMessageToListBox($"{curPlayer.Username}: {messageContent}");
+                messageBox.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending message: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessagesListBox.Items.Clear();
+                LoadChatHistory();
+                MessageBox.Show("Messages refreshed successfully.", "Refresh", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading new messages: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void leaveChatButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Notify the MainWindow that we're closing this chat
+                ((MainWindow)Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
+
+                // Navigate back to the previous page
+                    NavigationService.GoBack();
+                
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error leaving chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void HandleIncomingMessage(string sender, string content)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                AddMessageToListBox($"{sender}: {content}");
+            });
+        }
+
+        public void AddMessageToListBox(string message)
+        {
+            MessagesListBox.Items.Add(message);
+            
+        }
+
+        private string GetChatKey(string user1, string user2)
+        {
+            return string.Compare(user1, user2, StringComparison.Ordinal) < 0
+                ? $"{user1}:{user2}"  //checks to open the same chat between both players
+                : $"{user2}:{user1}"; //no matter who the sender is and who the recipent is
         }
     }
 }
