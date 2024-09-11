@@ -17,6 +17,13 @@ namespace MortalCombatBusinessServer
         {
             Console.WriteLine("Business Service");
 
+            //Call event handlers when the server is being closed:
+            //Handle Ctrl+C or Ctrl+Break
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnCancelKeyPress);
+
+            //Handle when the process is about to exit (including window close)
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+
             //The location of the download file of all the files
             downloadFile = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
                                         "MortalCombatDownloads");
@@ -44,13 +51,6 @@ namespace MortalCombatBusinessServer
 
             Console.WriteLine("System Online");
             Console.ReadLine();
-
-            //Call event handlers when the server is being closed:
-            //Handle Ctrl+C or Ctrl+Break
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnCancelKeyPress);
-
-            //Handle when the process is about to exit (including window close)
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         }
 
         /* Method: OnCancelKeyPress
