@@ -12,6 +12,7 @@ namespace MortalCombatBusinessServer
     internal class Program
     {
         private static string downloadFile;
+        private static ServiceHost host;
         static void Main(string[] args)
         {
             Console.WriteLine("Business Service");
@@ -22,8 +23,6 @@ namespace MortalCombatBusinessServer
 
             //If the app downloads folder doesn't exist yet... create it
             if (!Directory.Exists(downloadFile)) { Directory.CreateDirectory(downloadFile); }
-
-            ServiceHost host;
 
             //This represents a tcp/ip binding in the Windows network stack
             NetTcpBinding tcp = new NetTcpBinding();
@@ -109,6 +108,46 @@ namespace MortalCombatBusinessServer
             else
             {
                 Console.WriteLine($"The local downloads folder stash doesn't exist (never created)");
+            }
+        }
+
+        /* Method: Cleanup
+         * Description: The actual cleanup when server closes
+         * Parameters: none
+         */
+        static void Cleanup()
+        {
+            //Close the host if it's open
+            if (host != null && host.State == CommunicationState.Opened)
+            {
+                try
+                {
+                    host.Close();
+                    Console.WriteLine("Service host closed.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error closing service host: {ex.Message}");
+                }
+            }
+
+            // Check if the directory exists and delete it
+            if (Directory.Exists(downloadFile))
+            {
+                Console.WriteLine("Attempting to delete the directory...");
+                try
+                {
+                    Directory.Delete(downloadFile, true); // 'true' ensures recursive deletion
+                    Console.WriteLine("Directory deleted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error deleting directory: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("The local downloads folder stash doesn't exist (never created).");
             }
         }
     }
