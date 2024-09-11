@@ -45,9 +45,6 @@ namespace MortalCombatBusinessServer
 
             Console.WriteLine("System Online");
             Console.ReadLine();
-            //Don't forget to close the host after you're done!
-            host.Close();
-
 
             //Call event handlers when the server is being closed:
             //Handle Ctrl+C or Ctrl+Break
@@ -55,6 +52,9 @@ namespace MortalCombatBusinessServer
 
             //Handle when the process is about to exit (including window close)
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+
+            //Don't forget to close the host after you're done!
+            host.Close();
         }
 
         /* Method: OnCancelKeyPress
