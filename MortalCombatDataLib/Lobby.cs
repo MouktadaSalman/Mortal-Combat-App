@@ -17,29 +17,27 @@ using System.Runtime.Serialization;
 
 namespace Mortal_Combat_Data_Library
 {
-
     [DataContract]
     public class Lobby
     {
         /* Class fields:
          * lobbyName -> the name of the lobby
-         * _players -> list of players in the current lobby
+         * PlayerCount -> the number of players in the lobby
+         * HasPlayers -> boolean to check if there are players in the lobby
+         * _playerInLobby -> list of players in the current lobby
          * _messages -> the messages of the current lobby
          */
-
         [DataMember]
         public string LobbyName { get; set; }
+        [DataMember]
         public int PlayerCount { get; set; }
-
-        //[DataMember]       
-        //public List<Player> _players;
+        [DataMember]
+        public bool HasPlayers { get; set; }
 
         [DataMember]
         private List<MessageDatabase.Message> _messages;
-
         [DataMember]
         private List<string> _playerInLobby;
-
 
         /* 
          * Method: Lobby
@@ -51,25 +49,19 @@ namespace Mortal_Combat_Data_Library
         public Lobby(string lobbyName)
         {
             this.LobbyName = lobbyName;
-            //_players = new List<Player>();
+            PlayerCount = 0;
+            HasPlayers = false;
             _messages = new List<MessageDatabase.Message>();
             _playerInLobby = new List<string>();
         }
-
-        //public string GetUsernameByIndex(int index)
-        //{
-        //    return _players[index].Username;
-        //}
 
         /* 
          * Method: AddPlayer
          * Description: Add a player to the current lobby
          * Parameters: player (Player)
-         * Result: none
          */
         public void AddPlayer(Player player)
         {
-
             _playerInLobby.Add(player.Username);
         }
 
@@ -77,7 +69,6 @@ namespace Mortal_Combat_Data_Library
          * Method: RemovePlayer
          * Description: Remove a player from current lobby
          * Parameters: playerName (string)
-         * Result: none
          */
         //public void RemovePlayer(string playerName)
         //{
@@ -108,7 +99,6 @@ namespace Mortal_Combat_Data_Library
          * Method: AddMessage
          * Description: Add message to lobby
          * Parameters: message (Message)
-         * Result: none
          */
         public void AddMessage(MessageDatabase.Message message) 
         {
@@ -116,20 +106,25 @@ namespace Mortal_Combat_Data_Library
         }
 
         /* 
-         * Method: GetPlayerCount
-         * Description: Get player count of lobby
-         * Parameters: none
-         * Result: count (int)
+         * Method: GetPlayersInLobby
+         * Description: Get all players in lobby
+         * Result: List of players in lobby
          */
-        //public int GetPlayerCount()
-        //{
-        //    return _players.Count; 
-        //}
-
-
         public List<string> GetPlayersInLobby()
         {
             return _playerInLobby;
+        }
+
+        public void CheckForPlayersInLobby()
+        {
+            if (_playerInLobby.Count > 0)
+            {
+                HasPlayers = true;
+            }
+            else
+            {
+                HasPlayers = false;
+            }
         }
     }
 }

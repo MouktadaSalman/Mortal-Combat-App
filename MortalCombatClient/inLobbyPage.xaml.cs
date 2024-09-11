@@ -1,4 +1,11 @@
-﻿using MortalCombatBusinessServer;
+﻿/* 
+ * Module: inLobbyPage
+ * Description: This module is responsible for the in-lobby functionality of the game. It allows players to chat, send messages, and leave the lobby.
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using MortalCombatBusinessServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +34,17 @@ namespace MortalCombatClient
     /// </summary>
     public partial class inLobbyPage : Page
     {
+        /* Class fields:
+         * duplexFoob -> the business interface
+         * curPlayer -> the player currently using the client
+         * curLobby -> the lobby the player is currently in
+         * playersInLobby -> the list of players in the lobby
+         */
         private BusinessInterface duplexFoob;
         private Player curPlayer; 
         private Lobby curLobby;
         private List<Player> playersInLobby;
+
         public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
@@ -40,37 +54,15 @@ namespace MortalCombatClient
             curLobby = lobby;
             lobbyNameTextBox.Text = player.JoinedLobbyName;
 
-         
+            onlinePlayersCount.Text = curLobby.PlayerCount.ToString();
+
             playersInLobby = new List<Player>();
               
             ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
-
             
-            Task task = loadLobbyMessagesAsync();
-            
+            Task task = loadLobbyMessagesAsync();            
         }
 
-
-        public void RefreshLists()
-        {
-            playersInLobby.Clear();
-            onlinePlayers.Items.Clear();
-            foreach (string playerName in duplexFoob.GetPlayersInLobby(curLobby))
-            {
-
-
-                if (!onlinePlayers.Items.Contains(playerName))
-                {
-                    onlinePlayers.Items.Add(playerName);
-                }
-                
-
-                Player player = new Player(playerName, curLobby.LobbyName);
-                playersInLobby.Add(player);
-
-            }
-
-        }
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
@@ -82,7 +74,6 @@ namespace MortalCombatClient
             });
             
             messageBox.Clear();
-
         }
 
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
@@ -104,6 +95,22 @@ namespace MortalCombatClient
 
             MessagesListBox.Items.Clear();
             Task task = loadLobbyMessagesAsync();
+        }
+
+        public void RefreshLists()
+        {
+            playersInLobby.Clear();
+            onlinePlayers.Items.Clear();
+            foreach (string playerName in duplexFoob.GetPlayersInLobby(curLobby))
+            {
+                if (!onlinePlayers.Items.Contains(playerName))
+                {
+                    onlinePlayers.Items.Add(playerName);
+                }                
+
+                Player player = new Player(playerName, curLobby.LobbyName);
+                playersInLobby.Add(player);
+            }
         }
 
         public void showMessage(string message)
@@ -238,7 +245,7 @@ namespace MortalCombatClient
 
             onlinePlayers.Items.Remove(curPlayer);
             playersInLobby.Remove(curPlayer);
-            NavigationService.GoBack();            
+            NavigationService.GoBack();        
         }
     }
 }

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: MainWindow
+ * Description: 
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +35,8 @@ namespace MortalCombatClient
         public MainWindow()
         {
             InitializeComponent();
+
+            Callbacks = new callbacks(null, null);
             Callbacks = new callbacks();
             privateMessagePages = new Dictionary<string, privateMessagePage>();
 
@@ -67,7 +76,6 @@ namespace MortalCombatClient
                 privateMessagePages.Clear();
             }
         }
-
 
         public void UpdateLobbyCallbackContext(inLobbyPage lobbyPage)
         {

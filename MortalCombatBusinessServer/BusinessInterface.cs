@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: BusinessInterface
+ * Description: The business logic for the Mortal Combat game
+ * Author: Jauhar, Mouktada, Ahmed
+ * ID: 21494299, 20640266, 21467369
+ * Version: 1.0.0.1
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -11,9 +18,6 @@ namespace MortalCombatBusinessServer
     [ServiceContract(CallbackContract = typeof(PlayerCallback))]
     public interface BusinessInterface
     {
-        //[OperationContract]
-        //void DeleteLobby(string lobbyName);
-
         [OperationContract]
         void AddPlayerToServer(Player player);
 
@@ -23,7 +27,6 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void AddPlayertoLobby(Player player, string lobbyName);
 
-        //Private Messaging methods so far..
         [OperationContract]        
         void SendPrivateMessage(string sender, string recipent, string content);
 
@@ -33,9 +36,6 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void NotifyPrivatePlayer(string sender, string recipent, string content);
 
-        [OperationContract]
-        void StorePrivateMessage(string sender, string recipient, string content);
-        //lobby Messaging methods so far..
         [OperationContract]
         void DistributeMessageToLobby(string lobbyName, string sender, string content);
 
@@ -55,7 +55,6 @@ namespace MortalCombatBusinessServer
         List<string> GetAllLobbyNames();
 
         [OperationContract]
-
         List<string> GetPlayersInLobby(Lobby lobby);
 
         [OperationContract]
@@ -65,14 +64,13 @@ namespace MortalCombatBusinessServer
         void CheckLobbyNameValidity(string lobbyName, out bool isValid);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, out bool doesHavePlayers);
+        void DeleteLobby(string lobbyName);
 
         [OperationContract]
         void UploadFile(string filePath);
 
         [OperationContract]
         void DownloadFile(string filePath);
-
     }
 
     public interface PlayerCallback
