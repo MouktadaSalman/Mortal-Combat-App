@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.ServiceModel;
 
 namespace MortalCombatBusinessServer
@@ -365,9 +366,9 @@ namespace MortalCombatBusinessServer
             //Initialize values
             byte[] fData = null;
             int fType = 0;
-
+            
             //Get the path to the apps downloads folder
-            string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
+            string downloadPath = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName, 
                                         "MortalCombatDownloads");
 
             //If the app downloads folder doesn't exist yet... create it
