@@ -4,14 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
+using System.IO;
+using System.Reflection;
 
 namespace MortalCombatBusinessServer
 {
     internal class Program
     {
+        private static string downloadFile;
         static void Main(string[] args)
         {
             Console.WriteLine("Business Service");
+
+            //The location of the download file of all the files
+            downloadFile = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
+                                        "MortalCombatDownloads");
+
+            //If the app downloads folder doesn't exist yet... create it
+            if (!Directory.Exists(downloadFile)) { Directory.CreateDirectory(downloadFile); }
 
             ServiceHost host;
 
@@ -37,6 +47,69 @@ namespace MortalCombatBusinessServer
             Console.ReadLine();
             //Don't forget to close the host after you're done!
             host.Close();
+
+
+            //Call event handlers when the server is being closed:
+            //Handle Ctrl+C or Ctrl+Break
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnCancelKeyPress);
+
+            //Handle when the process is about to exit (including window close)
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+        }
+
+        /* Method: OnCancelKeyPress
+         * Description: An event handler when the server is being closed 
+         *              (when Ctrl+C/Break typed in terminal)
+         * Paramters: sender (object), e (ConsoleCancelEventArgs)
+         */
+        static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            //Check if it exists
+            if (Directory.Exists(downloadFile))
+            {
+                try
+                {
+                    //Delete the directory
+                    Directory.Delete(downloadFile);
+                    Console.WriteLine("Deleting the downloaded files stash...");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"There was an error... \n{ ex.ToString()}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"The local downloads folder stash doesn't exist (never created)");
+            }
+
+        }
+
+        /* Method: OnProcessExit
+         * Description: An event handler when the server is being closed 
+         *              (window close/ other shutdowns)
+         * Paramters: sender (object), e (EventArgs)
+         */
+        static void OnProcessExit(object sender, EventArgs e)
+        {
+            //Check if it exists
+            if (Directory.Exists(downloadFile))
+            {
+                try
+                {
+                    //Delete the directory
+                    Directory.Delete(downloadFile);
+                    Console.WriteLine("Deleting the downloaded files stash...");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"There was an error... \n{ex.ToString()}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"The local downloads folder stash doesn't exist (never created)");
+            }
         }
     }
 }

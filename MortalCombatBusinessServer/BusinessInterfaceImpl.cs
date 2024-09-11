@@ -29,6 +29,8 @@ namespace MortalCombatBusinessServer
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
 
+        public string downloadPath;
+
         private DataInterface data;
 
         /* Constructor: BusinessInterfaceImpl
@@ -368,7 +370,7 @@ namespace MortalCombatBusinessServer
             int fType = 0;
             
             //Get the path to the apps downloads folder
-            string downloadPath = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName, 
+            downloadPath = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName, 
                                         "MortalCombatDownloads");
 
             //If the app downloads folder doesn't exist yet... create it
