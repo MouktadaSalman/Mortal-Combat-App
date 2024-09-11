@@ -63,25 +63,9 @@ namespace MortalCombatBusinessServer
          */
         static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
-            //Check if it exists
-            if (Directory.Exists(downloadFile))
-            {
-                try
-                {
-                    //Delete the directory
-                    Directory.Delete(downloadFile);
-                    Console.WriteLine("Deleting the downloaded files stash...");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"There was an error... \n{ ex.ToString()}");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"The local downloads folder stash doesn't exist (never created)");
-            }
-
+            e.Cancel= true;
+            //Call cleanup method
+            Cleanup();
         }
 
         /* Method: OnProcessExit
@@ -91,24 +75,8 @@ namespace MortalCombatBusinessServer
          */
         static void OnProcessExit(object sender, EventArgs e)
         {
-            //Check if it exists
-            if (Directory.Exists(downloadFile))
-            {
-                try
-                {
-                    //Delete the directory
-                    Directory.Delete(downloadFile);
-                    Console.WriteLine("Deleting the downloaded files stash...");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"There was an error... \n{ex.ToString()}");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"The local downloads folder stash doesn't exist (never created)");
-            }
+            //Call cleanup method
+            Cleanup();
         }
 
         /* Method: Cleanup
