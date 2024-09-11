@@ -24,33 +24,69 @@ namespace MortalCombatBusinessServer
             //Handle when the process is about to exit (including window close)
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
 
-            //The location of the download file of all the files
-            downloadFile = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
-                                        "MortalCombatDownloads");
+            //So the console server can still cleanup the downloads local folder
+            try
+            {
+                //The location of the download file of all the files
+                downloadFile = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
+                                            "MortalCombatDownloads");
 
-            //If the app downloads folder doesn't exist yet... create it
-            if (!Directory.Exists(downloadFile)) { Directory.CreateDirectory(downloadFile); }
+                //If the app downloads folder doesn't exist yet... create it
+                if (!Directory.Exists(downloadFile)) { Directory.CreateDirectory(downloadFile); }
 
-            //This represents a tcp/ip binding in the Windows network stack
-            NetTcpBinding tcp = new NetTcpBinding();
+                //This represents a tcp/ip binding in the Windows network stack
+                NetTcpBinding tcp = new NetTcpBinding();
 
-            tcp.SendTimeout = TimeSpan.FromMinutes(5);
-            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
-            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
-            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+                tcp.SendTimeout = TimeSpan.FromMinutes(5);
+                tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+                tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+                tcp.CloseTimeout = TimeSpan.FromMinutes(1);
 
-            //Bind server to the implementation of DataServer
-            host = new ServiceHost(typeof(BusinessInterfaceImpl));
+                //Bind server to the implementation of DataServer
+                host = new ServiceHost(typeof(BusinessInterfaceImpl));
 
-            //Present the publicly accessible interface to the client. 0.0.0.0 tells .net to accept on any interface. :8100 means this will use port 8100. DataService is a name for theactual service, this can be any string.
-            host.AddServiceEndpoint(typeof(BusinessInterface), tcp,
-           "net.tcp://0.0.0.0:8200/MortalCombatBusinessService");
+                //Present the publicly accessible interface to the client. 0.0.0.0 tells .net to accept on any interface. :8100 means this will use port 8100. DataService is a name for theactual service, this can be any string.
+                host.AddServiceEndpoint(typeof(BusinessInterface), tcp,
+               "net.tcp://0.0.0.0:8200/MortalCombatBusinessService");
 
-            //And open the host for business!
-            host.Open();
+                //And open the host for business!
+                host.Open();
 
-            Console.WriteLine("System Online");
-            Console.ReadLine();
+                Console.WriteLine("System Online");
+                Console.ReadLine();
+            }
+            finally
+            {
+                Cleanup();
+            }
+
+           // //The location of the download file of all the files
+           // downloadFile = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
+           //                             "MortalCombatDownloads");
+
+           // //If the app downloads folder doesn't exist yet... create it
+           // if (!Directory.Exists(downloadFile)) { Directory.CreateDirectory(downloadFile); }
+
+           // //This represents a tcp/ip binding in the Windows network stack
+           // NetTcpBinding tcp = new NetTcpBinding();
+
+           // tcp.SendTimeout = TimeSpan.FromMinutes(5);
+           // tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+           // tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+           // tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+
+           // //Bind server to the implementation of DataServer
+           // host = new ServiceHost(typeof(BusinessInterfaceImpl));
+
+           // //Present the publicly accessible interface to the client. 0.0.0.0 tells .net to accept on any interface. :8100 means this will use port 8100. DataService is a name for theactual service, this can be any string.
+           // host.AddServiceEndpoint(typeof(BusinessInterface), tcp,
+           //"net.tcp://0.0.0.0:8200/MortalCombatBusinessService");
+
+           // //And open the host for business!
+           // host.Open();
+
+           // Console.WriteLine("System Online");
+           // Console.ReadLine();
         }
 
         /* Method: OnCancelKeyPress
