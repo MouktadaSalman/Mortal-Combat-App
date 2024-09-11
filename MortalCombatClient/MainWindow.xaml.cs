@@ -36,7 +36,7 @@ namespace MortalCombatClient
         {
             InitializeComponent();
 
-            Callbacks = new callbacks(null, null);
+            Callbacks = new callbacks();
             Callbacks = new callbacks();
             privateMessagePages = new Dictionary<string, privateMessagePage>();
 

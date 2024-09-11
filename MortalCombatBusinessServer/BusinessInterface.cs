@@ -34,6 +34,11 @@ namespace MortalCombatBusinessServer
         List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2);
 
         [OperationContract]
+
+
+        void StorePrivateMessage(string sender, string recipient, string content);
+
+        [OperationContract]
         void NotifyPrivatePlayer(string sender, string recipent, string content);
 
         [OperationContract]
