@@ -149,24 +149,20 @@ namespace MortalCombatBusinessServer
          * Parameters: lobbyName (string), isValid (bool)
          * Result: isValid (bool)
          */
-        public void CheckLobbyNameValidity(string lobbyName, out bool isValid)
+        public void CheckLobbyNameValidity(string lobbyName)
         {
-            int numOfLobbies;
-            Lobby foundLobbyName;
-            isValid = true; // Lobby name is valid by default
-
-            data.GetNumOfLobbies(out numOfLobbies);
+            data.GetNumOfLobbies(out int numOfLobbies);
 
             // Check if the lobby name already exists by comparing it with all the lobby names in the database
             for (int i = 0; i < numOfLobbies; i++)
             {
-                data.GetLobbyForIndex(i, out foundLobbyName);
+                data.GetLobbyForIndex(i, out Lobby foundLobby);
 
-                if (lobbyName.Equals(foundLobbyName.LobbyName))
+                if (lobbyName.Equals(foundLobby.LobbyName))
                 {
-                    Console.WriteLine($"Lobby name: {foundLobbyName.LobbyName}, already exists, try a different name for the lobby!!");
-                    isValid = false; // Lobby name is not valid, it already exists
-                    return;
+                    Console.WriteLine($"Lobby name: {foundLobby.LobbyName}, already exists, try a different name for the lobby!!");
+                    throw new FaultException<LobbyNameAlreadyExistsFault>(new LobbyNameAlreadyExistsFault()
+                    { Issue = "Lobby name already exists" });
                 }
             }
         }
@@ -178,6 +174,7 @@ namespace MortalCombatBusinessServer
         */
         public void DeleteLobby(string lobbyName)
         {
+            bool lobbyHasPlayers = false;
             data.GetNumOfLobbies(out int numOfLobbies);
             for (int i = 0; i < numOfLobbies; i++)
             {
@@ -186,8 +183,14 @@ namespace MortalCombatBusinessServer
                 // Check if the passed in lobby name still exists by comparing it with all the lobby names in the database
                 if (lobbyName.Equals(foundLobbyName.LobbyName))
                 {
-                    data.DeleteLobby(i); // Delete the lobby                    
+                    data.DeleteLobby(foundLobbyName, out lobbyHasPlayers); // Delete the lobby                    
+                    break;
                 }
+                }
+            if (lobbyHasPlayers)
+            {
+                throw new FaultException<PlayersStilInLobbyFault>(new PlayersStilInLobbyFault()
+                { Issue = "Players still in lobby" });
             }
         }
 
