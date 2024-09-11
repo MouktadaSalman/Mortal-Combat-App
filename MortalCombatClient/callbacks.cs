@@ -1,43 +1,43 @@
 ﻿using Mortal_Combat_Data_Library;
 using MortalCombatBusinessServer;
-using System;
+using MortalCombatClient;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
+using System.Windows;
 
 namespace MortalCombatClient
 {
-
-    //this is the implemntation for the rest of methods in BusinessInterface, under PlayerCallBack interface
     public class callbacks : PlayerCallback
     {
         private inLobbyPage _inLobbyPage;
-        private privateMessagePage _privateMessagePage;
-        private bool _isLobbyPageActive;
+        private Dictionary<string, privateMessagePage> _privateMessagePages;
+        private MainWindow _mainWindow;
 
-        public callbacks(inLobbyPage nInLobbyPage = null, privateMessagePage privateMessagePage = null)
+        public callbacks()
         {
-            _inLobbyPage = nInLobbyPage;
-            _privateMessagePage = privateMessagePage;
+            _mainWindow = (MainWindow)Application.Current.MainWindow;
+            _privateMessagePages = new Dictionary<string, privateMessagePage>();
         }
 
         public void UpdateLobbyPage(inLobbyPage lobbyPage)
         {
             _inLobbyPage = lobbyPage;
-            _isLobbyPageActive = true; 
         }
 
-        public void UpdatePrivatePage(privateMessagePage privateMessagePage)
+        public void UpdatePrivatePage(string chatPartner, privateMessagePage page)
         {
-            _privateMessagePage = privateMessagePage;
-            _isLobbyPageActive = false;
+            if (page == null)
+            {
+                _privateMessagePages.Remove(chatPartner);
+            }
+            else
+            {
+                _privateMessagePages[chatPartner] = page;
+            }
         }
 
         public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
         {
-            if (_isLobbyPageActive && _inLobbyPage != null)
+            if (_inLobbyPage != null)
             {
                 _inLobbyPage.Dispatcher.Invoke(() =>
                 {
@@ -48,7 +48,7 @@ namespace MortalCombatClient
 
         public void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content)
         {
-            if (_isLobbyPageActive && _inLobbyPage != null)
+            if (_inLobbyPage != null)
             {
                 _inLobbyPage.Dispatcher.Invoke(() =>
                 {
@@ -59,13 +59,10 @@ namespace MortalCombatClient
 
         public void ReceivePrivateMessage(string sender, string recipient, string content)
         {
-            if (!_isLobbyPageActive && _privateMessagePage != null)
+            _mainWindow.Dispatcher.Invoke(() =>
             {
-                _privateMessagePage.Dispatcher.Invoke(() =>
-                {
-                    _privateMessagePage.showMessage($"{sender}: {content}");
-                });
-            }
+                _mainWindow.HandleIncomingPrivateMessage(sender, recipient, content);
+            });
         }
     }
 }

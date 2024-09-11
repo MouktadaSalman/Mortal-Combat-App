@@ -21,27 +21,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
+using Mortal_Combat_Data_Library;
 
 namespace MortalCombatClient
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-
         private BusinessInterface duplexFoob;
-        
         private callbacks Callbacks;
+        private Dictionary<string, privateMessagePage> privateMessagePages;
+        private Player currentPlayer;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Callbacks = new callbacks(null, null);
+            Callbacks = new callbacks();
+            Callbacks = new callbacks();
+            privateMessagePages = new Dictionary<string, privateMessagePage>();
 
             InstanceContext callbackInstance = new InstanceContext(Callbacks);
-
             DuplexChannelFactory<BusinessInterface> channelFactory;
             NetTcpBinding tcp = new NetTcpBinding();
 
@@ -53,8 +52,29 @@ namespace MortalCombatClient
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, new EndpointAddress(URL));
             duplexFoob = channelFactory.CreateChannel();
-
             MainFrame.NavigationService.Navigate(new loginPage(duplexFoob));
+        }
+
+        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (e.Content is inLobbyPage lobbyPage)
+            {
+                UpdateLobbyCallbackContext(lobbyPage);
+            }
+            else if (e.Content is privateMessagePage privateMessagePage)
+            {
+                UpdatePrivateCallbackContext(privateMessagePage.MessageRecipient, privateMessagePage);
+            }
+            else
+            {
+                
+                Callbacks.UpdateLobbyPage(null);
+                foreach (var recipient in privateMessagePages.Keys)
+                {
+                    Callbacks.UpdatePrivatePage(recipient, null);
+                }
+                privateMessagePages.Clear();
+            }
         }
 
         public void UpdateLobbyCallbackContext(inLobbyPage lobbyPage)
@@ -62,9 +82,61 @@ namespace MortalCombatClient
             Callbacks.UpdateLobbyPage(lobbyPage);
         }
 
-        public void UpdatePrivateCallbackContext(privateMessagePage privateMessagePage)
+        public void UpdatePrivateCallbackContext(string recipient, privateMessagePage privateMessagePage)
         {
-            Callbacks.UpdatePrivatePage(privateMessagePage);
+            Callbacks.UpdatePrivatePage(recipient, privateMessagePage);
+            if (privateMessagePage != null)
+            {
+                privateMessagePages[recipient] = privateMessagePage;
+            }
+            else
+            {
+                privateMessagePages.Remove(recipient);
+            }
+        }
+
+        public void ClosePrivateMessagePage(string recipient)
+        {
+            UpdatePrivateCallbackContext(recipient, null);
+        }
+
+        public void HandleIncomingPrivateMessage(string sender, string recipient, string content)
+        {
+            
+            StorePrivateMessage(sender, recipient, content);
+
+            
+            string chatKey = GetChatKey(sender, recipient);
+            if (privateMessagePages.TryGetValue(chatKey, out var privatePage))
+            {
+                privatePage.HandleIncomingMessage(sender, content);
+            }
+            
+        }
+
+        private string GetChatKey(string user1, string user2)
+        {
+            // Create a consistent key for the chat regardless of who is sender/recipient
+            return string.Compare(user1, user2, StringComparison.Ordinal) < 0
+                ? $"{user1}:{user2}"
+                : $"{user2}:{user1}";
+        }
+
+        private void StorePrivateMessage(string sender, string recipient, string content)
+        {
+            // Store the message in the database or local storage
+            // This is a placeholder - implement according to your data storage method
+            duplexFoob.StorePrivateMessage(sender, recipient, content);
+        }
+
+        public void SetCurrentPlayer(Player player)
+        {
+            currentPlayer = player;
+        }
+
+        public Player GetCurrentPlayer()
+        {
+            return currentPlayer;
         }
     }
 }

@@ -79,8 +79,15 @@ namespace MortalCombatClient
         private void sendMessageButton_Click (object sender, RoutedEventArgs e)
         {
            string recipent = onlinePlayers.SelectedItem.ToString();
-           privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
-           NavigationService.Navigate(nextPage);
+            if (!recipent.Equals(curPlayer.Username))
+            {
+                privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+                NavigationService.Navigate(nextPage);
+            } else
+            {
+                System.Windows.MessageBox.Show("You can not send a message to yourself");
+            }
+           
         }
 
         public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
