@@ -112,7 +112,6 @@ namespace MortalCombatClient
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
             if (LobbyRoomList.SelectedItem == null)
             {
                 MessageBox.Show("Please select a lobby to delete");
