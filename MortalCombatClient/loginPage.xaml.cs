@@ -37,15 +37,12 @@ namespace MortalCombatClient
         {
             string username = UsernameBox.Text.ToString();
 
-            //Task<Player> task = new Task<Player>(() => CreatePlayer(username));
-            //task.Start();
-
-            //Player curPlayer = await task;
+            
 
             if (usernameIsValid(username))
             {
                 Player player = CreatePlayer(username);
-                
+
                 NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
             }
             else

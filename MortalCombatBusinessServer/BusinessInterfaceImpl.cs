@@ -14,6 +14,14 @@ namespace MortalCombatBusinessServer
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     public class BusinessInterfaceImpl : BusinessInterface
     {
+
+        /*
+         * ConcurrentDictionary allows multiple threads to read and write concurrently.
+         *
+         * 
+         * /
+
+
         /*This dictionary stores a mapping of player usernames to their associated callback interfaces. 
          * It allows the server to send messages directly to specific players. 
          * Used with both lobby messaging and private messaging.
