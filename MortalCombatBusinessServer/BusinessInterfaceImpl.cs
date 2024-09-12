@@ -14,9 +14,21 @@ namespace MortalCombatBusinessServer
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     public class BusinessInterfaceImpl : BusinessInterface
     {
-        // A ConcurrentDictionary to manage all player callbacks per instance
+        /*This dictionary stores a mapping of player usernames to their associated callback interfaces. 
+         * It allows the server to send messages directly to specific players. 
+         * Used with both lobby messaging and private messaging.
+         */
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
+
+        /*This dictionary stores a mapping of lobby names to lists of player callbacks in each lobby.
+         * It's used to manage which players are in which lobbies and to send messages to all players
+         * in a specific lobby. 
+         */
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
+
+        /*This dictionary stores messages so when the recipent enters the chat they get notified, key is the recipient's username.
+         * It allows the server to store messages for  players and deliver them when they come in the chat.
+         */
         private ConcurrentDictionary<string, List<MessageDatabase.Message>> pendingMessages = new ConcurrentDictionary<string, List<MessageDatabase.Message>>();
 
         private DataInterface data;
@@ -51,22 +63,7 @@ namespace MortalCombatBusinessServer
 
         
 
-        // List all players in the local instance's allPlayerCallback dictionary
-        public void ListAllPlayersInCallbacks()
-        {
-            if (allPlayerCallback.Count > 0)
-            {
-                Console.WriteLine("All players in allPlayerCallback:");
-                foreach (var player in allPlayerCallback)
-                {
-                    Console.WriteLine($"Player Username: {player.Key}, Callback: {player.Value}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No players in allPlayerCallback.");
-            }
-        }
+
 
 
 

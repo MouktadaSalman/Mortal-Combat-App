@@ -5,11 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MortalCombatClient"
         mc:Ignorable="d"
-        Title="loginPage"  Height="450" Width="800">
+        Title="loginPage"  Height="600" Width="900">
     <Grid>
-        <Button Content="Login" HorizontalAlignment="Center" Margin="0,293,0,0" VerticalAlignment="Top" Height="35" Width="196" Click="Button_Click" FontSize="22" FontFamily="Algerian"/>
-        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Center" Height="30" Width="612" FontFamily="Algerian" FontSize="22" TextAlignment="Center"/>
-        <TextBox x:Name="UsernameBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Width="538" Height="33" Margin="0,245,0,0" FontSize="20" FontFamily="Algerian" Background="{x:Null}" BorderBrush="Black" TextAlignment="Center" SelectionOpacity="1"/>
+        <Button Content="Login" HorizontalAlignment="Center" VerticalAlignment="Top" Height="52" Width="224" Click="Button_Click" FontSize="22" FontFamily="Algerian" Foreground="White" Margin="0,372,0,0">
+            <Button.Background>
+                <SolidColorBrush Color="#FF4F4E4E" Opacity="0.45"/>
+            </Button.Background>
+        </Button>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Enter your desired username to create account" VerticalAlignment="Top" Height="62" Width="386" FontFamily="Algerian" FontSize="24" TextAlignment="Center" Foreground="White" Margin="0,244,0,0"/>
+        <TextBox x:Name="UsernameBox" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Username" VerticalAlignment="Top" Width="386" Height="34" FontSize="22" FontFamily="Algerian" BorderBrush="White" TextAlignment="Center" SelectionOpacity="1" Foreground="White" Margin="0,321,0,0">
+            <TextBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </TextBox.Background>
+        </TextBox>
 
     </Grid>
 </Page>

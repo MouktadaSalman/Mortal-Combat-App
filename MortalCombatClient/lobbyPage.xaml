@@ -6,18 +6,46 @@
       xmlns:local="clr-namespace:MortalCombatClient"
       mc:Ignorable="d" 
       
-      Title="lobbyPage"  Height="450" Width="800">
+      Title="lobbyPage"  Height="600" Width="900" >
 
     <Grid>
-        <ListBox Name="LobbyRoomList" HorizontalAlignment="Left" VerticalAlignment="Top" Width="583" Height="264" Margin="97,70,0,0" FontFamily="Algerian" FontSize="16"/>
-        <Button Content="Join Lobby" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Click="JoinLobbyButton_Click" Margin="686,310,0,0" FontFamily="Algerian" FontSize="16"/>
-        <Button Content="Create Lobby" HorizontalAlignment="Right" VerticalAlignment="Top" Width="136"  Margin="0,370,136,0" Click=" CreateLobbyButton_Click" RenderTransformOrigin="0.525,0.679" FontFamily="Algerian" FontSize="16"/>
-        <TextBox Name="NewLobbyName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="260" Margin="264,367,0,0" Height="28" FontFamily="Algerian" FontSize="16" />
-        <TextBox Text="Choose from the following lobbies" HorizontalAlignment="Left" Height="23" Margin="97,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="583" IsEnabled="False" FontWeight="Bold" TextAlignment="Center" Background="{x:Null}" FontSize="18" FontFamily="Algerian" Foreground="White" BorderBrush="{x:Null}" />
-        <TextBox HorizontalAlignment="Left" Height="28" Margin="274,339,0,0" Text="or Create your own lobby" VerticalAlignment="Top" Width="238" IsEnabled="False" TextAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic" Background="{x:Null}" FontFamily="Algerian" BorderBrush="{x:Null}" Foreground="White" FontSize="16"/>
-        <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Left" Height="23" Margin="10,7,0,0" VerticalAlignment="Top" Width="79" Click="LogOutButton_Click" FontFamily="Algerian" FontSize="16"/>
-        <Button Name="RefreshButton" Content="Refresh Lobbies List" HorizontalAlignment="Center" Margin="0,410,0,0" VerticalAlignment="Top" Width="202" Click="RefreshButton_Click" FontFamily="Algerian" FontSize="16" Height="29"/>
-        <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="686,277,0,0" VerticalAlignment="Top" Width="100" Click="DeleteButton_Click" FontFamily="Algerian" FontSize="16"/>
+        <ListBox Name="LobbyRoomList" HorizontalAlignment="Left" VerticalAlignment="Top" Width="513" Height="267" Margin="175,140,0,0" FontFamily="Algerian" FontSize="18" BorderBrush="White" Foreground="White">
+            <ListBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </ListBox.Background>
+        </ListBox>
+        <Button Content="Join Lobby" HorizontalAlignment="Left" VerticalAlignment="Top" Width="127" Click="JoinLobbyButton_Click" Margin="696,374,0,0" FontFamily="Algerian" FontSize="16" Height="33" Foreground="white" BorderBrush="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="createLobbyButton" Content="Create Lobby" HorizontalAlignment="Right" VerticalAlignment="Top" Width="173"  Margin="0,450,69,0" Click=" CreateLobbyButton_Click" RenderTransformOrigin="0.525,0.679" FontFamily="Algerian" FontSize="16" Height="33" Foreground="White" BorderBrush="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </Button.Background>
+        </Button>
+        <TextBox Name="NewLobbyName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="412" Margin="226,450,0,0" Height="33" FontFamily="Algerian" FontSize="18" Foreground="White" >
+            <TextBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.485"/>
+            </TextBox.Background>
+        </TextBox>
+        <TextBlock  HorizontalAlignment="Left" TextWrapping="Wrap" Text="Choose from the following lobbies" VerticalAlignment="Top" Height="37" Width="513" FontFamily="Algerian" FontSize="24" TextAlignment="Center" Foreground="White" Margin="175,98,0,0" Background="{x:Null}" />
+        <TextBlock  HorizontalAlignment="Left" TextWrapping="Wrap" Text="Or create your own lobby" VerticalAlignment="Top" Height="33" Width="412" FontFamily="Algerian" FontSize="20" TextAlignment="Center" Foreground="White" Margin="226,412,0,0" Background="{x:Null}" />
+        <Button x:Name="LogOutButton" Content="Log Out" HorizontalAlignment="Left" Height="33" Margin="72,100,0,0" VerticalAlignment="Top" Width="98" Click="LogOutButton_Click" FontFamily="Algerian" FontSize="16" Foreground="White" BorderBrush="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </Button.Background>
+        </Button>
+        <Button Name="RefreshButton" HorizontalAlignment="Left" Margin="696,276,0,0" VerticalAlignment="Top" Width="91" Click="RefreshButton_Click" FontFamily="Algerian" FontSize="16" Height="40" Foreground="White" BorderBrush="White" Content="refresh">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75" />
+            </Button.Background>
+        </Button>
+        <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="696,328,0,0" VerticalAlignment="Top" Width="127" Click="DeleteButton_Click" FontFamily="Algerian" FontSize="16" Height="34" Foreground="White" BorderBrush="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </Button.Background>
+        </Button>
 
 
     </Grid>

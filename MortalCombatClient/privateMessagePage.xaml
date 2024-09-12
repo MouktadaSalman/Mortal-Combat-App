@@ -5,20 +5,40 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MortalCombatClient"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Page1">
+      
+      Title="Page1" Height="600" Width="900">
 
     <Grid>
-        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="656" Height="319" Margin="104,52,0,0" FontSize="14"/>
+        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="695" Height="386" Margin="146,100,0,0" FontSize="14" BorderBrush="White" Foreground="White">
+            <ListBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </ListBox.Background>
+        </ListBox>
 
 
-        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="25" Margin="104,376,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="548" FontStyle="Italic"/>
-        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="25" Margin="658,376,0,0" VerticalAlignment="Top" Width="102" Click="sendButton_Click" FontFamily="Algerian" FontSize="16"/>
+        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="29" Margin="146,492,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="581" Foreground="White" BorderBrush="White" FontSize="16">
+            <TextBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </TextBox.Background>
+        </TextBox>
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="29" Margin="732,492,0,0" VerticalAlignment="Top" Width="109" Click="sendButton_Click" FontFamily="Algerian" FontSize="16" BorderBrush="White" Foreground="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </Button.Background>
+        </Button>
 
 
-        <TextBox x:Name="playerNameTextBox" HorizontalAlignment="Left" Height="23" Margin="104,24,0,0" TextWrapping="Wrap" Text="player name" VerticalAlignment="Top" Width="156" IsEnabled="False" TextAlignment="Center" FontFamily="Algerian" FontSize="16"/>
-        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="23" Margin="266,24,0,0" VerticalAlignment="Top" Width="157" FontFamily="Algerian" FontSize="14"/>
-        <Button x:Name="leaveChatButton" Content="Leave Chat" HorizontalAlignment="Left" Height="23" Margin="10,24,0,0" VerticalAlignment="Top" Width="89" Click="leaveChatButton_Click" FontFamily="Algerian" FontSize="14"/>
+        <TextBlock x:Name="playerNameTextBox" HorizontalAlignment="Left" Height="28" Margin="146,66,0,0" TextWrapping="Wrap" Text="player name" VerticalAlignment="Top" Width="165" IsEnabled="False" TextAlignment="Center" FontFamily="Algerian" FontSize="16" Foreground="White">
+            <TextBlock.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </TextBlock.Background>
+        </TextBlock>
+        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="28" Margin="317,66,0,0" VerticalAlignment="Top" Width="167" FontFamily="Algerian" FontSize="14" Background="Black" BorderBrush="White" Foreground="White"/>
+        <Button x:Name="leaveChatButton" Content="Leave Chat" HorizontalAlignment="Left" Height="28" Margin="46,66,0,0" VerticalAlignment="Top" Width="94" Click="leaveChatButton_Click" FontFamily="Algerian" FontSize="14" BorderBrush="White" Foreground="White">
+            <Button.Background>
+                <SolidColorBrush Color="Black" Opacity="0.75"/>
+            </Button.Background>
+        </Button>
 
     </Grid>
 </Page>

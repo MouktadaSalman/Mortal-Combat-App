@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
 using Mortal_Combat_Data_Library;
+using System.Runtime.Remoting.Contexts;
 
 namespace MortalCombatClient
 {
@@ -31,6 +32,13 @@ namespace MortalCombatClient
             Callbacks = new callbacks();
             privateMessagePages = new Dictionary<string, privateMessagePage>();
 
+
+            /*
+             * This line creates a context for the callbacks, allowing the server
+             * to call back to the client.Used for setting up the duplex channel
+             * for communication between client and server.
+             * It will be changed between inLobbyPage and privateMessagingPage when required.
+             * */
             InstanceContext callbackInstance = new InstanceContext(Callbacks);
             DuplexChannelFactory<BusinessInterface> channelFactory;
             NetTcpBinding tcp = new NetTcpBinding();
