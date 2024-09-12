@@ -1,4 +1,4 @@
-﻿<Page x:Class="MortalCombatClient.inLobbyPage"
+﻿<Page x:Class="MortalCombatClient.InLobbyPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,6 +14,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
             </ListBox.Background>
         </ListBox>
+
 
 
         <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="29" Margin="272,466,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="455" Foreground="White" FontSize="16">
@@ -52,5 +53,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
         </Button>
+
+
     </Grid>
 </Page>

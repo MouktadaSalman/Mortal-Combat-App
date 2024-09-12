@@ -20,13 +20,13 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for privateMessagePage.xaml
     /// </summary>
-    public partial class privateMessagePage : Page
+    public partial class PrivateMessagePage : Page
     {
         private BusinessInterface duplexFoob;
         private Player curPlayer;
         public string MessageRecipient { get; private set; }
 
-        public privateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
+        public PrivateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
         {
             InitializeComponent();
 
@@ -36,8 +36,19 @@ namespace MortalCombatClient
             playerNameTextBox.Text = recipient;
             MessageRecipient = recipient;
 
+
             ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
             LoadChatHistory();
+
+           
+            playerNameTextBox.Text = recipent;
+            messageRecipent = recipent;
+
+            ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(this);
+
+            Task task = loadMessagesAsync();
+
+
         }
 
         private void LoadChatHistory()
@@ -85,6 +96,7 @@ namespace MortalCombatClient
                 // Notify the MainWindow that we're closing this chat
                 ((MainWindow)Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
 
+
                 // Navigate back to the previous page
                     NavigationService.GoBack();
                 
@@ -97,6 +109,13 @@ namespace MortalCombatClient
         }
 
         public void HandleIncomingMessage(string sender, string content)
+
+            MessagesListBox.Items.Clear();
+            Task task = loadMessagesAsync();
+        }
+
+        public async Task loadMessagesAsync()
+
         {
             Dispatcher.Invoke(() =>
             {

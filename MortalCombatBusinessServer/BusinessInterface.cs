@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: BusinessInterface
+ * Description: The business logic for the Mortal Combat game
+ * Author: Jauhar, Mouktada, Ahmed
+ * ID: 21494299, 20640266, 21467369
+ * Version: 1.0.0.1
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -11,19 +18,21 @@ namespace MortalCombatBusinessServer
     [ServiceContract(CallbackContract = typeof(PlayerCallback))]
     public interface BusinessInterface
     {
-        //[OperationContract]
-        //void DeleteLobby(string lobbyName);
-
         [OperationContract]
         void AddPlayerToServer(Player player);
 
         [OperationContract]
-        void AddLobbyToServer(Lobby lobby);
+        void AddLobbyToServer(string lobby);
 
         [OperationContract]
         void AddPlayertoLobby(Player player, string lobbyName);
 
-        //Private Messaging methods so far..
+        [OperationContract]
+        void RemovePlayerFromLobby(string playerUsername, string lobbyName);
+
+        [OperationContract]
+        void RemovePlayerFromServer(string playerUsername);
+
         [OperationContract]        
         void SendPrivateMessage(string sender, string recipent, string content);
 
@@ -31,11 +40,11 @@ namespace MortalCombatBusinessServer
         List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2);
 
         [OperationContract]
-        void NotifyPrivatePlayer(string sender, string recipent, string content);
+        void StorePrivateMessage(string sender, string recipient, string content);
 
         [OperationContract]
-        void StorePrivateMessage(string sender, string recipient, string content);
-        //lobby Messaging methods so far..
+        void NotifyPrivatePlayer(string sender, string recipent, string content);
+
         [OperationContract]
         void DistributeMessageToLobby(string lobbyName, string sender, string content);
 
@@ -55,17 +64,19 @@ namespace MortalCombatBusinessServer
         List<string> GetAllLobbyNames();
 
         [OperationContract]
-
         List<string> GetPlayersInLobby(Lobby lobby);
 
         [OperationContract]
-        void CheckUsernameValidity(string username, out bool isValid);
+        [FaultContract(typeof(PlayerNameAlreadyEsistsFault))]
+        void CheckUsernameValidity(string username);
 
         [OperationContract]
-        void CheckLobbyNameValidity(string lobbyName, out bool isValid);
+        [FaultContract(typeof(LobbyNameAlreadyExistsFault))]
+        void CheckLobbyNameValidity(string lobbyName);
 
         [OperationContract]
-        void DeleteLobby(string lobbyName, out bool doesHavePlayers);
+        [FaultContract(typeof(PlayersStilInLobbyFault))]
+        void DeleteLobby(string lobbyName);
 
         [OperationContract]
         void UploadFile(string filePath);
@@ -73,6 +84,17 @@ namespace MortalCombatBusinessServer
         [OperationContract]
         void DownloadFile(string filePath);
 
+        [OperationContract]
+        Lobby GetLobbyByName(string lobbyName);
+
+        [OperationContract]
+        Player GetPlayerByName(string playerName);
+
+        [OperationContract]
+        int GetIndexForPlayer(string playerToFind);
+
+        [OperationContract]
+        int GetIndexForLobby(string lobbyToFind);
     }
 
 

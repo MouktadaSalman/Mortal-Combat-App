@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: loginPage
+ * Description: This module is responsible for the login functionality of the game. It allows players to login to the game.
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,24 +30,45 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for loginPage.xaml
     /// </summary>
-    public partial class loginPage : Page
+    public partial class LoginPage : Page
     {
+        /* Class Fields:
+         * duplexFoob -> the business interface
+         */
         private BusinessInterface duplexFoob;
 
-        public loginPage(BusinessInterface inDuplexFoob)
+        /* Constructor: loginPage
+         * Description: The constructor of the login page
+         * Parameters: inDuplexFoob (BusinessInterface)
+         */
+        public LoginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
             this.duplexFoob = inDuplexFoob;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /* Method: Button_Click
+         * Description: When the button is clicked, the username is checked for validity and a player is created 
+         * Parameters: snender (object), e (RoutedEventArgs)
+         */
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text.ToString();
 
             
 
-            if (usernameIsValid(username))
+            var button = sender as Button; // Cast sender to Button
+            if (button != null)
             {
+                button.IsEnabled = false; // Disable the button
+            }
+
+            string username = UsernameBox.Text.ToString();
+
+
+            try
+            {
+
                 Player player = CreatePlayer(username);
 
                 NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
@@ -48,30 +76,34 @@ namespace MortalCombatClient
             else
             {
                 return;
+
+                Player player = await Task.Run(() => CreatePlayer(username));
+                
+                NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
+
+            }
+            catch (FaultException<PlayerNameAlreadyEsistsFault> ex)
+            {
+                MessageBox.Show(ex.Detail.Issue);
+            }
+            finally
+            {
+                if (button != null)
+                {
+                    button.IsEnabled = true; // Re-enable the button after operation
+                }
             }
         }
 
-        public bool usernameIsValid(string pUserName)
-        {
-            if (UsernameBox.Text == "")
-            {
-                MessageBox.Show("Please enter a username");
-            }
-            bool isValid;
-
-            duplexFoob.CheckUsernameValidity(pUserName, out isValid);
-
-            if (!isValid)
-            {
-                MessageBox.Show("Username already Taken");
-                return false;
-            }
-            return true;
-        }
-
+        /* Method: CreatePlayer
+         * Description: Creates a player
+         * Parameters: pUserName (string)
+         * Result: Player
+         */
         private Player CreatePlayer(string pUserName)
         {
-            Player newPlayer = new Player(pUserName, "Main");
+            duplexFoob.CheckUsernameValidity(pUserName);
+            Player newPlayer = new Player(pUserName);
             duplexFoob.AddPlayerToServer(newPlayer);
             return newPlayer;
         }

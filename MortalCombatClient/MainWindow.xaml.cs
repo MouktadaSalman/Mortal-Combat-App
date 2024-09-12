@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: MainWindow
+ * Description: 
+ * Author: Ahmed, Moukhtada, Jauhar
+ * ID: 21467369, 20640266, , 21494299
+ * Version: 1.0.0.2
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,15 +29,18 @@ namespace MortalCombatClient
     public partial class MainWindow : Window
     {
         private BusinessInterface duplexFoob;
-        private callbacks Callbacks;
-        private Dictionary<string, privateMessagePage> privateMessagePages;
+        private Callbacks Callbacks;
+        private Dictionary<string, PrivateMessagePage> privateMessagePages;
+        private LobbyPage LobbyPage;
         private Player currentPlayer;
 
         public MainWindow()
         {
             InitializeComponent();
-            Callbacks = new callbacks();
-            privateMessagePages = new Dictionary<string, privateMessagePage>();
+
+            Callbacks = new Callbacks();
+            Callbacks = new Callbacks();
+            privateMessagePages = new Dictionary<string, PrivateMessagePage>();
 
 
             /*
@@ -51,23 +61,22 @@ namespace MortalCombatClient
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, new EndpointAddress(URL));
             duplexFoob = channelFactory.CreateChannel();
-            MainFrame.NavigationService.Navigate(new loginPage(duplexFoob));
+            MainFrame.NavigationService.Navigate(new LoginPage(duplexFoob));
         }
 
         private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (e.Content is inLobbyPage lobbyPage)
+            if (e.Content is InLobbyPage lobbyPage)
             {
-                UpdateLobbyCallbackContext(lobbyPage);
+                UpdateInLobbyCallbackContext(lobbyPage);
             }
-            else if (e.Content is privateMessagePage privateMessagePage)
+            else if (e.Content is PrivateMessagePage privateMessagePage)
             {
                 UpdatePrivateCallbackContext(privateMessagePage.MessageRecipient, privateMessagePage);
             }
             else
-            {
-                
-                Callbacks.UpdateLobbyPage(null);
+            {                
+                Callbacks.UpdateInLobbyPage(null);
                 foreach (var recipient in privateMessagePages.Keys)
                 {
                     Callbacks.UpdatePrivatePage(recipient, null);
@@ -76,13 +85,17 @@ namespace MortalCombatClient
             }
         }
 
-
-        public void UpdateLobbyCallbackContext(inLobbyPage lobbyPage)
+        public void UpdateLobbyCallbackContext(LobbyPage lobbyPage)
         {
             Callbacks.UpdateLobbyPage(lobbyPage);
         }
 
-        public void UpdatePrivateCallbackContext(string recipient, privateMessagePage privateMessagePage)
+        public void UpdateInLobbyCallbackContext(InLobbyPage lobbyPage)
+        {
+            Callbacks.UpdateInLobbyPage(lobbyPage);
+        }
+
+        public void UpdatePrivateCallbackContext(string recipient, PrivateMessagePage privateMessagePage)
         {
             Callbacks.UpdatePrivatePage(recipient, privateMessagePage);
             if (privateMessagePage != null)
@@ -101,8 +114,7 @@ namespace MortalCombatClient
         }
 
         public void HandleIncomingPrivateMessage(string sender, string recipient, string content)
-        {
-            
+        { 
             StorePrivateMessage(sender, recipient, content);
 
             

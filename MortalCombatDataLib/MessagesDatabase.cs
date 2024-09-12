@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Module: MessagesDatabase
+ * Description: The operations to store and retrieve messages
+ * Author: Ahmad
+ * ID: 21467369
+ * Version: 1.0.1.1
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -6,19 +13,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Mortal_Combat_Data_Library
-
 {
     [DataContract]
     public class MessageDatabase
     {
         /*
          * Class fields:
-         * _messages: contains all the messages
-         * Instance: allows a single instance of the message database
+         * _messages -> contains all the messages
+         * Instance -> allows a single instance of the message database
          */
         [DataMember]
         private readonly List<Message> _messages;
-
         
         public static readonly MessageDatabase Instance = new MessageDatabase();
 
@@ -68,7 +73,11 @@ namespace Mortal_Combat_Data_Library
             return recipientMessages;
         }
 
-
+        /* Method: GetPrivateMessagesForRecipient
+         * Description: Retrieves all private messages sent to a specific recipient.
+         * Parameters: sender (string), recipient (string)
+         * Result: List of private messages for the recipient.
+         */
         public List<Message> GetPrivateMessagesForRecipient(string sender, string recipent)
         {
             List<Message> pRecipientMessages = new List<Message>();
@@ -96,10 +105,22 @@ namespace Mortal_Combat_Data_Library
         /*
          * Inner Class: Message
          * Description: Represents a message entity in the database.
+         * Author: Ahmed
+         * ID: 21467369
+         * Version: 1.0.1.1
          */
         [DataContract]
         public class Message
         {
+            /*
+             * Inner Class fields:
+             * Sender -> the sender of the message
+             * Recipient -> the recipient of the message
+             * Content -> the content of the message if it is a text
+             * ContentF -> the content of the message if it is a file
+             * MessageType -> the type of the message (1 for text, 2 for file)
+             */
+
             [DataMember]
             public string Sender { get; set; }
 
@@ -113,9 +134,7 @@ namespace Mortal_Combat_Data_Library
             public FileLinkBlock ContentF { get; set; }
 
             [DataMember]
-            public int MessageType { get; set; }  // maybe we could have this set 1 in default for normal messages,
-                                             // however if it is a file we set it to 2, in the message chat
-          
+            public int MessageType { get; set; }          
 
             /*
              * Constructor: Message
@@ -127,8 +146,7 @@ namespace Mortal_Combat_Data_Library
                 Sender = sender;
                 Recipent = recipient;
                 Content = content;
-                MessageType = messageType;
-                
+                MessageType = messageType;                
             }
 
             /*
@@ -142,11 +160,13 @@ namespace Mortal_Combat_Data_Library
                 Recipent = recipient;
                 ContentF = content;
                 MessageType = messageType;
-
             }
 
-
-            // IDK just maybe we will use it for debugging later on similar to the one in message.cs
+            /*
+             * Method: ToString
+             * Description: Returns a string representation of the message.
+             * Result: string representation of the message.
+             */
             public override string ToString()
             {
                 return $"{Sender}: {Content}";

@@ -66,40 +66,40 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="callbacks.cs" />
+    <Compile Include="Callbacks.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="loginPage.xaml">
+    <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="lobbyPage.xaml">
+    <Page Include="LobbyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="inLobbyPage.xaml">
+    <Page Include="InLobbyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="privateMessagePage.xaml">
+    <Page Include="PrivateMessagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="loginPage.xaml.cs">
-      <DependentUpon>loginPage.xaml</DependentUpon>
+    <Compile Include="LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="lobbyPage.xaml.cs">
-      <DependentUpon>lobbyPage.xaml</DependentUpon>
+    <Compile Include="LobbyPage.xaml.cs">
+      <DependentUpon>LobbyPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="inLobbyPage.xaml.cs">
-      <DependentUpon>inLobbyPage.xaml</DependentUpon>
+    <Compile Include="InLobbyPage.xaml.cs">
+      <DependentUpon>InLobbyPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="privateMessagePage.xaml.cs">
-      <DependentUpon>privateMessagePage.xaml</DependentUpon>
+    <Compile Include="PrivateMessagePage.xaml.cs">
+      <DependentUpon>PrivateMessagePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
