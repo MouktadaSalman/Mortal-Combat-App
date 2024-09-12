@@ -71,8 +71,6 @@ namespace MortalCombatClient
                 duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
             });
 
-
-
             messageBox.Clear();
         }
 
@@ -142,8 +140,6 @@ namespace MortalCombatClient
                 MessagesListBox.Items.Add(block);
             });
         }
-    
-
 
         public async Task LoadLobbyMessagesAsync()
         {

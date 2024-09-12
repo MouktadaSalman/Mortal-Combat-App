@@ -3,6 +3,7 @@ using MortalCombatBusinessServer;
 using MortalCombatClient;
 using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Windows;
 
 namespace MortalCombatClient
@@ -11,6 +12,7 @@ namespace MortalCombatClient
 
     //This class implements the PlayerCallback interface.
     //It's used by the client to handle incoming messages from the server for lobby and private messages.
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class Callbacks : PlayerCallback
 
 

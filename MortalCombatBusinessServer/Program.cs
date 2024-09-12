@@ -7,6 +7,7 @@ using System.ServiceModel;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.ServiceModel.Dispatcher;
 
 namespace MortalCombatBusinessServer
 {

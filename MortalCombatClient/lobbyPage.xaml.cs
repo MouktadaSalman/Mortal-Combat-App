@@ -34,7 +34,7 @@ namespace MortalCombatClient
     public partial class LobbyPage : Page
     {
         private BusinessInterface duplexFoob;
-        private InLobbyPage nextPage;
+        private InLobbyPage lobbyPage;
         private Player curPlayer;
         private List<Lobby> lobbiesInServer;
 
@@ -64,12 +64,14 @@ namespace MortalCombatClient
                 duplexFoob.AddPlayertoLobby(curPlayer, selectedLobbyName);
                 RefreshLists();
 
-                Lobby lobby = GetLobbyUsingName(selectedLobbyName);
+                Lobby lobby = duplexFoob.GetLobbyByName(selectedLobbyName);
 
-                if (lobby != null)
-                {
-                    NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
-                }
+                Console.ReadLine();
+
+                lobbyPage = new InLobbyPage(duplexFoob, curPlayer, lobby);
+
+                NavigationService.Navigate(lobbyPage);
+                
             } 
             else
             {
@@ -89,10 +91,13 @@ namespace MortalCombatClient
                 duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
                 lobbiesInServer.Add(lobby);
 
-                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
-            
+                lobbyPage = new InLobbyPage(duplexFoob, curPlayer, lobby);
+
                 RefreshLists();
-            }catch (FaultException<LobbyNameAlreadyExistsFault> ex)
+            
+                NavigationService.Navigate(lobbyPage);
+            }
+            catch (FaultException<LobbyNameAlreadyExistsFault> ex)
             {
                 MessageBox.Show(ex.Detail.Issue);
             }

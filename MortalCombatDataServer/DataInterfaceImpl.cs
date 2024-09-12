@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace MortalCombatDataServer
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     internal class DataInterfaceImpl : DataInterface
     {
         /* Class fields:
