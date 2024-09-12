@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -32,23 +33,12 @@ namespace MortalCombatClient
 
             duplexFoob = inDuplexFoob;
             curPlayer = player;
-      
+
             playerNameTextBox.Text = recipient;
             MessageRecipient = recipient;
 
-
-            ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
+            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
             LoadChatHistory();
-
-           
-            playerNameTextBox.Text = recipent;
-            messageRecipent = recipent;
-
-            ((MainWindow)Application.Current.MainWindow).UpdatePrivateCallbackContext(this);
-
-            Task task = loadMessagesAsync();
-
-
         }
 
         private void LoadChatHistory()
@@ -71,7 +61,7 @@ namespace MortalCombatClient
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending message: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error sending message: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -81,11 +71,11 @@ namespace MortalCombatClient
             {
                 MessagesListBox.Items.Clear();
                 LoadChatHistory();
-               
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading new messages: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error loading new messages: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -94,28 +84,20 @@ namespace MortalCombatClient
             try
             {
                 // Notify the MainWindow that we're closing this chat
-                ((MainWindow)Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
-
+                ((MainWindow)System.Windows.Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
 
                 // Navigate back to the previous page
-                    NavigationService.GoBack();
-                
-                
+                NavigationService.GoBack();
+
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error leaving chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error leaving chat: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         public void HandleIncomingMessage(string sender, string content)
-
-            MessagesListBox.Items.Clear();
-            Task task = loadMessagesAsync();
-        }
-
-        public async Task loadMessagesAsync()
-
         {
             Dispatcher.Invoke(() =>
             {
@@ -126,7 +108,7 @@ namespace MortalCombatClient
         public void AddMessageToListBox(string message)
         {
             MessagesListBox.Items.Add(message);
-            
+
         }
 
         private string GetChatKey(string user1, string user2)

@@ -77,10 +77,6 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine($"{lobbyName} created in dictionary");
             }
         }
-        
-
-
-
 
         public void CheckUsernameValidity(string username)
         {
@@ -391,19 +387,11 @@ namespace MortalCombatBusinessServer
             for (int i = 0; i < numOfLobbies; i++)
             {
                 data.GetLobbyForIndex(i, out Lobby foundLobby);
-
-            ListAllPlayersInCallbacks();
-
-            if (allPrivatePlayerCallback.ContainsKey(recipent))
-            {
-                var callback = allPrivatePlayerCallback[recipent];
-                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
-
                 // Check if the passed in lobby name still exists by comparing it with all the lobby names in the database
                 if (lobbyName.Equals(foundLobby.LobbyName))
                 {
                     return foundLobby; // Delete the lobby                    
-                }
+                }                
             }
             return null;
         }

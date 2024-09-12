@@ -41,7 +41,7 @@ namespace MortalCombatClient
          * playersInLobby -> the list of players in the lobby
          */
         private BusinessInterface duplexFoob;
-        private Player curPlayer; 
+        private Player curPlayer;
         private Lobby curLobby;
         private List<Player> playersInLobby;
 
@@ -56,13 +56,9 @@ namespace MortalCombatClient
 
             playersInLobby = new List<Player>();
 
-            
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
+            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateInLobbyCallbackContext(this);
 
-
-        
-            
-            Task task = LoadLobbyMessagesAsync();            
+            Task task = LoadLobbyMessagesAsync();
         }
 
 
@@ -75,14 +71,14 @@ namespace MortalCombatClient
                 duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
             });
 
-            
-            
+
+
             messageBox.Clear();
         }
 
-        private void SendMessageButton_Click (object sender, RoutedEventArgs e)
+        private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
-           string recipent = onlinePlayers.SelectedItem.ToString();
+            string recipent = onlinePlayers.SelectedItem.ToString();
             if (!recipent.Equals(curPlayer.Username))
             {
                 PrivateMessagePage nextPage = new PrivateMessagePage(duplexFoob, curPlayer, recipent);
@@ -91,7 +87,6 @@ namespace MortalCombatClient
             {
                 System.Windows.MessageBox.Show("You can not send a message to yourself");
             }
-           
         }
 
         public void LoadNewMessagesButton_Click(object sender, RoutedEventArgs e)
@@ -110,7 +105,7 @@ namespace MortalCombatClient
                 if (!onlinePlayers.Items.Contains(playerName))
                 {
                     onlinePlayers.Items.Add(playerName);
-                }                
+                }
 
                 Player player = new Player(playerName);
                 playersInLobby.Add(player);
@@ -131,12 +126,10 @@ namespace MortalCombatClient
             TextBlock block = new TextBlock();
             block.Inlines.Add(new Run(message.Sender + ": "));
 
-           string recipent = onlinePlayers.SelectedItem.ToString();
-           privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
-         
-           NavigationService.Navigate(nextPage);
-        }
+            string recipent = onlinePlayers.SelectedItem.ToString();
+            PrivateMessagePage nextPage = new PrivateMessagePage(duplexFoob, curPlayer, recipent);
 
+            NavigationService.Navigate(nextPage);
 
             //Setup hyperlink
             //Hyperlink link = new Hyperlink(new Run(message.FileName));
@@ -156,11 +149,11 @@ namespace MortalCombatClient
                 MessagesListBox.Items.Add(block);
             });
         }
+    
+
 
         public async Task LoadLobbyMessagesAsync()
         {
-
-            
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {

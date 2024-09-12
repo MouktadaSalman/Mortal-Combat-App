@@ -63,24 +63,11 @@ namespace MortalCombatClient
                 button.IsEnabled = false; // Disable the button
             }
 
-            string username = UsernameBox.Text.ToString();
-
-
             try
-            {
-
-                Player player = CreatePlayer(username);
-
-                NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
-            }
-            else
-            {
-                return;
-
+            {     
                 Player player = await Task.Run(() => CreatePlayer(username));
                 
                 NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
-
             }
             catch (FaultException<PlayerNameAlreadyEsistsFault> ex)
             {

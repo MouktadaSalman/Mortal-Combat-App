@@ -41,8 +41,6 @@ namespace MortalCombatClient
         public LobbyPage(BusinessInterface inFoob, Player player)
         {
             InitializeComponent();
-            
-
 
             duplexFoob = inFoob;
             curPlayer = player;
@@ -56,8 +54,6 @@ namespace MortalCombatClient
 
             RefreshLists();
         }
-
-
         
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
@@ -80,7 +76,6 @@ namespace MortalCombatClient
                 MessageBox.Show("Choose one of the lobbies then click 'Join' \n Note: If there are no lobbies, you can create one");
             }
         }
-        
 
         private void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {

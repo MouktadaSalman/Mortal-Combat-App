@@ -22,22 +22,22 @@
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </TextBox.Background>
         </TextBox>
-        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="29" Margin="732,466,0,0" VerticalAlignment="Top" Width="109" Click="sendButton_Click" FontFamily="Algerian" FontSize="16" Background="Black" BorderBrush="White" Foreground="White"/>
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="29" Margin="732,466,0,0" VerticalAlignment="Top" Width="109" Click="SendButton_Click" FontFamily="Algerian" FontSize="16" Background="Black" BorderBrush="White" Foreground="White"/>
 
 
-        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="33" Margin="54,54,0,0" VerticalAlignment="Top" Width="124" Click="leaveLobbyButton_Click" FontSize="14" FontFamily="Algerian" Foreground="White" BorderBrush="White">
+        <Button x:Name="leaveLobbybutton" Content="Leave Lobby" HorizontalAlignment="Left" Height="33" Margin="54,54,0,0" VerticalAlignment="Top" Width="124" Click="LeaveLobbyButton_Click" FontSize="14" FontFamily="Algerian" Foreground="White" BorderBrush="White">
             <Button.Background>
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="28" Margin="732,504,0,0" VerticalAlignment="Top" Width="109" Click="selectFilesButton_Click" FontSize="16" FontFamily="Algerian" Background="Black" Foreground="White" BorderBrush="White"/>
+        <Button x:Name="selectFilesButton" Content="Select files" HorizontalAlignment="Left" Height="28" Margin="732,504,0,0" VerticalAlignment="Top" Width="109" Click="SelectFilesButton_Click" FontSize="16" FontFamily="Algerian" Background="Black" Foreground="White" BorderBrush="White"/>
         <TextBlock x:Name="lobbyNameTextBox" HorizontalAlignment="Left" Height="26" Margin="272,69,0,0" TextWrapping="Wrap" Text="lobby name" VerticalAlignment="Top" Width="130" TextAlignment="Center" FontFamily="Algerian" FontSize="16" Foreground="White">
             <TextBlock.Background>
                 <SolidColorBrush Color="Black" Opacity="0.6"/>
             </TextBlock.Background>
         </TextBlock>
-        <Button x:Name="loadMessagesButton" Content="Refresh" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="26" Margin="407,69,0,0" VerticalAlignment="Top" Width="130" FontFamily="Algerian" FontSize="16" Foreground="White" BorderBrush="White">
+        <Button x:Name="loadMessagesButton" Content="Refresh" Click="LoadNewMessagesButton_Click" HorizontalAlignment="Left" Height="26" Margin="407,69,0,0" VerticalAlignment="Top" Width="130" FontFamily="Algerian" FontSize="16" Foreground="White" BorderBrush="White">
             <Button.Background>
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
@@ -48,7 +48,7 @@
             </ListBox.Background>
         </ListBox>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Players In Lobby" VerticalAlignment="Top" Height="31" Width="175" FontFamily="Algerian" FontSize="18" TextAlignment="Center" Foreground="White" Margin="90,97,0,0" Background="{x:Null}" />
-        <Button x:Name="sendMessageButton" Content="Open chat" HorizontalAlignment="Left" Height="31" Margin="90,434,0,0" VerticalAlignment="Top" Width="175" FontSize="16" FontFamily="Algerian" Click="sendMessageButton_Click" Foreground="White" BorderBrush="White">
+        <Button x:Name="sendMessageButton" Content="Open chat" HorizontalAlignment="Left" Height="31" Margin="90,434,0,0" VerticalAlignment="Top" Width="175" FontSize="16" FontFamily="Algerian" Click="SendMessageButton_Click" Foreground="White" BorderBrush="White">
             <Button.Background>
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
