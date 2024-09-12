@@ -97,6 +97,9 @@ namespace MortalCombatBusinessServer
         int GetIndexForLobby(string lobbyToFind);
     }
 
+
+    //This interface defines the methods that the server can call on the client.
+    //It allows the server to send messages to clients asynchronously.
     public interface PlayerCallback
     {
         [OperationContract(IsOneWay = true)]

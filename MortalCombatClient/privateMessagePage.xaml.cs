@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 namespace MortalCombatClient
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for privateMessagePage.xaml
     /// </summary>
     public partial class PrivateMessagePage : Page
     {
@@ -81,7 +81,7 @@ namespace MortalCombatClient
             {
                 MessagesListBox.Items.Clear();
                 LoadChatHistory();
-                MessageBox.Show("Messages refreshed successfully.", "Refresh", MessageBoxButton.OK, MessageBoxImage.Information);
+               
             }
             catch (Exception ex)
             {

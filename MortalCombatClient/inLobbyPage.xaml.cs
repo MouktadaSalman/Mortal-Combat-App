@@ -30,7 +30,7 @@ using System.Diagnostics;
 namespace MortalCombatClient
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for inLobbyPage.xaml
     /// </summary>
     public partial class InLobbyPage : Page
     {
@@ -56,7 +56,11 @@ namespace MortalCombatClient
 
             playersInLobby = new List<Player>();
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateInLobbyCallbackContext(this);
+            
+            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
+
+
+        
             
             Task task = LoadLobbyMessagesAsync();            
         }
@@ -70,6 +74,8 @@ namespace MortalCombatClient
             {
                 duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
             });
+
+            
             
             messageBox.Clear();
         }
@@ -154,7 +160,7 @@ namespace MortalCombatClient
         public async Task LoadLobbyMessagesAsync()
         {
 
-            RefreshLists();
+            
             var lobbyMessages = await Task.Run(() => duplexFoob.GetDistributedMessages(curPlayer.Username,curLobby.LobbyName));
             foreach (var message in lobbyMessages)
             {
@@ -171,6 +177,7 @@ namespace MortalCombatClient
                     System.Windows.MessageBox.Show("Encountered an unkown message type");
                 }
             }
+           RefreshLists();
         }
 
         private async void SelectFilesButton_Click(object sender, RoutedEventArgs e)

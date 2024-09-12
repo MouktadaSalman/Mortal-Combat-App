@@ -53,6 +53,10 @@ namespace MortalCombatClient
          */
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            string username = UsernameBox.Text.ToString();
+
+            
+
             var button = sender as Button; // Cast sender to Button
             if (button != null)
             {
@@ -61,11 +65,22 @@ namespace MortalCombatClient
 
             string username = UsernameBox.Text.ToString();
 
+
             try
             {
+
+                Player player = CreatePlayer(username);
+
+                NavigationService.Navigate(new lobbyPage(duplexFoob, player));             
+            }
+            else
+            {
+                return;
+
                 Player player = await Task.Run(() => CreatePlayer(username));
                 
                 NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
+
             }
             catch (FaultException<PlayerNameAlreadyEsistsFault> ex)
             {

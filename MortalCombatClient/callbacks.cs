@@ -6,7 +6,13 @@ using System.Windows;
 
 namespace MortalCombatClient
 {
+
+
+    //This class implements the PlayerCallback interface.
+    //It's used by the client to handle incoming messages from the server for lobby and private messages.
     public class Callbacks : PlayerCallback
+
+
     {
         private InLobbyPage _inLobbyPage;
         private Dictionary<string, PrivateMessagePage> _privateMessagePages;

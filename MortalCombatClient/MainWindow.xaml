@@ -5,18 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MortalCombatClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="OrangeRed" >
+        Title="MainWindow" Height="600" Width="900" Background="Orange" >
     <Grid>
-        <StackPanel>
-            <StackPanel.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="#FFC71B1B" Offset="0.739"/>
-                </LinearGradientBrush>
-            </StackPanel.Background>
-            <Image Source ="/Images/logo.png" Width="268" Height="182" Opacity="0.8" IsEnabled="False"/>
+        <Grid.Background>
+            <ImageBrush ImageSource="images/background.jpeg" Stretch="UniformToFill"/>
+        </Grid.Background>
 
-        </StackPanel>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden">
+            <Frame.Background>
+                <ImageBrush/>
+            </Frame.Background>
+        </Frame>
     </Grid>
 </Window>

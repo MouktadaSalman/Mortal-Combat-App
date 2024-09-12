@@ -24,6 +24,7 @@ using MortalCombatBusinessServer;
 using MortalCombatDataServer;
 using Mortal_Combat_Data_Library;
 using System.ServiceModel.Channels;
+using System.Windows.Media.Animation;
 
 namespace MortalCombatClient
 {
@@ -40,6 +41,8 @@ namespace MortalCombatClient
         public LobbyPage(BusinessInterface inFoob, Player player)
         {
             InitializeComponent();
+            
+
 
             duplexFoob = inFoob;
             curPlayer = player;
@@ -54,6 +57,8 @@ namespace MortalCombatClient
             RefreshLists();
         }
 
+
+        
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
             if (LobbyRoomList.SelectedItem != null)
