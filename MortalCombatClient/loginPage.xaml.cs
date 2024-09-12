@@ -30,7 +30,7 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for loginPage.xaml
     /// </summary>
-    public partial class loginPage : Page
+    public partial class LoginPage : Page
     {
         /* Class Fields:
          * duplexFoob -> the business interface
@@ -41,7 +41,7 @@ namespace MortalCombatClient
          * Description: The constructor of the login page
          * Parameters: inDuplexFoob (BusinessInterface)
          */
-        public loginPage(BusinessInterface inDuplexFoob)
+        public LoginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
             this.duplexFoob = inDuplexFoob;
@@ -51,48 +51,33 @@ namespace MortalCombatClient
          * Description: When the button is clicked, the username is checked for validity and a player is created 
          * Parameters: snender (object), e (RoutedEventArgs)
          */
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            var button = sender as Button; // Cast sender to Button
+            if (button != null)
+            {
+                button.IsEnabled = false; // Disable the button
+            }
+
             string username = UsernameBox.Text.ToString();
 
-            //Task<Player> task = new Task<Player>(() => CreatePlayer(username));
-            //task.Start();
-
-            //Player curPlayer = await task;
-
-            if (usernameIsValid(username))
+            try
             {
-                Player player = CreatePlayer(username);
+                Player player = await Task.Run(() => CreatePlayer(username));
                 
-                NavigationService.Navigate(new lobbyPage(duplexFoob, player));         
+                NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
             }
-            else
+            catch (FaultException<PlayerNameAlreadyEsistsFault> ex)
             {
-                return;
+                MessageBox.Show(ex.Detail.Issue);
             }
-        }
-
-        /* Method: usernameIsValid
-         * Description: Checks if the username is valid
-         * Parameters: pUserName (string)
-         * Result: bool
-         */
-        public bool usernameIsValid(string pUserName)
-        {
-            if (UsernameBox.Text == "")
+            finally
             {
-                MessageBox.Show("Please enter a username");
+                if (button != null)
+                {
+                    button.IsEnabled = true; // Re-enable the button after operation
+                }
             }
-            bool isValid;
-
-            duplexFoob.CheckUsernameValidity(pUserName, out isValid);
-
-            if (!isValid)
-            {
-                MessageBox.Show("Username already Taken");
-                return false;
-            }
-            return true;
         }
 
         /* Method: CreatePlayer
@@ -102,7 +87,8 @@ namespace MortalCombatClient
          */
         private Player CreatePlayer(string pUserName)
         {
-            Player newPlayer = new Player(pUserName, "Main");
+            duplexFoob.CheckUsernameValidity(pUserName);
+            Player newPlayer = new Player(pUserName);
             duplexFoob.AddPlayerToServer(newPlayer);
             return newPlayer;
         }

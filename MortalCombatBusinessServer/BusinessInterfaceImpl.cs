@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Configuration;
 
 namespace MortalCombatBusinessServer
 {
@@ -38,58 +39,32 @@ namespace MortalCombatBusinessServer
         }
 
         // Add lobby to the server and ensure it's in the allLobbies dictionary
-        public void AddLobbyToServer(Lobby lobby)
+        public void AddLobbyToServer(string lobbyName)
         {
-            data.AddLobbyToServer(lobby);
 
-            if (!allLobbies.ContainsKey(lobby.LobbyName))
+            Console.WriteLine($"trying to add lobby = {lobbyName}");
+            data.AddLobbyToServer(lobbyName);
+
+            if (!allLobbies.ContainsKey(lobbyName))
             {
-                allLobbies[lobby.LobbyName] = new List<PlayerCallback>();
-                Console.WriteLine($"{lobby.LobbyName} created in dictionary");
+                allLobbies[lobbyName] = new List<PlayerCallback>();
+                Console.WriteLine($"{lobbyName} created in dictionary");
             }
         }
-
-
-
-        // List all players in the local instance's allPlayerCallback dictionary
-        public void ListAllPlayersInCallbacks()
+        
+        public void CheckUsernameValidity(string username)
         {
-            if (allPlayerCallback.Count > 0)
+            data.GetNumOfPlayers(out int numOfPlayers);
+            
+            int i = GetIndexForPlayer(username);
+
+            if (i != -1)
             {
-                Console.WriteLine("All players in allPlayerCallback:");
-                foreach (var player in allPlayerCallback)
-                {
-                    Console.WriteLine($"Player Username: {player.Key}, Callback: {player.Value}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No players in allPlayerCallback.");
-            }
+                Console.WriteLine($"username: {username}, already exists, try a different username!!");
+                throw new FaultException<PlayerNameAlreadyEsistsFault>(new PlayerNameAlreadyEsistsFault()
+                { Issue = "Player name already exists" });
+            }            
         }
-
-
-
-        public void CheckUsernameValidity(string username, out bool isValid)
-        {
-            int numOfPlayers;
-            string foundUsername;
-            isValid = true;
-
-            data.GetNumOfPlayers(out numOfPlayers);
-            for (int i = 0; i < numOfPlayers; i++)
-            {
-                data.GetPlayerForIndex(i, out foundUsername);
-
-                if (username.Equals(foundUsername))
-                {
-                    Console.WriteLine($"username: {foundUsername}, already exists, try a different username!!");
-                    isValid = false;
-                    return;
-                }
-            }
-        }
-
 
         /* Method: CheckLobbyNameValidity
          * Description: Checks if the lobby name is valid
@@ -101,51 +76,45 @@ namespace MortalCombatBusinessServer
             data.GetNumOfLobbies(out int numOfLobbies);
 
             // Check if the lobby name already exists by comparing it with all the lobby names in the database
-            for (int i = 0; i < numOfLobbies; i++)
+
+            int i = GetIndexForLobby(lobbyName);
+
+            if (i != -1)
             {
-                data.GetLobbyForIndex(i, out Lobby foundLobby);
-                
-                if (lobbyName.Equals(foundLobby.LobbyName))
-                {
-                    Console.WriteLine($"Lobby name: {foundLobby.LobbyName}, already exists, try a different name for the lobby!!");
-                    throw new FaultException<LobbyNameAlreadyExistsFault>(new LobbyNameAlreadyExistsFault()
-                    { Issue = "Lobby name already exists" });
-                }
+                Console.WriteLine($"Lobby name: {lobbyName}, already exists, try a different name for the lobby!!");
+                throw new FaultException<LobbyNameAlreadyExistsFault>(new LobbyNameAlreadyExistsFault()
+                { Issue = "Lobby name already taken \nTry a different name" });
             }
         }
 
-        public void DeleteLobby(string lobbyName, out bool doesHavePlayers)
+        public void DeleteLobby(string lobbyName)
         {
 
-            bool lobbyHasPlayers = false;
-            data.GetNumOfLobbies(out int numOfLobbies);
+            Console.WriteLine($"trying to delete lobby = {lobbyName}");
 
-            for (int i = 0; i < numOfLobbies; i++)
+            List<PlayerCallback> playerCallBacks = allLobbies[lobbyName];
+            
+
+                // Check if the list is empty
+            if (playerCallBacks.Count == 0)
             {
-                data.GetLobbyForIndex(i, out foundLobbyName);
-                if (lobbyName.Equals(foundLobbyName.LobbyName))
-                {
+                // Delete the lobby form the database
+                int i = GetIndexForLobby(lobbyName);
+                data.DeleteLobby(i); 
 
-                    data.DeleteLobby(foundLobbyName, out lobbyHasPlayers); // Delete the lobby                    
-                    break;
-                }
-
+                // Remove the key from the ConcurrentDictionary
+                allLobbies.TryRemove(lobbyName, out playerCallBacks);
             }
-            if (lobbyHasPlayers)
+            else
             {
                 throw new FaultException<PlayersStilInLobbyFault>(new PlayersStilInLobbyFault()
-                { Issue = "Players still in lobby" });
+                { Issue = "Lobby still has player inside it\nTry again later" });
             }
+            
         }
 
-
-        // Handle private messages
         public void AddPlayertoLobby(Player player, string lobbyName)
         {
-            if (player == null)
-            {
-                throw new ArgumentNullException(nameof(player));
-            }
 
             if (string.IsNullOrEmpty(lobbyName))
             {
@@ -159,7 +128,9 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine($"{lobbyName} created in dictionary");
             }
 
-            data.AddPlayerToLobby(player, lobbyName);
+            Lobby lobby = GetLobbyByName(lobbyName);    
+
+            data.AddPlayerToLobby(player, lobby.LobbyName);
 
             PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
 
@@ -169,7 +140,6 @@ namespace MortalCombatBusinessServer
             {
                 playerCallbacks.Add(callback);
             }
-
 
             if (allPlayerCallback.TryAdd(player.Username, callback))
             {
@@ -181,6 +151,82 @@ namespace MortalCombatBusinessServer
             {
                 Console.WriteLine($"Player {player.Username} already exists in allPlayerCallback.");
             }
+        }
+
+        public void RemovePlayerFromLobby(string playerUsername, string lobbyName)
+        {
+            List<PlayerCallback> playerCallBacks = allLobbies[lobbyName];
+            
+            PlayerCallback plCallback = allPlayerCallback[playerUsername];
+
+            foreach(var pCB in playerCallBacks)
+            {
+                if (pCB == plCallback)
+                {
+                    playerCallBacks.Remove(pCB);
+
+                    int i = GetIndexForLobby(lobbyName);
+                    int j = GetIndexForPlayer(playerUsername);
+
+                    Console.WriteLine($"index for lobby {i} and index for player {j}");
+                    data.RemovePlayerFromLobby(j, i);
+                    break;
+                }
+            }
+            
+        }
+
+        // Remove player from the server
+        public void RemovePlayerFromServer(string pUserName)
+        {
+            // Check if the player exists in the global player dictionary
+            if (allPlayerCallback.TryGetValue(pUserName, out PlayerCallback playerCallback))
+            {
+                // Remove the player from the global player list
+                allPlayerCallback.TryRemove(pUserName, out playerCallback);
+
+                int i = GetIndexForPlayer(pUserName);
+
+                data.RemovePlayerFromServer(i);
+            }
+            else
+            {
+                Console.WriteLine($"Player {pUserName} not found in the global list.");
+            }
+        }
+        
+        public int GetIndexForPlayer(string playerToFind)
+        {
+            data.GetNumOfPlayers(out int numOfPlayers);
+
+            // Check if the lobby name already exists by comparing it with all the lobby names in the database
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                data.GetPlayerForIndex(i, out Player foundPlayer);
+
+                if (playerToFind.Equals(foundPlayer.Username))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        public int GetIndexForLobby(string lobbyToFind)
+        {
+            data.GetNumOfLobbies(out int numOfLobbies);
+
+            // Check if the lobby name already exists by comparing it with all the lobby names in the database
+            for (int i = 0; i < numOfLobbies; i++)
+            {
+                data.GetLobbyForIndex(i, out Lobby foundLobby);
+
+                if (lobbyToFind.Equals(foundLobby.LobbyName))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         public void SendPrivateMessage(string sender, string recipient, string content)
@@ -307,6 +353,37 @@ namespace MortalCombatBusinessServer
             }
         }
 
+        public Lobby GetLobbyByName(string lobbyName)
+        {
+            data.GetNumOfLobbies(out int numOfLobbies);
+            for (int i = 0; i < numOfLobbies; i++)
+            {
+                data.GetLobbyForIndex(i, out Lobby foundLobby);
+
+                // Check if the passed in lobby name still exists by comparing it with all the lobby names in the database
+                if (lobbyName.Equals(foundLobby.LobbyName))
+                {
+                    return foundLobby; // Delete the lobby                    
+                }
+            }
+            return null;
+        }
+
+        public Player GetPlayerByName(string playerName)
+        {
+            data.GetNumOfPlayers(out int numOfPlayers);
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                data.GetPlayerForIndex(i, out Player foundPlayer);
+
+                if (playerName.Equals(foundPlayer.Username))
+                {
+                    return foundPlayer; // Delete the player
+                }
+            }
+            return null;
+        }
+
         //------Distribute messages to the lobby (Both text + hyper-links)-------//
         public void DistributeMessageToLobby(string lobbyName, string sender, string content)
         {
@@ -368,17 +445,7 @@ namespace MortalCombatBusinessServer
                 }
             }
         }
-        //----------------------------------------------------------------------//
-
-        // Remove player from the server
-        public void RemovePlayerFromServer(string pUserName)
-        {
-            if (allPlayerCallback.ContainsKey(pUserName))
-            {
-                allPlayerCallback.TryRemove(pUserName, out _);
-                Console.WriteLine($"Player {pUserName} removed from allPlayerCallback.");
-            }
-        }
+        //----------------------------------------------------------------------//        
 
         public List<string> GetAllLobbyNames()
         {
@@ -446,9 +513,9 @@ namespace MortalCombatBusinessServer
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }
 
-        public void DeleteLobby(string lobbyName)
-        {
-            throw new NotImplementedException();
-        }
+        //public void DeleteLobby(string lobbyName)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

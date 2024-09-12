@@ -29,15 +29,11 @@ namespace Mortal_Combat_Data_Library
          */
         [DataMember]
         public string LobbyName { get; set; }
-        [DataMember]
-        public int PlayerCount { get; set; }
-        [DataMember]
-        public bool HasPlayers { get; set; }
 
         [DataMember]
         private List<MessageDatabase.Message> _messages;
         [DataMember]
-        private List<string> _playerInLobby;
+        public List<string> _playerInLobby;
 
         /* 
          * Method: Lobby
@@ -49,8 +45,6 @@ namespace Mortal_Combat_Data_Library
         public Lobby(string lobbyName)
         {
             this.LobbyName = lobbyName;
-            PlayerCount = 0;
-            HasPlayers = false;
             _messages = new List<MessageDatabase.Message>();
             _playerInLobby = new List<string>();
         }
@@ -113,18 +107,6 @@ namespace Mortal_Combat_Data_Library
         public List<string> GetPlayersInLobby()
         {
             return _playerInLobby;
-        }
-
-        public void CheckForPlayersInLobby()
-        {
-            if (_playerInLobby.Count > 0)
-            {
-                HasPlayers = true;
-            }
-            else
-            {
-                HasPlayers = false;
-            }
         }
     }
 }

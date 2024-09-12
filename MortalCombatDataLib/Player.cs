@@ -20,18 +20,11 @@ namespace Mortal_Combat_Data_Library
     {
         /* Class fields:
          * Username -> the username of the player
-         * JoinedLobbyName -> the name of the lobby the player joined
-         * DateTime -> to save the time and date of when the player joins the lobby
          */
 
         [DataMember]
         public string Username { get; set; }
 
-        [DataMember]
-        public string JoinedLobbyName { get; set; }
-
-        [DataMember]        
-        public DateTime timeJoinedToLobby { get; set; }
 
         /* 
          * Method: Player
@@ -40,11 +33,9 @@ namespace Mortal_Combat_Data_Library
          *              the default values for 
          * Parameters: username (string), lobbyName (string)
          */
-        public Player(string username, string lobbyName)
+        public Player(string username)
         {
             this.Username = username;
-            JoinedLobbyName = lobbyName;
-            timeJoinedToLobby = DateTime.Now;
         }
 
     }

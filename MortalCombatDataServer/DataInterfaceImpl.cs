@@ -57,7 +57,7 @@ namespace MortalCombatDataServer
          */
         void DataInterface.AddPlayerToServer(Player player) 
         {
-            _playerDatabase._players.Add(player);
+            _playerDatabase.AddPlayerToServer(player);
         }
 
         /* Method: AddPlayerToLobby
@@ -73,19 +73,29 @@ namespace MortalCombatDataServer
          * Description: Add a lobby to the server
          * Parameters: lobby (Lobby)
          */
-        void DataInterface.AddLobbyToServer(Lobby lobby)
+        void DataInterface.AddLobbyToServer(string lobby)
         {
-            _lobbyDatabase._lobbies.Add(lobby);
+            Lobby newLobby = new Lobby(lobby);
+            _lobbyDatabase.AddNewLobbyToServer(newLobby);
         }
 
-        /* Method: CreateLobby
-         * Description: Create a new lobby and add it to the server
-         * Parameters: lobbyName (string)
+        /* Method: RemovePlayerFromLobby
+         * Description: Remove a player from the selected lobby
+         * Parameters: username (string), lobby (Lobby)
          */
-        void DataInterface.CreateLobby(string lobbyName)
+        void DataInterface.RemovePlayerFromLobby(int playerIndex, int lobbyIndex)
         {
-            Lobby lobby = new Lobby(lobbyName);
-            _lobbyDatabase.AddNewLobbyToServer(lobby);
+            Lobby lobby = _lobbyDatabase._lobbies[lobbyIndex];
+            lobby._playerInLobby.RemoveAt(playerIndex);
+        }
+
+        /* Method: RemovePlayerFromServer
+         * Description: Remove a player from the server
+         * Parameters: player (Player)
+         */
+        void DataInterface.RemovePlayerFromServer(int index)
+        {
+            _playerDatabase.RemovePlayerFromServer(index);
         }
 
         /* Method: GetPlayerForIndex
@@ -93,9 +103,9 @@ namespace MortalCombatDataServer
          * Parameters: index (int), foundUsername (string)
          * Result: foundUsername (string)
          */
-        void DataInterface.GetPlayerForIndex(int index, out string foundUsername)
+        void DataInterface.GetPlayerForIndex(int index, out Player foundPlayer)
         {
-            foundUsername = _playerDatabase.GetUsernameByIndex(index);
+            foundPlayer = _playerDatabase.GetPlayerByIndex(index);
         }
 
         /* Method: GetLobbyForIndex
@@ -126,16 +136,6 @@ namespace MortalCombatDataServer
             _messageDatabase.SaveMessage(sender, recipent, content, messageType);
         }
 
-        /* Method: GetPlayersInLobbyCount
-         * Description: Get the number of players in the lobby
-         * Parameters: index (int), lobbyCount (int)
-         * Result: lobbyCount (int)
-         */
-        void DataInterface.GetPlayersInLobbyCount(int index, out int lobbyCount)
-        {
-            lobbyCount = _lobbyDatabase._lobbies[index].PlayerCount;
-        }
-
         /* Method: GetMessagesForLobby
          * Description: Get the messages for the selected lobby
          * Parameters: sender (string), lobbyName (string)
@@ -162,7 +162,7 @@ namespace MortalCombatDataServer
          */
         void DataInterface.DeleteLobby(int index)
         {
-            _lobbyDatabase._lobbies.RemoveAt(index);
+            _lobbyDatabase._lobbies.RemoveAt(index);            
         }
 
         /* Method: DistributeMessage

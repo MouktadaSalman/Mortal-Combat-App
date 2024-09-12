@@ -65,6 +65,7 @@
     <Compile Include="BusinessInterface.cs" />
     <Compile Include="BusinessInterfaceImpl.cs" />
     <Compile Include="LobbyNameAlreadyExistsFault.cs" />
+    <Compile Include="PlayerNameAlreadyEsistsFault.cs" />
     <Compile Include="PlayersStilInLobbyFault.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -38,22 +38,27 @@ namespace Mortal_Combat_Data_Library
             _players = new List<Player>();
         }
 
-        /* Method: GetUsernameByIndex
-         * Description: Get the username by index
-         * Parameters: index (int)
+        /* Method: AddPlayerToServer
+         * Description: Add a player to the server
+         * Parameters: player (Player)
          */
-        public string GetUsernameByIndex(int index)
+        public void AddPlayerToServer(Player player)
         {
-            return _players[index].Username;
+            _players.Add(player);
         }
 
-        /* Method: GetJoinedLobbyNameByIndex
-         * Description: Get the joined lobby name by index
-         * Parameters: index (int)
+        /* Method: RemovePlayerFromServer
+         * Description: Remove a player from the server
+         * Parameters: player (Player)
          */
-        public string GetJoinedLobbyNameByIndex(int index)
+        public void RemovePlayerFromServer(int index)
         {
-            return _players[index].JoinedLobbyName;
+            _players.RemoveAt(index);
+        }
+
+        public Player GetPlayerByIndex(int index)
+        {
+            return _players[index];
         }
     }
 }

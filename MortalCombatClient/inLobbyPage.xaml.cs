@@ -32,7 +32,7 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class inLobbyPage : Page
+    public partial class InLobbyPage : Page
     {
         /* Class fields:
          * duplexFoob -> the business interface
@@ -45,26 +45,24 @@ namespace MortalCombatClient
         private Lobby curLobby;
         private List<Player> playersInLobby;
 
-        public inLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
+        public InLobbyPage(BusinessInterface inDuplexFoob, Player player, Lobby lobby)
         {
             InitializeComponent();
 
             duplexFoob = inDuplexFoob;
             curPlayer = player;
             curLobby = lobby;
-            lobbyNameTextBox.Text = player.JoinedLobbyName;
-
-            onlinePlayersCount.Text = curLobby.PlayerCount.ToString();
+            lobbyNameTextBox.Text = lobby.LobbyName;
 
             playersInLobby = new List<Player>();
-              
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateInLobbyCallbackContext(this);
             
-            Task task = loadLobbyMessagesAsync();            
+            Task task = LoadLobbyMessagesAsync();            
         }
 
 
-        private async void sendButton_Click(object sender, RoutedEventArgs e)
+        private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string messageContent = messageBox.Text;
 
@@ -76,12 +74,12 @@ namespace MortalCombatClient
             messageBox.Clear();
         }
 
-        private void sendMessageButton_Click (object sender, RoutedEventArgs e)
+        private void SendMessageButton_Click (object sender, RoutedEventArgs e)
         {
            string recipent = onlinePlayers.SelectedItem.ToString();
             if (!recipent.Equals(curPlayer.Username))
             {
-                privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+                PrivateMessagePage nextPage = new PrivateMessagePage(duplexFoob, curPlayer, recipent);
                 NavigationService.Navigate(nextPage);
             } else
             {
@@ -90,11 +88,11 @@ namespace MortalCombatClient
            
         }
 
-        public void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
+        public void LoadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
 
             MessagesListBox.Items.Clear();
-            Task task = loadLobbyMessagesAsync();
+            Task task = LoadLobbyMessagesAsync();
         }
 
         public void RefreshLists()
@@ -108,12 +106,12 @@ namespace MortalCombatClient
                     onlinePlayers.Items.Add(playerName);
                 }                
 
-                Player player = new Player(playerName, curLobby.LobbyName);
+                Player player = new Player(playerName);
                 playersInLobby.Add(player);
             }
         }
 
-        public void showMessage(string message)
+        public void ShowMessage(string message)
         {
             Dispatcher.Invoke(() =>
             {
@@ -121,7 +119,7 @@ namespace MortalCombatClient
             });
         }
 
-        public void showLink(MessageDatabase.FileLinkBlock message)
+        public void ShowLink(MessageDatabase.FileLinkBlock message)
         {
             TextBlock block = new TextBlock();
             block.Inlines.Add(new Run(message.Sender + ": "));
@@ -145,7 +143,7 @@ namespace MortalCombatClient
             });
         }
 
-        public async Task loadLobbyMessagesAsync()
+        public async Task LoadLobbyMessagesAsync()
         {
 
             RefreshLists();
@@ -154,11 +152,11 @@ namespace MortalCombatClient
             {
                 if(message.MessageType == 1)
                 {
-                    showMessage(message.ToString());
+                    ShowMessage(message.ToString());
                 }
                 else if(message.MessageType == 2)
                 {
-                    showLink(message.ContentF);
+                    ShowLink(message.ContentF);
                 }
                 else
                 {
@@ -167,7 +165,7 @@ namespace MortalCombatClient
             }
         }
 
-        private async void selectFilesButton_Click(object sender, RoutedEventArgs e)
+        private async void SelectFilesButton_Click(object sender, RoutedEventArgs e)
         {
             //To extract file path + filename
             string filePath = string.Empty;
@@ -238,14 +236,10 @@ namespace MortalCombatClient
             e.Handled = true;
         }
 
-        private void leaveLobbyButton_Click(object sender, RoutedEventArgs e)
+        private void LeaveLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            curPlayer.JoinedLobbyName = "Main";
-            curLobby.PlayerCount--;
-
-            onlinePlayers.Items.Remove(curPlayer);
-            playersInLobby.Remove(curPlayer);
-            NavigationService.GoBack();        
+            duplexFoob.RemovePlayerFromLobby(curPlayer.Username, curLobby.LobbyName);
+            NavigationService.GoBack();
         }
     }
 }

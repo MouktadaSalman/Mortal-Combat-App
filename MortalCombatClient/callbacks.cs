@@ -6,24 +6,31 @@ using System.Windows;
 
 namespace MortalCombatClient
 {
-    public class callbacks : PlayerCallback
+    public class Callbacks : PlayerCallback
     {
-        private inLobbyPage _inLobbyPage;
-        private Dictionary<string, privateMessagePage> _privateMessagePages;
+        private InLobbyPage _inLobbyPage;
+        private Dictionary<string, PrivateMessagePage> _privateMessagePages;
+        private LobbyPage _lobbyPage; 
         private MainWindow _mainWindow;
 
-        public callbacks()
+        public Callbacks()
         {
             _mainWindow = (MainWindow)Application.Current.MainWindow;
-            _privateMessagePages = new Dictionary<string, privateMessagePage>();
+            _privateMessagePages = new Dictionary<string, PrivateMessagePage>();
         }
 
-        public void UpdateLobbyPage(inLobbyPage lobbyPage)
+        public void UpdateLobbyPage(LobbyPage lobbyPage)
+        {
+            _lobbyPage = lobbyPage;
+        }
+
+
+        public void UpdateInLobbyPage(InLobbyPage lobbyPage)
         {
             _inLobbyPage = lobbyPage;
         }
 
-        public void UpdatePrivatePage(string chatPartner, privateMessagePage page)
+        public void UpdatePrivatePage(string chatPartner, PrivateMessagePage page)
         {
             if (page == null)
             {
@@ -41,7 +48,7 @@ namespace MortalCombatClient
             {
                 _inLobbyPage.Dispatcher.Invoke(() =>
                 {
-                    _inLobbyPage.showMessage($"{sender}: {content}");
+                    _inLobbyPage.ShowMessage($"{sender}: {content}");
                 });
             }
         }
@@ -52,7 +59,7 @@ namespace MortalCombatClient
             {
                 _inLobbyPage.Dispatcher.Invoke(() =>
                 {
-                    _inLobbyPage.showLink(content);
+                    _inLobbyPage.ShowLink(content);
                 });
             }
         }

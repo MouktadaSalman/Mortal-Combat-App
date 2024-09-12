@@ -22,10 +22,16 @@ namespace MortalCombatBusinessServer
         void AddPlayerToServer(Player player);
 
         [OperationContract]
-        void AddLobbyToServer(Lobby lobby);
+        void AddLobbyToServer(string lobby);
 
         [OperationContract]
         void AddPlayertoLobby(Player player, string lobbyName);
+
+        [OperationContract]
+        void RemovePlayerFromLobby(string playerUsername, string lobbyName);
+
+        [OperationContract]
+        void RemovePlayerFromServer(string playerUsername);
 
         [OperationContract]        
         void SendPrivateMessage(string sender, string recipent, string content);
@@ -34,8 +40,6 @@ namespace MortalCombatBusinessServer
         List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2);
 
         [OperationContract]
-
-
         void StorePrivateMessage(string sender, string recipient, string content);
 
         [OperationContract]
@@ -63,7 +67,8 @@ namespace MortalCombatBusinessServer
         List<string> GetPlayersInLobby(Lobby lobby);
 
         [OperationContract]
-        void CheckUsernameValidity(string username, out bool isValid);
+        [FaultContract(typeof(PlayerNameAlreadyEsistsFault))]
+        void CheckUsernameValidity(string username);
 
         [OperationContract]
         [FaultContract(typeof(LobbyNameAlreadyExistsFault))]
@@ -78,6 +83,18 @@ namespace MortalCombatBusinessServer
 
         [OperationContract]
         void DownloadFile(string filePath);
+
+        [OperationContract]
+        Lobby GetLobbyByName(string lobbyName);
+
+        [OperationContract]
+        Player GetPlayerByName(string playerName);
+
+        [OperationContract]
+        int GetIndexForPlayer(string playerToFind);
+
+        [OperationContract]
+        int GetIndexForLobby(string lobbyToFind);
     }
 
     public interface PlayerCallback

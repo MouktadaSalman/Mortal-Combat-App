@@ -20,13 +20,13 @@ namespace MortalCombatClient
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class privateMessagePage : Page
+    public partial class PrivateMessagePage : Page
     {
         private BusinessInterface duplexFoob;
         private Player curPlayer;
         public string MessageRecipient { get; private set; }
 
-        public privateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
+        public PrivateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
         {
             InitializeComponent();
 

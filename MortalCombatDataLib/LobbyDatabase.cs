@@ -60,6 +60,11 @@ namespace Mortal_Combat_Data_Library
             _lobbies.Add(newLobby);
         }
 
+        public void RemoveLobbyFromServer(Lobby lobby)
+        {
+            _lobbies.Remove(lobby);
+        }
+
         /* Method: AddPlayerToLobby
          * Description: Add a player to the appropriate lobby
          * Parameters: player (Player), lobbyName (string)
@@ -71,44 +76,7 @@ namespace Mortal_Combat_Data_Library
             lobby.AddPlayer(player);
         }
 
-        /* Method: RemoveLobby
-         * Description: Remove a lobby
-         * Parameter: lobbyName (string)
-         * Result: none
-         */
-        //public void RemoveLobby(Lobby lobbyToRemove)
-        //{
-        //    _lobbies.Remove(lobbyToRemove);
-        //}
 
-        /* Method: RemovePlayer
-         * Description: Remove player from lobby
-         * Parameters: playerName (string), lobbyName (string)
-         * Result none
-         */
-        //public void RemovePlayer(string playerName,  string lobbyName)
-        //{
-        //    Lobby correctLobby = null;
-
-        //    foreach(Lobby lob in _lobbies)
-        //    {
-        //        if(lob.LobbyName.Equals(lobbyName))
-        //        {
-        //            correctLobby= lob;
-        //            break;
-        //        }
-        //    }
-
-        //    //Check if lobby exists in database
-        //    if (correctLobby == null)
-        //    {
-        //        Console.WriteLine("MissingLobbyError:: No matching lobby found");
-        //    }
-        //    else
-        //    {
-        //        correctLobby.RemovePlayer(playerName);
-        //    }
-        //}
 
         /* Method: GetLobbies
          * Description: Get the list of lobbies
