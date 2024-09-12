@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Linq;
 using System.ServiceModel;
 
@@ -18,6 +19,8 @@ namespace MortalCombatBusinessServer
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
         private ConcurrentDictionary<string, List<MessageDatabase.Message>> pendingMessages = new ConcurrentDictionary<string, List<MessageDatabase.Message>>();
+
+        public string downloadPath;
 
         private DataInterface data;
 
@@ -401,10 +404,10 @@ namespace MortalCombatBusinessServer
             //Initialize values
             byte[] fData = null;
             int fType = 0;
-
+            
             //Get the path to the apps downloads folder
-            string downloadPath = @"" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                                        "MortalCombatDownloads");
+            downloadPath = @"" + Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location).Parent.Parent.Parent.FullName,
+                                              "MortalCombatDownloads");
 
             //If the app downloads folder doesn't exist yet... create it
             if (!Directory.Exists(downloadPath)) { Directory.CreateDirectory(downloadPath); }
