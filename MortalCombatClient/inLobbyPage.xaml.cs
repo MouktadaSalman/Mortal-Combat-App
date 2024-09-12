@@ -122,17 +122,11 @@ namespace MortalCombatClient
 
         public void ShowLink(MessageDatabase.FileLinkBlock message)
         {
-
+            //Create the placeholder to hold hyperlink + sender
             TextBlock block = new TextBlock();
             block.Inlines.Add(new Run(message.Sender + ": "));
 
-            string recipent = onlinePlayers.SelectedItem.ToString();
-            PrivateMessagePage nextPage = new PrivateMessagePage(duplexFoob, curPlayer, recipent);
-
-            NavigationService.Navigate(nextPage);
-
             //Setup hyperlink
-            //Hyperlink link = new Hyperlink(new Run(message.FileName));
             Hyperlink link = new Hyperlink(new Run(message.FileName))
             {
                 NavigateUri = new Uri(message.Uri)
@@ -143,7 +137,6 @@ namespace MortalCombatClient
 
             //Direct a method when link is clicked
             link.RequestNavigate += HandleRequestNavigate;
-
             Dispatcher.Invoke(() =>
             {
                 MessagesListBox.Items.Add(block);
