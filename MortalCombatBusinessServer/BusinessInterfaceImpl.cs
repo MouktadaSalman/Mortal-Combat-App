@@ -19,9 +19,11 @@ namespace MortalCombatBusinessServer
         // A ConcurrentDictionary to manage all player callbacks per instance
         private ConcurrentDictionary<string, PlayerCallback> allPlayerCallback = new ConcurrentDictionary<string, PlayerCallback>();
         private ConcurrentDictionary<string, List<PlayerCallback>> allLobbies = new ConcurrentDictionary<string, List<PlayerCallback>>();
+
         private ConcurrentDictionary<string, List<MessageDatabase.Message>> pendingMessages = new ConcurrentDictionary<string, List<MessageDatabase.Message>>();
 
         public string downloadPath;
+
 
         private DataInterface data;
 
@@ -358,10 +360,18 @@ namespace MortalCombatBusinessServer
 
         public Lobby GetLobbyByName(string lobbyName)
         {
+
             data.GetNumOfLobbies(out int numOfLobbies);
             for (int i = 0; i < numOfLobbies; i++)
             {
                 data.GetLobbyForIndex(i, out Lobby foundLobby);
+
+            ListAllPlayersInCallbacks();
+
+            if (allPrivatePlayerCallback.ContainsKey(recipent))
+            {
+                var callback = allPrivatePlayerCallback[recipent];
+                MessageDatabase.Message message = new MessageDatabase.Message(sender, recipent, content, 1);
 
                 // Check if the passed in lobby name still exists by comparing it with all the lobby names in the database
                 if (lobbyName.Equals(foundLobby.LobbyName))

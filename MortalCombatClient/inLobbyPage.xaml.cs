@@ -121,8 +121,16 @@ namespace MortalCombatClient
 
         public void ShowLink(MessageDatabase.FileLinkBlock message)
         {
+
             TextBlock block = new TextBlock();
             block.Inlines.Add(new Run(message.Sender + ": "));
+
+           string recipent = onlinePlayers.SelectedItem.ToString();
+           privateMessagePage nextPage = new privateMessagePage(duplexFoob, curPlayer, recipent);
+         
+           NavigationService.Navigate(nextPage);
+        }
+
 
             //Setup hyperlink
             //Hyperlink link = new Hyperlink(new Run(message.FileName));
