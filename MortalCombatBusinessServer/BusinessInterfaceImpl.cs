@@ -13,7 +13,7 @@ using System.ServiceModel.Configuration;
 
 namespace MortalCombatBusinessServer
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false, IncludeExceptionDetailInFaults = true)]
     public class BusinessInterfaceImpl : BusinessInterface
     {
 
@@ -44,7 +44,6 @@ namespace MortalCombatBusinessServer
         private ConcurrentDictionary<string, List<MessageDatabase.Message>> pendingMessages = new ConcurrentDictionary<string, List<MessageDatabase.Message>>();
 
         public string downloadPath;
-
 
         private DataInterface data;
 
@@ -116,11 +115,11 @@ namespace MortalCombatBusinessServer
 
         public void DeleteLobby(string lobbyName)
         {
-
             Console.WriteLine($"trying to delete lobby = {lobbyName}");
 
-            List<PlayerCallback> playerCallBacks = allLobbies[lobbyName];
-            
+            List<PlayerCallback> playerCallBacks = allLobbies[lobbyName];                    
+
+            Console.WriteLine($"players in lobby {playerCallBacks.Count} for lobby {lobbyName}");
 
                 // Check if the list is empty
             if (playerCallBacks.Count == 0)
@@ -137,7 +136,6 @@ namespace MortalCombatBusinessServer
                 throw new FaultException<PlayersStilInLobbyFault>(new PlayersStilInLobbyFault()
                 { Issue = "Lobby still has player inside it\nTry again later" });
             }
-            
         }
 
         public void AddPlayertoLobby(Player player, string lobbyName)
@@ -148,7 +146,6 @@ namespace MortalCombatBusinessServer
                 throw new ArgumentException("Lobby name cannot be null or empty", nameof(lobbyName));
             }
 
-            // Ensure the lobby exists
             if (!allLobbies.ContainsKey(lobbyName))
             {
                 allLobbies[lobbyName] = new List<PlayerCallback>();
@@ -162,6 +159,9 @@ namespace MortalCombatBusinessServer
             PlayerCallback callback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
 
             var playerCallbacks = allLobbies[lobbyName];
+
+            Console.WriteLine($"Players in  this lobby are {playerCallbacks.Count} ");
+
 
             if (!playerCallbacks.Contains(callback))
             {

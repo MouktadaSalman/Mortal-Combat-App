@@ -39,7 +39,6 @@ namespace MortalCombatClient
             InitializeComponent();
 
             Callbacks = new Callbacks();
-            Callbacks = new Callbacks();
             privateMessagePages = new Dictionary<string, PrivateMessagePage>();
 
 
@@ -59,7 +58,7 @@ namespace MortalCombatClient
             tcp.CloseTimeout = TimeSpan.FromMinutes(1);
 
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, new EndpointAddress(URL));
+            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
             duplexFoob = channelFactory.CreateChannel();
             MainFrame.NavigationService.Navigate(new LoginPage(duplexFoob));
         }
