@@ -28,10 +28,15 @@ namespace MortalCombatBusinessServer
         void AddPlayertoLobby(Player player, string lobbyName);
 
         [OperationContract]        
-        void SendPrivateMessage(string sender, string recipent, string content); 
-     
+        void SendPrivateMessage(string sender, string recipent, string content);
+
         [OperationContract]
-        List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);
+        List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2);
+
+        [OperationContract]
+
+
+        void StorePrivateMessage(string sender, string recipient, string content);
 
         [OperationContract]
         void NotifyPrivatePlayer(string sender, string recipent, string content);
@@ -61,9 +66,11 @@ namespace MortalCombatBusinessServer
         void CheckUsernameValidity(string username, out bool isValid);
 
         [OperationContract]
-        void CheckLobbyNameValidity(string lobbyName, out bool isValid);
+        [FaultContract(typeof(LobbyNameAlreadyExistsFault))]
+        void CheckLobbyNameValidity(string lobbyName);
 
         [OperationContract]
+        [FaultContract(typeof(PlayersStilInLobbyFault))]
         void DeleteLobby(string lobbyName);
 
         [OperationContract]
