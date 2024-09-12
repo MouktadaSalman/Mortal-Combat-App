@@ -199,27 +199,22 @@ namespace MortalCombatBusinessServer
                     data.RemovePlayerFromLobby(j, i);
                     break;
                 }
-            }
-            
+            }            
         }
 
         // Remove player from the server
         public void RemovePlayerFromServer(string pUserName)
         {
-            // Check if the player exists in the global player dictionary
-            if (allPlayerCallback.TryGetValue(pUserName, out PlayerCallback playerCallback))
-            {
-                // Remove the player from the global player list
-                allPlayerCallback.TryRemove(pUserName, out playerCallback);
+            PlayerCallback plCallback = allPlayerCallback[pUserName];
+            
+            // Remove the player from the global player list
+            allPlayerCallback.TryRemove(pUserName, out plCallback);
 
-                int i = GetIndexForPlayer(pUserName);
+            int i = GetIndexForPlayer(pUserName);
 
-                data.RemovePlayerFromServer(i);
-            }
-            else
-            {
-                Console.WriteLine($"Player {pUserName} not found in the global list.");
-            }
+            data.RemovePlayerFromServer(i);
+
+            Console.WriteLine($"Player {pUserName} not found in the global list.");            
         }
         
         public int GetIndexForPlayer(string playerToFind)
@@ -539,10 +534,5 @@ namespace MortalCombatBusinessServer
             }
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
         }
-
-        //public void DeleteLobby(string lobbyName)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

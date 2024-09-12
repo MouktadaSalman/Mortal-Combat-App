@@ -17,7 +17,7 @@ namespace MortalCombatClient
     {
         private InLobbyPage _inLobbyPage;
         private Dictionary<string, PrivateMessagePage> _privateMessagePages;
-        private LobbyPage _lobbyPage; 
+        private LobbyPage _lobbyPage;
         private MainWindow _mainWindow;
 
         public Callbacks()
