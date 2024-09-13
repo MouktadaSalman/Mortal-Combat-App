@@ -219,7 +219,7 @@ namespace MortalCombatClient
             }
             else
             {
-                System.Windows.MessageBox.Show("Failed to extract file path");
+                System.Windows.MessageBox.Show("No file selected");
             }
         }
 
