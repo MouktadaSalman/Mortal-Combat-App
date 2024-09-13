@@ -205,7 +205,7 @@ namespace MortalCombatBusinessServer
             }
 
             Console.WriteLine($"Players in  this lobby are {playerCallbacks.Count} ");
-           
+            NotifyAllLobbyUpdate();
         }
 
         /* Method: RemovePlayerFromLobby
