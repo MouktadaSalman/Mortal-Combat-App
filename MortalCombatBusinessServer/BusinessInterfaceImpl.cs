@@ -188,7 +188,6 @@ namespace MortalCombatBusinessServer
 
             var playerCallbacks = allLobbies[lobbyName]; // Get the list of player callbacks in the lobby
 
-            Console.WriteLine($"Players in  this lobby are {playerCallbacks.Count} ");
 
             // Check if the player is already in the lobby, if not add them
             if (!playerCallbacks.Contains(callback)) 
@@ -208,6 +207,7 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine($"Player {player.Username} already exists in allPlayerCallback.");
             }
 
+            Console.WriteLine($"Players in  this lobby are {playerCallbacks.Count} ");
             NotifyAllLobbyUpdate();
         }
 
@@ -230,14 +230,15 @@ namespace MortalCombatBusinessServer
                     playerCallBacks.Remove(pCB);
 
                     int i = GetIndexForLobby(lobbyName);   
-                    int j = GetIndexForPlayer(playerUsername);
+                    int j = GetIndexForPlayerInLobby(playerUsername, lobbyName);
+
+                    Console.WriteLine($"returned index for player is ({j}), and for lobby is ({i}).");
 
                     data.RemovePlayerFromLobby(i, j); // Remove the player from the lobby in the database
                     NotifyAllLobbyUpdate();
                     break;
                 }
             }
-
         }
 
         /* Method: RemovePlayerFromServer
@@ -252,10 +253,9 @@ namespace MortalCombatBusinessServer
             allPlayerCallback.TryRemove(pUserName, out plCallback);
 
             int i = GetIndexForPlayer(pUserName);
+            Console.WriteLine($"Player {pUserName} is in index {i}.");            
 
-            data.RemovePlayerFromServer(i);
-
-            Console.WriteLine($"Player {pUserName} not found in the global list.");            
+            data.RemovePlayerFromServer(i);           
         }
 
         /* Method: GetIndexForPlayer
@@ -272,6 +272,25 @@ namespace MortalCombatBusinessServer
                 data.GetPlayerForIndex(i, out Player foundPlayer);
 
                 if (playerToFind.Equals(foundPlayer.Username)) 
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public int GetIndexForPlayerInLobby(string playerToFind, string lobbyName)
+        {
+            Lobby lobby = GetLobbyByName(lobbyName);
+            int numOfPlayers = lobby._playerInLobby.Count;
+
+            Console.WriteLine($"Count of players in lobby is: {numOfPlayers}");
+
+            // Check if the lobby name already exists by comparing it with all the lobby names in the database
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                Player player = lobby._playerInLobby[i];
+                if (playerToFind.Equals(player.Username))
                 {
                     return i;
                 }
@@ -571,16 +590,6 @@ namespace MortalCombatBusinessServer
         public List<string> GetAllLobbyNames()
         {
             return data.GetAllLobbyNames();
-        }
-
-        /* Method: GetPlayersInLobby
-         * Description: Retrieves all players in a lobby
-         * Parameters: lobby (Lobby)
-         * Result: List<string>
-         */
-        public List<string> GetPlayersInLobby(string lobbyName)
-        {
-            return data.GetAllPlayersInlobby(lobbyName);
         }
 
         /* Method: UploadFile

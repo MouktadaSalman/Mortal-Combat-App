@@ -64,9 +64,6 @@ namespace MortalCombatBusinessServer
         List<string> GetAllLobbyNames();
 
         [OperationContract]
-        List<string> GetPlayersInLobby(string lobbyName);
-
-        [OperationContract]
         [FaultContract(typeof(PlayerNameAlreadyEsistsFault))]
         void CheckUsernameValidity(string username);
 
@@ -91,10 +88,13 @@ namespace MortalCombatBusinessServer
         Player GetPlayerByUsername(string username);
 
         [OperationContract]
-        int GetIndexForPlayer(string playerToFind);
+        int GetIndexForPlayerInLobby(string playerToFind, string lobbyName);
 
         [OperationContract]
         int GetIndexForLobby(string lobbyToFind);
+
+        [OperationContract]
+        int GetIndexForPlayer(string playerToFind);
     }
 
 

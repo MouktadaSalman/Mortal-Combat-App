@@ -30,7 +30,7 @@ namespace Mortal_Combat_Data_Library
         [DataMember]
         private List<MessageDatabase.Message> _messages;
         [DataMember]
-        public List<string> _playerInLobby;
+        public List<Player> _playerInLobby;
 
         /* 
          * Method: Lobby
@@ -43,7 +43,7 @@ namespace Mortal_Combat_Data_Library
         {
             this.LobbyName = lobbyName;
             _messages = new List<MessageDatabase.Message>();
-            _playerInLobby = new List<string>();
+            _playerInLobby = new List<Player>();
         }
 
         /* 
@@ -51,7 +51,7 @@ namespace Mortal_Combat_Data_Library
          * Description: Add a player to the current lobby
          * Parameters: player (Player)
          */
-        public void AddPlayer(string player)
+        public void AddPlayer(Player player)
         {
             _playerInLobby.Add(player);
         }
@@ -71,7 +71,7 @@ namespace Mortal_Combat_Data_Library
          * Description: Get all players in lobby
          * Result: List of players in lobby
          */
-        public List<string> GetPlayersInLobby()
+        public List<Player> GetPlayersInLobby()
         {
             return _playerInLobby;
         }

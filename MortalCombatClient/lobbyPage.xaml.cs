@@ -48,15 +48,48 @@ namespace MortalCombatClient
             duplexFoob = inFoob;
             curPlayer = player;
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                mainWindow.CreateChannel();
+            }
+
+            mainWindow.UpdateLobbyCallbackContext(this);
             RefreshLists();
         }
 
+        /* Method: CreateLobbyButton_Click
+         * Description: The click listener when a user presses the button to create a lobby (async)
+         * Parameters: sender (object), e (RoutedEventArgs)
+         */
+        private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
 
+            try
+            {
+                string createdLobbyName = NewLobbyName.Text;
+                duplexFoob.CheckLobbyNameValidity(createdLobbyName);
 
+                Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
 
+                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
 
-        
+                RefreshLists();
+            
+                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
+            }
+            catch (FaultException<LobbyNameAlreadyExistsFault> ex)
+            {
+                MessageBox.Show(ex.Detail.Issue);
+            }
+        }
+
         /* Method: JoinLobbyButton_Click
          * Description: The click listener when a user presses the button want to 
          *              join a lobby
@@ -64,7 +97,12 @@ namespace MortalCombatClient
          */
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            //Null check if the user clicks button without selection
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
 
             try
             {
@@ -91,38 +129,29 @@ namespace MortalCombatClient
             }
         }
 
-        /* Method: CreateLobbyButton_Click
-         * Description: The click listener when a user presses the button to create a lobby (async)
-         * Parameters: sender (object), e (RoutedEventArgs)
-         */
-        private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string createdLobbyName = NewLobbyName.Text;
-                duplexFoob.CheckLobbyNameValidity(createdLobbyName);
-
-                Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
-
-                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
-
-                RefreshLists();
-            
-                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
-            }
-            catch (FaultException<LobbyNameAlreadyExistsFault> ex)
-            {
-                MessageBox.Show(ex.Detail.Issue);
-            }
-        }
 
         /* Method: LogOutButton_Click
          * Description: The click listener when a user presses the button to log out
          * Parameters: sender (object), e (RoutedEventArgs)
          */
-        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
-            duplexFoob.RemovePlayerFromServer(curPlayer.Username);
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
+            try
+            {
+                await Task.Run(() => duplexFoob.RemovePlayerFromServer(curPlayer.Username));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
             // Goes back to the loginPage
             NavigationService.GoBack();
         }
@@ -133,6 +162,13 @@ namespace MortalCombatClient
          */
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             RefreshLists();
         }
 
@@ -142,6 +178,13 @@ namespace MortalCombatClient
          */
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             if (LobbyRoomList.SelectedItem == null)
             {
                 MessageBox.Show("Please select a lobby to delete");

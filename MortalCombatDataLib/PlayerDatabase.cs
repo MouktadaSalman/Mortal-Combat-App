@@ -53,6 +53,7 @@ namespace Mortal_Combat_Data_Library
          */
         public void RemovePlayerFromServer(int index)
         {
+            Console.WriteLine($"player index of: {index}");
             _players.RemoveAt(index);
         }
 

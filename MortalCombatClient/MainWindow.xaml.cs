@@ -34,6 +34,7 @@ namespace MortalCombatClient
         private Dictionary<string, PrivateMessagePage> privateMessagePages;
         private LobbyPage LobbyPage;
         private Player currentPlayer;
+        InstanceContext callbackInstance;
 
         public MainWindow()
         {
@@ -41,15 +42,22 @@ namespace MortalCombatClient
 
             Callbacks = new Callbacks();
             privateMessagePages = new Dictionary<string, PrivateMessagePage>();
+            callbackInstance = new InstanceContext(Callbacks);
 
+            CreateChannel();
 
+            MainFrame.NavigationService.Navigate(new LoginPage(duplexFoob));
+        }
+
+        public void CreateChannel()
+        {
             /*
              * This line creates a context for the callbacks, allowing the server
              * to call back to the client.Used for setting up the duplex channel
              * for communication between client and server.
              * It will be changed between inLobbyPage and privateMessagingPage when required.
              * */
-            InstanceContext callbackInstance = new InstanceContext(Callbacks);
+            
             DuplexChannelFactory<BusinessInterface> channelFactory;
             NetTcpBinding tcp = new NetTcpBinding();
 
@@ -58,12 +66,10 @@ namespace MortalCombatClient
             tcp.OpenTimeout = TimeSpan.FromMinutes(1);
             tcp.CloseTimeout = TimeSpan.FromMinutes(1);
 
-
-           
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
             duplexFoob = channelFactory.CreateChannel();
-            MainFrame.NavigationService.Navigate(new LoginPage(duplexFoob));
+            
         }
 
         private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)

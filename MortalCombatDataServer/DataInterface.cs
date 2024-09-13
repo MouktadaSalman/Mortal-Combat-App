@@ -34,13 +34,16 @@ namespace DataServer
         void AddLobbyToServer(string lobby);
 
         [OperationContract]
-        void RemovePlayerFromLobby(int i, int lobbyIndex);
+        void RemovePlayerFromLobby(int lobbyIndex, int playerIndex);
 
         [OperationContract]
         void RemovePlayerFromServer(int index);
 
         [OperationContract]
         void GetPlayerForIndex(int index, out Player foundUsername);
+
+        [OperationContract]
+        void GetPlayerInLobbyForIndex(int playerIndex, int lobbyIndex, out Player foundPlayer);
 
         [OperationContract]
         void GetLobbyForIndex(int index, out Lobby foundLobbyName);

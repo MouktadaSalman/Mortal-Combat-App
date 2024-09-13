@@ -51,7 +51,14 @@ namespace MortalCombatClient
             curLobby = lobby;
             lobbyNameTextBox.Text = lobby.LobbyName;
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateInLobbyCallbackContext(this);
+            var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                mainWindow.CreateChannel();
+            }
+
+            mainWindow.UpdateInLobbyCallbackContext(this);
 
             Task task = LoadLobbyMessagesAsync();
         }
@@ -64,6 +71,13 @@ namespace MortalCombatClient
          */
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             //Get the message input
             string messageContent = messageBox.Text;
 
@@ -88,6 +102,13 @@ namespace MortalCombatClient
          */
         private async void SelectFilesButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             //To extract file path + filename
             string filePath = string.Empty;
             string fileName = string.Empty;
@@ -155,6 +176,13 @@ namespace MortalCombatClient
          */
         private void OpenChatButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             if (onlinePlayers.SelectedItem != null) { 
             string recipent = onlinePlayers.SelectedItem.ToString();
             if (!recipent.Equals(curPlayer.Username))
@@ -180,6 +208,13 @@ namespace MortalCombatClient
          */
         public void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             //Clear the chat
             MessagesListBox.Items.Clear();
 
@@ -253,11 +288,11 @@ namespace MortalCombatClient
             Lobby lobby = duplexFoob.GetLobbyByName(curLobby.LobbyName);
 
             //Get all the players in current lobby
-            foreach (string playerName in lobby._playerInLobby)
+            foreach (Player player in lobby._playerInLobby)
             {
-                if (!onlinePlayers.Items.Contains(playerName))
+                if (!onlinePlayers.Items.Contains(player.Username))
                 {
-                    onlinePlayers.Items.Add(playerName);
+                    onlinePlayers.Items.Add(player.Username);
                 }
             }
         }

@@ -10,6 +10,7 @@ using MortalCombatBusinessServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -49,7 +50,13 @@ namespace MortalCombatClient
             playerNameTextBox.Text = recipient;
             MessageRecipient = recipient;
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
+            var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                mainWindow.CreateChannel();
+            }
+
+            mainWindow.UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
             LoadChatHistory();
         }
 
@@ -60,6 +67,14 @@ namespace MortalCombatClient
          */
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
+
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             try
             {
                 string messageContent = messageBox.Text;
@@ -79,6 +94,13 @@ namespace MortalCombatClient
          */
         private void LoadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             try
             {
                 MessagesListBox.Items.Clear();
@@ -97,6 +119,13 @@ namespace MortalCombatClient
          */
         private void LeaveChatButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             try
             {
                 // Notify the MainWindow that we're closing this chat

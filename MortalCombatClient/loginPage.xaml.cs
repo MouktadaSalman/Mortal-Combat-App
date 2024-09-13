@@ -44,7 +44,12 @@ namespace MortalCombatClient
         public LoginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
-            this.duplexFoob = inDuplexFoob;
+            duplexFoob = inDuplexFoob;
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
         }
 
         /* Method: Button_Click
@@ -53,6 +58,13 @@ namespace MortalCombatClient
          */
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the connection is faulted
+            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+            {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow.CreateChannel();
+            }
+
             string username = UsernameBox.Text.ToString();
 
             var button = sender as Button; // Cast sender to Button

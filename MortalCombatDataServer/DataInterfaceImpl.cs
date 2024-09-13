@@ -83,10 +83,12 @@ namespace MortalCombatDataServer
          * Description: Remove a player from the selected lobby
          * Parameters: username (string), lobby (Lobby)
          */
-        void DataInterface.RemovePlayerFromLobby(int i, int lobbyIndex)
+        void DataInterface.RemovePlayerFromLobby(int lobbyIndex, int playerIndex)
         {
+            Console.WriteLine($"Removing player from lobby: {lobbyIndex}.  With player index of: {playerIndex}");
             Lobby lobby = _lobbyDatabase.GetLobbyNameByIndex(lobbyIndex);
-            lobby._playerInLobby.RemoveAt(i);
+
+            lobby._playerInLobby.RemoveAt(playerIndex);
         }
 
         /* Method: RemovePlayerFromServer
@@ -108,14 +110,20 @@ namespace MortalCombatDataServer
             foundPlayer = _playerDatabase.GetPlayerByIndex(index);
         }
 
+        void DataInterface.GetPlayerInLobbyForIndex(int playerIndex, int lobbyIndex, out Player foundPlayer)
+        {
+            Lobby lobby = _lobbyDatabase.GetLobbyNameByIndex(lobbyIndex);
+            foundPlayer = lobby._playerInLobby[playerIndex];
+        }
+
         /* Method: GetLobbyForIndex
          * Description: Get the lobby for a specific index
          * Parameters: index (int), foundLobbyName (string)
-         * Result: foundLobbyName (string)
+         * Result: foundLobbyName (Lobby)
          */
-        void DataInterface.GetLobbyForIndex(int index, out Lobby foundLobbyName)
+        void DataInterface.GetLobbyForIndex(int index, out Lobby foundLobby)
         {
-            foundLobbyName = _lobbyDatabase.GetLobbyNameByIndex(index);
+            foundLobby = _lobbyDatabase.GetLobbyNameByIndex(index);
         }
 
         /* Method: CreateMessage
@@ -198,9 +206,9 @@ namespace MortalCombatDataServer
         {
             List<string> playerNames = new List<string>();
 
-            foreach (string p in _lobbyDatabase.GetPlayersInLobby(lobbyName))
+            foreach (Player p in _lobbyDatabase.GetPlayersInLobby(lobbyName))
             {
-                playerNames.Add(p);
+                playerNames.Add(p.Username);
             }
             return playerNames;
         }
