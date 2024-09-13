@@ -1,29 +1,17 @@
 ﻿/* 
  * Module: MainWindow
- * Description: 
+ * Description: This is the main window which will be acting as the base of the entire GUI for this 
+ *              program, other pages will be kind of navigated through inside of the main window.
  * Author: Ahmed, Moukhtada, Jauhar
  * ID: 21467369, 20640266, , 21494299
  * Version: 1.0.0.2
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
 using Mortal_Combat_Data_Library;
-using System.Runtime.Remoting.Contexts;
-using System.ServiceModel.Dispatcher;
 
 namespace MortalCombatClient
 {
@@ -81,10 +69,6 @@ namespace MortalCombatClient
             else if (e.Content is PrivateMessagePage privateMessagePage)
             {
                 UpdatePrivateCallbackContext(privateMessagePage.MessageRecipient, privateMessagePage);
-            }
-            else if(e.Content is LobbyPage lobbyPage)
-            {
-                UpdateLobbyCallbackContext(lobbyPage);
             } else { 
                           
                 Callbacks.UpdateInLobbyPage(null);
@@ -94,11 +78,6 @@ namespace MortalCombatClient
                 }
                 privateMessagePages.Clear();
             }
-        }
-
-        public void UpdateLobbyCallbackContext(LobbyPage lobbyPage)
-        {
-            Callbacks.UpdateLobbyPage(lobbyPage);
         }
 
         public void UpdateInLobbyCallbackContext(InLobbyPage lobbyPage)

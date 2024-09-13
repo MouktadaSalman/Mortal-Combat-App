@@ -110,9 +110,6 @@ namespace MortalCombatBusinessServer
 
         [OperationContract(IsOneWay = true)]
         void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content);
-
-        [OperationContract(IsOneWay = true)]
-        void NotifyLobbyListUpdate();
     }
 
 }

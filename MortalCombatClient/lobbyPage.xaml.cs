@@ -6,25 +6,13 @@
  * Version: 1.0.0.2
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MortalCombatBusinessServer;
-using MortalCombatDataServer;
 using Mortal_Combat_Data_Library;
-using System.ServiceModel.Channels;
-using System.Windows.Media.Animation;
 
 namespace MortalCombatClient
 {
