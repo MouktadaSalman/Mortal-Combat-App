@@ -87,8 +87,6 @@ namespace MortalCombatBusinessServer
                 allLobbies[lobbyName] = new List<PlayerCallback>();
                 Console.WriteLine($"{lobbyName} created in dictionary");
             }
-
-            NotifyAllLobbyUpdate();
         }
 
         /* Method: CheckUsernameValidity
@@ -161,7 +159,6 @@ namespace MortalCombatBusinessServer
                 throw new FaultException<PlayersStilInLobbyFault>(new PlayersStilInLobbyFault()
                 { Issue = "Lobby still has player inside it\nTry again later" });
             }
-            NotifyAllLobbyUpdate();
         }
 
         /* Method: AddPlayertoLobby
@@ -207,8 +204,6 @@ namespace MortalCombatBusinessServer
             {
                 Console.WriteLine($"Player {player.Username} already exists in allPlayerCallback.");
             }
-
-            NotifyAllLobbyUpdate();
         }
 
         /* Method: RemovePlayerFromLobby
@@ -233,11 +228,10 @@ namespace MortalCombatBusinessServer
                     int j = GetIndexForPlayer(playerUsername);
 
                     data.RemovePlayerFromLobby(i, j); // Remove the player from the lobby in the database
-                    NotifyAllLobbyUpdate();
+             
                     break;
                 }
             }
-
         }
 
         /* Method: RemovePlayerFromServer
@@ -644,42 +638,6 @@ namespace MortalCombatBusinessServer
                 Process.Start("explorer.exe", finalPath);
             }
             else { Console.WriteLine("DirectoryNotFound:: Failed to path towards the downloads folder"); }
-        }
-
-
-        private void NotifyAllLobbyUpdate()
-        {
-            foreach (var callback in allPlayerCallback.Values)
-            {
-                try
-                {
-                    callback.NotifyLobbyListUpdate();
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error notifying client of lobby update: {ex.Message}");
-                }
-            }
-
-        }
-
-
-        private async Task NotifyAllClientsLobbyUpdateAsync()
-        {
-            var tasks = allPlayerCallback.Values.Select(callback => Task.Run(() =>
-            {
-                try
-                {
-                    callback.NotifyLobbyListUpdate();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error notifying client of lobby update: {ex.Message}");
-                }
-            }));
-
-            await Task.WhenAll(tasks);
         }
 
     }

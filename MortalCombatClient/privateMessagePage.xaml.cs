@@ -1,6 +1,7 @@
 ﻿/* 
  * Module: lobbyPage
- * Description: This module is responsible for the lobby functionality of the game. It allows players to create, join, and leave lobbies.
+ * Description: This module is responsible for private messaging between 2 players(instances), 
+ *              it handles the callbacks and the incoming messages and showing them in the chat box.
  * Author: Ahmed 
  * ID: 21467369
  * Version: 1.0.0.2
@@ -8,20 +9,10 @@
 using Mortal_Combat_Data_Library;
 using MortalCombatBusinessServer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace MortalCombatClient
 {

@@ -30,23 +30,12 @@ namespace MortalCombatClient
          */
         private InLobbyPage _inLobbyPage;
         private Dictionary<string, PrivateMessagePage> _privateMessagePages;
-        private LobbyPage _lobbyPage;
         private MainWindow _mainWindow;
 
         public Callbacks()
         {
             _mainWindow = (MainWindow)Application.Current.MainWindow;
             _privateMessagePages = new Dictionary<string, PrivateMessagePage>();
-        }
-
-        /* Method: UpdateLobbyPage
-         * Description: To set where the callbacks go/the recipient of pull requests 
-         *              (any instance of the main lobby page)
-         * Parameters: lobbyPage (LobbyPage)
-         */
-        public void UpdateLobbyPage(LobbyPage lobbyPage)
-        {
-            _lobbyPage = lobbyPage;
         }
 
         /* Method: UpdateInLobbyPage
@@ -117,18 +106,6 @@ namespace MortalCombatClient
             {
                 _mainWindow.HandleIncomingPrivateMessage(sender, recipient, content);
             });
-        }
-
-        /* Method: NotifyLobbyListUpdate
-         * Description: To update the lobby list for the pull requesting main lobby page
-         * Parameters: sender (string), lobbyName (string), content (string)
-         */
-        public void NotifyLobbyListUpdate()
-        {
-            if (_lobbyPage != null)
-            {
-                _lobbyPage.Dispatcher.Invoke(() => _lobbyPage.RefreshLists());
-            }
         }
     }
 }

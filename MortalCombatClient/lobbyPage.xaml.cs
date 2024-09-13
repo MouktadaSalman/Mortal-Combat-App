@@ -6,25 +6,13 @@
  * Version: 1.0.0.2
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MortalCombatBusinessServer;
-using MortalCombatDataServer;
 using Mortal_Combat_Data_Library;
-using System.ServiceModel.Channels;
-using System.Windows.Media.Animation;
 
 namespace MortalCombatClient
 {
@@ -48,15 +36,38 @@ namespace MortalCombatClient
             duplexFoob = inFoob;
             curPlayer = player;
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).UpdateLobbyCallbackContext(this);
             RefreshLists();
         }
 
 
 
 
+        /* Method: CreateLobbyButton_Click
+         * Description: The click listener when a user presses the button to create a lobby (async)
+         * Parameters: sender (object), e (RoutedEventArgs)
+         */
+        private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string createdLobbyName = NewLobbyName.Text;
+                duplexFoob.CheckLobbyNameValidity(createdLobbyName);
 
-        
+                Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
+
+                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
+
+                RefreshLists();
+
+                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
+            }
+            catch (FaultException<LobbyNameAlreadyExistsFault> ex)
+            {
+                MessageBox.Show(ex.Detail.Issue);
+            }
+        }
+
+
         /* Method: JoinLobbyButton_Click
          * Description: The click listener when a user presses the button want to 
          *              join a lobby
@@ -88,31 +99,6 @@ namespace MortalCombatClient
             catch(Exception)
             {
                 MessageBox.Show("An issue occured\n Try refreshing list before joining lobby");
-            }
-        }
-
-        /* Method: CreateLobbyButton_Click
-         * Description: The click listener when a user presses the button to create a lobby (async)
-         * Parameters: sender (object), e (RoutedEventArgs)
-         */
-        private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string createdLobbyName = NewLobbyName.Text;
-                duplexFoob.CheckLobbyNameValidity(createdLobbyName);
-
-                Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
-
-                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
-
-                RefreshLists();
-            
-                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
-            }
-            catch (FaultException<LobbyNameAlreadyExistsFault> ex)
-            {
-                MessageBox.Show(ex.Detail.Issue);
             }
         }
 
