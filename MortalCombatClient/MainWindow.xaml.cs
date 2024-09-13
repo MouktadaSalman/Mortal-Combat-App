@@ -114,7 +114,7 @@ namespace MortalCombatClient
 
         public void HandleIncomingPrivateMessage(string sender, string recipient, string content)
         { 
-            StorePrivateMessage(sender, recipient, content);
+            
 
             
             string chatKey = GetChatKey(sender, recipient);
@@ -133,12 +133,7 @@ namespace MortalCombatClient
                 : $"{user2}:{user1}";
         }
 
-        private void StorePrivateMessage(string sender, string recipient, string content)
-        {
-            // Store the message in the database or local storage
-            // This is a placeholder - implement according to your data storage method
-            duplexFoob.StorePrivateMessage(sender, recipient, content);
-        }
+        
 
         public void SetCurrentPlayer(Player player)
         {
