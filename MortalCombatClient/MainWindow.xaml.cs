@@ -23,6 +23,7 @@ namespace MortalCombatClient
         private LobbyPage LobbyPage;
         private Player currentPlayer;
         InstanceContext callbackInstance;
+        private static readonly object _channelLock = new object();
 
         public MainWindow()
         {
@@ -32,7 +33,17 @@ namespace MortalCombatClient
             privateMessagePages = new Dictionary<string, PrivateMessagePage>();
             callbackInstance = new InstanceContext(Callbacks);
 
-            CreateChannel();
+            DuplexChannelFactory<BusinessInterface> channelFactory;
+            NetTcpBinding tcp = new NetTcpBinding();
+
+            tcp.SendTimeout = TimeSpan.FromMinutes(5);
+            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+
+            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
+            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
+            duplexFoob = channelFactory.CreateChannel();
 
             MainFrame.NavigationService.Navigate(new LoginPage(duplexFoob));
         }
@@ -45,19 +56,36 @@ namespace MortalCombatClient
              * for communication between client and server.
              * It will be changed between inLobbyPage and privateMessagingPage when required.
              * */
-            
-            DuplexChannelFactory<BusinessInterface> channelFactory;
-            NetTcpBinding tcp = new NetTcpBinding();
+            lock (_channelLock)
+            {
+                try
+                {
+                    if (duplexFoob != null && ((ICommunicationObject)duplexFoob).State != CommunicationState.Closed)
+                    {
+                        ((ICommunicationObject)duplexFoob).Abort(); // Forcefully close the current channel
+                    }
 
-            tcp.SendTimeout = TimeSpan.FromMinutes(5);
-            tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
-            tcp.OpenTimeout = TimeSpan.FromMinutes(1);
-            tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+                    DuplexChannelFactory<BusinessInterface> channelFactory;
+                    NetTcpBinding tcp = new NetTcpBinding();
 
-            string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
-            channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
-            duplexFoob = channelFactory.CreateChannel();
-            
+                    tcp.SendTimeout = TimeSpan.FromMinutes(5);
+                    tcp.ReceiveTimeout = TimeSpan.FromMinutes(5);
+                    tcp.OpenTimeout = TimeSpan.FromMinutes(1);
+                    tcp.CloseTimeout = TimeSpan.FromMinutes(1);
+
+                    string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
+                    channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
+                    duplexFoob = channelFactory.CreateChannel();
+
+                    // Open the new channel
+                    ((ICommunicationObject)duplexFoob).Open();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to recreate the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+            }
         }
 
         private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)

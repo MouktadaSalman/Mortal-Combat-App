@@ -36,13 +36,8 @@ namespace MortalCombatClient
             duplexFoob = inFoob;
             curPlayer = player;
 
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
-            mainWindow.UpdateLobbyCallbackContext(this);
             RefreshLists();
         }
 
@@ -53,11 +48,7 @@ namespace MortalCombatClient
         private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
@@ -86,11 +77,7 @@ namespace MortalCombatClient
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
@@ -103,6 +90,12 @@ namespace MortalCombatClient
 
                     Lobby lobby = duplexFoob.GetLobbyByName(selectedLobbyName);
 
+                    if (lobby == null)
+                    {
+                        MessageBox.Show("Lobby not found. Please try refreshing the list.");
+                        return;
+                    }
+
                     NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));                
                 } 
                 else
@@ -111,7 +104,12 @@ namespace MortalCombatClient
                 }
 
             }
-            catch(Exception)
+            catch (FaultException ex)
+            {
+                MessageBox.Show($"A communication error occurred: {ex.Message}");
+                EnsureChannelIsOpen();
+            }
+            catch (Exception)
             {
                 MessageBox.Show("An issue occured\n Try refreshing list before joining lobby");
             }
@@ -125,11 +123,7 @@ namespace MortalCombatClient
         private async void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
@@ -151,12 +145,7 @@ namespace MortalCombatClient
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
-
+            EnsureChannelIsOpen();
             RefreshLists();
         }
 
@@ -167,12 +156,7 @@ namespace MortalCombatClient
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
-
+            EnsureChannelIsOpen();
             if (LobbyRoomList.SelectedItem == null)
             {
                 MessageBox.Show("Please select a lobby to delete");
@@ -214,6 +198,32 @@ namespace MortalCombatClient
             {
                 LobbyRoomList.Items.Add(lobbyName.ToString());
             }            
+        }
+
+        /* Method: EnsureChannelIsOpen
+         * Description: Ensures the channel is open
+         */
+        public void EnsureChannelIsOpen()
+        {
+            try
+            {
+                // If the channel is in a faulted state or not created, recreate it
+                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+                {
+                    var mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.CreateChannel();
+                }
+
+                // Open the channel if it is not in an Open state
+                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
+                {
+                    ((ICommunicationObject)duplexFoob).Open();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

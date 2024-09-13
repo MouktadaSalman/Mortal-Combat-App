@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.ServiceModel;
 using MortalCombatBusinessServer;
 using Mortal_Combat_Data_Library;
+using System;
 
 
 namespace MortalCombatClient
@@ -34,12 +35,10 @@ namespace MortalCombatClient
         public LoginPage(BusinessInterface inDuplexFoob)
         {
             InitializeComponent();
+
             duplexFoob = inDuplexFoob;
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            
+            EnsureChannelIsOpen();
         }
 
         /* Method: Button_Click
@@ -95,5 +94,31 @@ namespace MortalCombatClient
             return newPlayer;
         }
 
+        /* Method: EnsureChannelIsOpen
+         * Description: Ensures the channel is open
+         */
+        public void EnsureChannelIsOpen()
+        {
+            try
+            {
+                // If the channel is in a faulted state or not created, recreate it
+                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+                {
+                    var mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.CreateChannel();
+                }
+
+                // Open the channel if it is not in an Open state
+                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
+                {
+                    ((ICommunicationObject)duplexFoob).Open();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
+
 }

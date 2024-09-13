@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using Mortal_Combat_Data_Library;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.ServiceModel;
 
 namespace MortalCombatClient
 {
@@ -43,10 +44,7 @@ namespace MortalCombatClient
 
             var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             mainWindow.UpdateInLobbyCallbackContext(this);
 
@@ -62,11 +60,7 @@ namespace MortalCombatClient
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             //Get the message input
             string messageContent = messageBox.Text;
@@ -93,11 +87,7 @@ namespace MortalCombatClient
         private async void SelectFilesButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             //To extract file path + filename
             string filePath = string.Empty;
@@ -167,11 +157,7 @@ namespace MortalCombatClient
         private void OpenChatButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             if (onlinePlayers.SelectedItem != null) { 
             string recipent = onlinePlayers.SelectedItem.ToString();
@@ -199,11 +185,7 @@ namespace MortalCombatClient
         public void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             //Clear the chat
             MessagesListBox.Items.Clear();
@@ -338,6 +320,32 @@ namespace MortalCombatClient
 
             //Process handled
             e.Handled = true;
+        }
+
+        /* Method: EnsureChannelIsOpen
+         * Description: To ensure the channel is open
+         */
+        public void EnsureChannelIsOpen()
+        {
+            try
+            {
+                // If the channel is in a faulted state or not created, recreate it
+                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+                {
+                    var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+                    mainWindow.CreateChannel();
+                }
+
+                // Open the channel if it is not in an Open state
+                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
+                {
+                    ((ICommunicationObject)duplexFoob).Open();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
