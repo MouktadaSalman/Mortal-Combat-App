@@ -49,15 +49,23 @@ namespace MortalCombatClient
             try
             {
                 string createdLobbyName = NewLobbyName.Text;
-                duplexFoob.CheckLobbyNameValidity(createdLobbyName);
 
-                Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
+                if (string.IsNullOrWhiteSpace(createdLobbyName))
+                {
+                    MessageBox.Show("Lobby name cannot be empty or contain only spaces. Please enter a valid name.");
+                }
+                else
+                {
+                    duplexFoob.CheckLobbyNameValidity(createdLobbyName);
 
-                duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
+                    Lobby lobby = await Task.Run(() => CreateLobby(createdLobbyName));
 
-                RefreshLists();
-            
-                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
+                    duplexFoob.AddPlayertoLobby(curPlayer, createdLobbyName);
+
+                    RefreshLists();
+
+                    NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
+                }
             }
             catch (FaultException<LobbyNameAlreadyExistsFault> ex)
             {

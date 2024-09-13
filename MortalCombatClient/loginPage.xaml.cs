@@ -46,7 +46,6 @@ namespace MortalCombatClient
          */
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string username = UsernameBox.Text.ToString();
 
             var button = sender as Button; // Cast sender to Button
             if (button != null)
@@ -56,9 +55,18 @@ namespace MortalCombatClient
 
             try
             {     
-                Player player = await Task.Run(() => CreatePlayer(username));
+                string username = UsernameBox.Text.ToString();
+
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    MessageBox.Show("Username cannot be empty or contain only spaces. Please enter a valid name.");
+                }
+                else
+                {
+                    Player player = await Task.Run(() => CreatePlayer(username));
                 
-                NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
+                    NavigationService.Navigate(new LobbyPage(duplexFoob, player));         
+                }
             }
             catch (FaultException<PlayerNameAlreadyEsistsFault> ex)
             {
