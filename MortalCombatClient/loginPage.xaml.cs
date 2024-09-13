@@ -55,8 +55,6 @@ namespace MortalCombatClient
         {
             string username = UsernameBox.Text.ToString();
 
-            
-
             var button = sender as Button; // Cast sender to Button
             if (button != null)
             {

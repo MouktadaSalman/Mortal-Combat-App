@@ -73,7 +73,7 @@ namespace Mortal_Combat_Data_Library
         {
             Lobby lobby = GetLobby(lobbyName);
 
-            lobby.AddPlayer(player);
+            lobby.AddPlayer(player.Username);
         }
 
 
@@ -92,9 +92,9 @@ namespace Mortal_Combat_Data_Library
          * Parameters: lobby (Lobby)
          * Result: List<string>
          */
-        public List<string> GetPlayersInLobby(Lobby lobby)
+        public List<string> GetPlayersInLobby(string lobbyName)
         {
-            lobby = GetLobby(lobby.LobbyName);
+            Lobby lobby = GetLobby(lobbyName);
             return lobby.GetPlayersInLobby();
         }
 

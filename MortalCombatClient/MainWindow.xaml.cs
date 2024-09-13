@@ -68,16 +68,19 @@ namespace MortalCombatClient
 
         private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (e.Content is InLobbyPage lobbyPage)
+            if (e.Content is InLobbyPage inLobbyPage)
             {
-                UpdateInLobbyCallbackContext(lobbyPage);
+                UpdateInLobbyCallbackContext(inLobbyPage);
             }
             else if (e.Content is PrivateMessagePage privateMessagePage)
             {
                 UpdatePrivateCallbackContext(privateMessagePage.MessageRecipient, privateMessagePage);
             }
-            else
-            {                
+            else if(e.Content is LobbyPage lobbyPage)
+            {
+                UpdateLobbyCallbackContext(lobbyPage);
+            } else { 
+                          
                 Callbacks.UpdateInLobbyPage(null);
                 foreach (var recipient in privateMessagePages.Keys)
                 {

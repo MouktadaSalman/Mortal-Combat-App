@@ -83,10 +83,10 @@ namespace MortalCombatDataServer
          * Description: Remove a player from the selected lobby
          * Parameters: username (string), lobby (Lobby)
          */
-        void DataInterface.RemovePlayerFromLobby(int playerIndex, int lobbyIndex)
+        void DataInterface.RemovePlayerFromLobby(int i, int lobbyIndex)
         {
-            Lobby lobby = _lobbyDatabase._lobbies[lobbyIndex];
-            lobby._playerInLobby.RemoveAt(playerIndex);
+            Lobby lobby = _lobbyDatabase.GetLobbyNameByIndex(lobbyIndex);
+            lobby._playerInLobby.RemoveAt(i);
         }
 
         /* Method: RemovePlayerFromServer
@@ -194,11 +194,11 @@ namespace MortalCombatDataServer
          * Parameters: lobby (Lobby)
          * Result: List of player names
          */
-        List<string> DataInterface.GetAllPlayersInlobby(Lobby lobby)
+        List<string> DataInterface.GetAllPlayersInlobby(string lobbyName)
         {
             List<string> playerNames = new List<string>();
 
-            foreach (string p in _lobbyDatabase.GetPlayersInLobby(lobby))
+            foreach (string p in _lobbyDatabase.GetPlayersInLobby(lobbyName))
             {
                 playerNames.Add(p);
             }

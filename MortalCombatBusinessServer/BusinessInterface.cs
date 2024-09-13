@@ -64,7 +64,7 @@ namespace MortalCombatBusinessServer
         List<string> GetAllLobbyNames();
 
         [OperationContract]
-        List<string> GetPlayersInLobby(Lobby lobby);
+        List<string> GetPlayersInLobby(string lobbyName);
 
         [OperationContract]
         [FaultContract(typeof(PlayerNameAlreadyEsistsFault))]
@@ -88,7 +88,7 @@ namespace MortalCombatBusinessServer
         Lobby GetLobbyByName(string lobbyName);
 
         [OperationContract]
-        Player GetPlayerByName(string playerName);
+        Player GetPlayerByUsername(string username);
 
         [OperationContract]
         int GetIndexForPlayer(string playerToFind);
@@ -110,5 +110,9 @@ namespace MortalCombatBusinessServer
 
         [OperationContract(IsOneWay = true)]
         void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content);
+
+        [OperationContract(IsOneWay = true)]
+        void NotifyLobbyListUpdate();
     }
+
 }

@@ -1,4 +1,11 @@
-﻿using Mortal_Combat_Data_Library;
+﻿/* 
+ * Module: lobbyPage
+ * Description: This module is responsible for the lobby functionality of the game. It allows players to create, join, and leave lobbies.
+ * Author: Ahmed 
+ * ID: 21467369
+ * Version: 1.0.0.2
+ */
+using Mortal_Combat_Data_Library;
 using MortalCombatBusinessServer;
 using System;
 using System.Collections.Generic;
@@ -27,6 +34,11 @@ namespace MortalCombatClient
         private Player curPlayer;
         public string MessageRecipient { get; private set; }
 
+
+        /* Constructor: PrivateMessagePage
+         * Description: The constructor of the private message page
+         * Parameters: inDuplexFoob (BusinessInterface), player (Player), recipient (string)
+         */
         public PrivateMessagePage(BusinessInterface inDuplexFoob, Player player, string recipient)
         {
             InitializeComponent();
@@ -41,16 +53,12 @@ namespace MortalCombatClient
             LoadChatHistory();
         }
 
-        private void LoadChatHistory()
-        {
-            var messages = duplexFoob.GetPrivateMessages(curPlayer.Username, MessageRecipient);
-            foreach (var message in messages)
-            {
-                AddMessageToListBox($"{message.Sender}: {message.Content}");
-            }
-        }
 
-        private void sendButton_Click(object sender, RoutedEventArgs e)
+        /* Method: SendButton_Click
+         * Description: Sends a message to the recipient
+         * Parameters: sender (object), e (RoutedEventArgs)
+         */
+        private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -65,7 +73,11 @@ namespace MortalCombatClient
             }
         }
 
-        private void loadNewMessagesButton_Click(object sender, RoutedEventArgs e)
+        /* Method: LoadNewMessagesButton_Click
+         * Description: Loads new messages
+         * Parameters: sender (object), e (RoutedEventArgs)
+         */
+        private void LoadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -79,7 +91,11 @@ namespace MortalCombatClient
             }
         }
 
-        private void leaveChatButton_Click(object sender, RoutedEventArgs e)
+        /* Method: LeaveChatButton_Click
+         * Description: Leaves the chat
+         * Parameters: sender (object), e (RoutedEventArgs)
+         */
+        private void LeaveChatButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -88,8 +104,6 @@ namespace MortalCombatClient
 
                 // Navigate back to the previous page
                 NavigationService.GoBack();
-
-
             }
             catch (Exception ex)
             {
@@ -97,6 +111,22 @@ namespace MortalCombatClient
             }
         }
 
+        /* Method: LoadChatHistory
+         * Description: Loads the chat history between the current player and the recipient
+         */
+        private void LoadChatHistory()
+        {
+            var messages = duplexFoob.GetPrivateMessages(curPlayer.Username, MessageRecipient);
+            foreach (var message in messages)
+            {
+                AddMessageToListBox($"{message.Sender}: {message.Content}");
+            }
+        }
+
+        /* Method: HandleIncomingMessage
+         * Description: Handles incoming messages
+         * Parameters: sender (string), content (string)
+         */
         public void HandleIncomingMessage(string sender, string content)
         {
             Dispatcher.Invoke(() =>
@@ -105,12 +135,20 @@ namespace MortalCombatClient
             });
         }
 
+        /* Method: AddMessageToListBox
+         * Description: Adds a message to the list box
+         * Parameters: message (string)
+         */
         public void AddMessageToListBox(string message)
         {
             MessagesListBox.Items.Add(message);
-
         }
 
+        /* Method: GetChatKey
+         * Description: Gets the chat key
+         * Parameters: user1 (string), user2 (string)
+         * Result: string
+         */
         private string GetChatKey(string user1, string user2)
         {
             return string.Compare(user1, user2, StringComparison.Ordinal) < 0

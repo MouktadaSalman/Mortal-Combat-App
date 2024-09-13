@@ -56,6 +56,11 @@ namespace Mortal_Combat_Data_Library
             _players.RemoveAt(index);
         }
 
+        /* Method: GetPlayerByIndex
+         * Description: Get player by index
+         * Parameters: index (int)
+         * Result: _players[index] (Player)
+         */
         public Player GetPlayerByIndex(int index)
         {
             return _players[index];

@@ -21,7 +21,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
             </TextBox.Background>
         </TextBox>
-        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="29" Margin="732,492,0,0" VerticalAlignment="Top" Width="109" Click="sendButton_Click" FontFamily="Algerian" FontSize="16" BorderBrush="White" Foreground="White">
+        <Button x:Name="sendButton" Content="Send" HorizontalAlignment="Left" Height="29" Margin="732,492,0,0" VerticalAlignment="Top" Width="109" Click="SendButton_Click" FontFamily="Algerian" FontSize="16" BorderBrush="White" Foreground="White">
             <Button.Background>
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
@@ -33,8 +33,8 @@
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </TextBlock.Background>
         </TextBlock>
-        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="loadNewMessagesButton_Click" HorizontalAlignment="Left" Height="28" Margin="317,66,0,0" VerticalAlignment="Top" Width="167" FontFamily="Algerian" FontSize="14" Background="Black" BorderBrush="White" Foreground="White"/>
-        <Button x:Name="leaveChatButton" Content="Leave Chat" HorizontalAlignment="Left" Height="28" Margin="46,66,0,0" VerticalAlignment="Top" Width="94" Click="leaveChatButton_Click" FontFamily="Algerian" FontSize="14" BorderBrush="White" Foreground="White">
+        <Button x:Name="loadMessagesButton" Content="Load New Messages" Click="LoadNewMessagesButton_Click" HorizontalAlignment="Left" Height="28" Margin="317,66,0,0" VerticalAlignment="Top" Width="167" FontFamily="Algerian" FontSize="14" Background="Black" BorderBrush="White" Foreground="White"/>
+        <Button x:Name="leaveChatButton" Content="Leave Chat" HorizontalAlignment="Left" Height="28" Margin="46,66,0,0" VerticalAlignment="Top" Width="94" Click="LeaveChatButton_Click" FontFamily="Algerian" FontSize="14" BorderBrush="White" Foreground="White">
             <Button.Background>
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>

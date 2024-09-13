@@ -34,7 +34,7 @@ namespace DataServer
         void AddLobbyToServer(string lobby);
 
         [OperationContract]
-        void RemovePlayerFromLobby(int playerIndex, int lobbyIndex);
+        void RemovePlayerFromLobby(int i, int lobbyIndex);
 
         [OperationContract]
         void RemovePlayerFromServer(int index);
@@ -67,7 +67,7 @@ namespace DataServer
         void DeleteLobby(int index);
 
         [OperationContract]
-        List<string> GetAllPlayersInlobby(Lobby lobby);
+        List<string> GetAllPlayersInlobby(string lobby);
 
         [OperationContract]
         void UploadFile(string filePath);
