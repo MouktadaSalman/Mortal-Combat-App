@@ -49,13 +49,11 @@ namespace DataServer
         void GetLobbyForIndex(int index, out Lobby foundLobbyName);
 
         [OperationContract]
-        void CreateMessage(string sender, string recipent, string content, int messageType);
+        void CreateMessage(string sender, string recipent, string content, int messageType, DateTime dateTime);
 
         [OperationContract]
-        void CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType);
+        void CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType, DateTime dateTime);
 
-        [OperationContract]
-        void DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType);
 
         [OperationContract]
         List<MessageDatabase.Message> GetPrivateMessages(string sender, string recipent);

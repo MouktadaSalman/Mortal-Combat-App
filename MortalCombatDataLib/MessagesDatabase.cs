@@ -39,9 +39,9 @@ namespace Mortal_Combat_Data_Library
          * Description: just stores the message in the db.
          * Parameters: sender (string), recipient (string), content (string), messageType (int)
          */
-        public void SaveMessage(string sender, string recipent, string content, int messageType)
+        public void SaveMessage(string sender, string recipent, string content, int messageType, DateTime dateTime)
         {
-            Message newMessage = new Message(sender, recipent, content, messageType);
+            Message newMessage = new Message(sender, recipent, content, messageType, dateTime);
             _messages.Add(newMessage);
         }
 
@@ -49,9 +49,9 @@ namespace Mortal_Combat_Data_Library
          * Description: just stores the message in the db.
          * Parameters: sender (string), recipient (string), content (FileLinkBlock), messageType (int)
          */
-        public void SaveMessage(string sender, string recipent, FileLinkBlock content, int messageType)
+        public void SaveMessage(string sender, string recipent, FileLinkBlock content, int messageType, DateTime dateTime)
         {
-            Message newMessage = new Message(sender, recipent, content, messageType);
+            Message newMessage = new Message(sender, recipent, content, messageType, dateTime);
             _messages.Add(newMessage);
         }
 
@@ -134,19 +134,22 @@ namespace Mortal_Combat_Data_Library
             public FileLinkBlock ContentF { get; set; }
 
             [DataMember]
-            public int MessageType { get; set; }          
+            public int MessageType { get; set; }
 
+            [DataMember]
+            public DateTime dateTime { get; set; }
             /*
              * Constructor: Message
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (string), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, string content, int messageType)
+            public Message(string sender, string recipient, string content, int messageType, DateTime dateTime)
             {
                 Sender = sender;
                 Recipent = recipient;
                 Content = content;
-                MessageType = messageType;                
+                MessageType = messageType;
+                this.dateTime = dateTime;
             }
 
             /*
@@ -154,12 +157,13 @@ namespace Mortal_Combat_Data_Library
              * Description: Creates a new message instance.
              * Parameters: sender (string), recipient (string), content (FileLinkBlock), messageType (int), timestamp (DateTime)
              */
-            public Message(string sender, string recipient, FileLinkBlock content, int messageType)
+            public Message(string sender, string recipient, FileLinkBlock content, int messageType,DateTime dateTime)
             {
                 Sender = sender;
                 Recipent = recipient;
                 ContentF = content;
                 MessageType = messageType;
+                this.dateTime = dateTime;
             }
 
             /*

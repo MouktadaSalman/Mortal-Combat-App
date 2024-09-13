@@ -321,22 +321,22 @@ namespace MortalCombatBusinessServer
          * Description: Sends a private message to a player
          * Parameters: sender (string), recipient (string), content (string)
          */
-        public void SendPrivateMessage(string sender, string recipient, string content)
+        public void SendPrivateMessage(string sender, string recipient, string content, DateTime dateTime)
         {
-            data.CreateMessage(sender, recipient, content, 1);
+            data.CreateMessage(sender, recipient, content, 1, dateTime);
 
             if (allPlayerCallback.TryGetValue(recipient, out PlayerCallback callback)) 
             {
-                NotifyPrivatePlayer(sender, recipient, content); // Notify the recipient
+                NotifyPrivatePlayer(sender, recipient, content, dateTime); // Notify the recipient
             }
             else
             {
                 // Store the message for later delivery
                 pendingMessages.AddOrUpdate(recipient,
-                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1, dateTime) },
                     (key, existingList) =>
                     {
-                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1, dateTime));
                         return existingList;
                     });
                 Console.WriteLine($"Message from {sender} to {recipient} stored for later delivery.");
@@ -353,7 +353,7 @@ namespace MortalCombatBusinessServer
             {
                 foreach (var message in messages)
                 {
-                    NotifyPrivatePlayer(message.Sender, message.Recipent, message.Content.ToString());
+                    NotifyPrivatePlayer(message.Sender, message.Recipent, message.Content.ToString(), message.dateTime);
                 }
                 Console.WriteLine($"Delivered {messages.Count} pending messages to {username}");
             }
@@ -363,13 +363,13 @@ namespace MortalCombatBusinessServer
          * Description: Notifies a player of a private message
          * Parameters: sender (string), recipient (string), content (string)
          */
-        public void NotifyPrivatePlayer(string sender, string recipient, string content)
+        public void NotifyPrivatePlayer(string sender, string recipient, string content, DateTime dateTime)
         {
             if (allPlayerCallback.TryGetValue(recipient, out PlayerCallback callback))
             {
                 try
                 {
-                    callback.ReceivePrivateMessage(sender, recipient, content);
+                    callback.ReceivePrivateMessage(sender, recipient, content, dateTime);
                     Console.WriteLine($"Private message sent from {sender} to {recipient}");
                 }
                 catch (Exception ex)
@@ -377,10 +377,10 @@ namespace MortalCombatBusinessServer
                     Console.WriteLine($"Error sending private message to {recipient}: {ex.Message}");
                     // Store the message for later delivery
                     pendingMessages.AddOrUpdate(recipient,
-                        new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                        new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1, dateTime) },
                         (key, existingList) =>
                         {
-                            existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                            existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1, dateTime));
                             return existingList;
                         });
                 }
@@ -390,10 +390,10 @@ namespace MortalCombatBusinessServer
                 Console.WriteLine($"Recipient {recipient} not found in active callbacks. Message from {sender} stored for later delivery.");
                 // Store the message for later delivery
                 pendingMessages.AddOrUpdate(recipient,
-                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1) },
+                    new List<MessageDatabase.Message> { new MessageDatabase.Message(sender, recipient, content, 1, dateTime) },
                     (key, existingList) =>
                     {
-                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1));
+                        existingList.Add(new MessageDatabase.Message(sender, recipient, content, 1, dateTime));
                         return existingList;
                     });
             }
@@ -403,12 +403,12 @@ namespace MortalCombatBusinessServer
          * Description: Stores a private message in the database
          * Parameters: sender (string), recipient (string), content (string)
          */
-        public void StorePrivateMessage(string sender, string recipient, string content)
+        public void StorePrivateMessage(string sender, string recipient, string content, DateTime dateTime)
         {
             try
             {
                 // Store the message in the database
-                data.CreateMessage(sender, recipient, content, 1); // Assuming 1 is the type for private messages
+                data.CreateMessage(sender, recipient, content, 1, dateTime); // Assuming 1 is the type for private messages
 
                 Console.WriteLine($"Stored private message from {sender} to {recipient}");
 
@@ -417,7 +417,7 @@ namespace MortalCombatBusinessServer
                 {
                     try
                     {
-                        callback.ReceivePrivateMessage(sender, recipient, content);
+                        callback.ReceivePrivateMessage(sender, recipient, content, dateTime);
                     }
                     catch (Exception ex)
                     {
@@ -447,10 +447,11 @@ namespace MortalCombatBusinessServer
                 // Retrieve messages where user2 is sender and user1 is recipient
                 var messages2 = data.GetPrivateMessages(user2, user1);
 
-                // Combine and sort the messages by timestamp
-                var allMessages = messages1.Concat(messages2)
+                // Combine the messages
+                var allMessages = messages1.Concat(messages2).ToList();
 
-                    .ToList();
+                // Sort the combined messages by their timestamp to ensure correct order
+                allMessages.Sort((a, b) => a.dateTime.CompareTo(b.dateTime));
 
                 return allMessages;
             }
@@ -505,20 +506,20 @@ namespace MortalCombatBusinessServer
          * Description: Distributes a message to all players in a lobby
          * Parameters: lobbyName (string), sender (string), content (string)
          */
-        public void DistributeMessageToLobby(string lobbyName, string sender, string content)
+        public void DistributeMessageToLobby(string lobbyName, string sender, string content, DateTime dateTime)
         {
-            data.CreateMessage(sender, lobbyName, content, 1);
-            NotifyDistributedMessages(lobbyName, sender, content.ToString());
+            data.CreateMessage(sender, lobbyName, content, 1, dateTime);
+            NotifyDistributedMessages(lobbyName, sender, content.ToString(), dateTime);
         }
 
         /* Method: DistributeMessageToLobbyF
          * Description: Distributes a hyper-link message to all players in a lobby
          * Parameters: lobbyName (string), sender (string), content (MessageDatabase.FileLinkBlock)
          */
-        public void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
+        public void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content, DateTime dateTime)
         {
-            data.CreateMessageF(sender, lobbyName, content, 2);
-            NotifyDistributedMessagesF(lobbyName, sender, content);
+            data.CreateMessageF(sender, lobbyName, content, 2, dateTime);
+            NotifyDistributedMessagesF(lobbyName, sender, content, dateTime);
         }
 
         /* Method: GetDistributedMessages
@@ -535,7 +536,7 @@ namespace MortalCombatBusinessServer
          * Description: Notifies all players in a lobby of a message
          * Parameters: lobbyName (string), sender (string), content (string)
          */
-        public void NotifyDistributedMessages(string lobbyName, string sender, string content)
+        public void NotifyDistributedMessages(string lobbyName, string sender, string content, DateTime dateTime)
         {
             if (allLobbies.ContainsKey(lobbyName))
             {
@@ -546,7 +547,7 @@ namespace MortalCombatBusinessServer
                 {
                     try
                     {
-                        callback.ReceiveLobbyMessage(sender, lobbyName, content.ToString());
+                        callback.ReceiveLobbyMessage(sender, lobbyName, content.ToString(), dateTime);
                     }
                     catch (Exception ex)
                     {
@@ -560,7 +561,7 @@ namespace MortalCombatBusinessServer
          * Description: Notifies all players in a lobby of a hyper-link message
          * Parameters: lobbyName (string), sender (string), content (MessageDatabase.FileLinkBlock)
          */
-        public void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content)
+        public void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content, DateTime dateTime)
         {
             if (allLobbies.ContainsKey(lobbyName))
             {
@@ -571,7 +572,7 @@ namespace MortalCombatBusinessServer
                 {
                     try
                     {
-                        callback.ReceiveLobbyMessageF(sender, lobbyName, content);
+                        callback.ReceiveLobbyMessageF(sender, lobbyName, content, dateTime);
                     }
                     catch (Exception ex)
                     {

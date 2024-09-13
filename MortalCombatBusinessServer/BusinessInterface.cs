@@ -34,31 +34,31 @@ namespace MortalCombatBusinessServer
         void RemovePlayerFromServer(string playerUsername);
 
         [OperationContract]        
-        void SendPrivateMessage(string sender, string recipent, string content);
+        void SendPrivateMessage(string sender, string recipent, string content, DateTime dateTime);
 
         [OperationContract]
         List<MessageDatabase.Message> GetPrivateMessages(string user1, string user2);
 
         [OperationContract]
-        void StorePrivateMessage(string sender, string recipient, string content);
+        void StorePrivateMessage(string sender, string recipient, string content, DateTime dateTime);
 
         [OperationContract]
-        void NotifyPrivatePlayer(string sender, string recipent, string content);
+        void NotifyPrivatePlayer(string sender, string recipent, string content, DateTime dateTime);
 
         [OperationContract]
-        void DistributeMessageToLobby(string lobbyName, string sender, string content);
+        void DistributeMessageToLobby(string lobbyName, string sender, string content, DateTime dateTime);
 
         [OperationContract]
-        void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content);
+        void DistributeMessageToLobbyF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content, DateTime dateTime);
 
         [OperationContract]
         List<MessageDatabase.Message> GetDistributedMessages(string sender, string recipent);
 
         [OperationContract]
-        void NotifyDistributedMessages(string lobbyName, string sender, string content);
+        void NotifyDistributedMessages(string lobbyName, string sender, string content, DateTime dateTime);
 
         [OperationContract]
-        void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content);
+        void NotifyDistributedMessagesF(string lobbyName, string sender, MessageDatabase.FileLinkBlock content, DateTime dateTime);
 
         [OperationContract]
         List<string> GetAllLobbyNames();
@@ -103,13 +103,13 @@ namespace MortalCombatBusinessServer
     public interface PlayerCallback
     {
         [OperationContract(IsOneWay = true)]
-        void ReceivePrivateMessage(string sender, string lobbyName, string content);
+        void ReceivePrivateMessage(string sender, string lobbyName, string content, DateTime dateTime);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveLobbyMessage(string sender, string lobbyName, string content);
+        void ReceiveLobbyMessage(string sender, string lobbyName, string content, DateTime dateTime);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content);
+        void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content, DateTime dateTime);
     }
 
 }

@@ -130,18 +130,18 @@ namespace MortalCombatDataServer
          * Description: Store the new message in the database
          * Parameters: sender (string), recipient (string), content (string), messageType (int)
          */
-        void DataInterface.CreateMessage(string sender, string recipent, string content, int messageType)
+        void DataInterface.CreateMessage(string sender, string recipent, string content, int messageType, DateTime dateTime)
         {
-            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType);
+            _messageDatabase.SaveMessage(sender, recipent, content.ToString(), messageType, dateTime);
         }
 
         /* Method: CreateMessageF
          * Description: Store the new hyper-link message in the database. For file transfer
          * Parameters: sender (string), recipient (string), content (FileLinkBlock), messageType (int)
          */
-        void DataInterface.CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType)
+        void DataInterface.CreateMessageF(string sender, string recipent, MessageDatabase.FileLinkBlock content, int messageType, DateTime dateTime)
         {
-            _messageDatabase.SaveMessage(sender, recipent, content, messageType);
+            _messageDatabase.SaveMessage(sender, recipent, content, messageType, dateTime);
         }
 
         /* Method: GetMessagesForLobby
@@ -173,14 +173,6 @@ namespace MortalCombatDataServer
             _lobbyDatabase._lobbies.RemoveAt(index);            
         }
 
-        /* Method: DistributeMessage
-         * Description: Distribute the message to the selected recipient
-         * Parameters: lobbyName (string), sender (string), recipient (string), content (object), messageType (int)
-         */
-        void DataInterface.DistributeMessage(string lobbyName, string sender, string recipent, object content, int messageType)
-        {
-            throw new NotImplementedException();
-        }
 
         /* Method: GetAllLobbyNames
          * Description: Get all the lobby names

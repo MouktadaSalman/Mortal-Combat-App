@@ -67,7 +67,7 @@ namespace MortalCombatClient
                 //If its not empty start a new task/create a pull request to a new thread
                 await Task.Run(() =>
                 {
-                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent);
+                    duplexFoob.DistributeMessageToLobby(curLobby.LobbyName, curPlayer.Username, messageContent, DateTime.Now);
                 });
             }
 
@@ -134,7 +134,7 @@ namespace MortalCombatClient
                     duplexFoob.UploadFile(filePath);
 
                     //Create info of message
-                    duplexFoob.DistributeMessageToLobbyF(curLobby.LobbyName, curPlayer.Username, messageContent);
+                    duplexFoob.DistributeMessageToLobbyF(curLobby.LobbyName, curPlayer.Username, messageContent, DateTime.Now);
                 });
             }
             else

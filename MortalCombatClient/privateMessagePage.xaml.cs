@@ -62,7 +62,7 @@ namespace MortalCombatClient
             try
             {
                 string messageContent = messageBox.Text;
-                duplexFoob.SendPrivateMessage(curPlayer.Username, MessageRecipient, messageContent);
+                duplexFoob.SendPrivateMessage(curPlayer.Username, MessageRecipient, messageContent, DateTime.Now);
                 AddMessageToListBox($"{curPlayer.Username}: {messageContent}");
                 messageBox.Clear();
             }

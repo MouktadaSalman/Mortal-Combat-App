@@ -69,7 +69,7 @@ namespace MortalCombatClient
          * Description: To send the string messages for the pull requesting lobby page
          * Parameters: sender (string), lobbyName (string), content (string)
          */
-        public void ReceiveLobbyMessage(string sender, string lobbyName, string content)
+        public void ReceiveLobbyMessage(string sender, string lobbyName, string content, DateTime dateTime)
         {
             if (_inLobbyPage != null)
             {
@@ -84,7 +84,7 @@ namespace MortalCombatClient
          * Description: To send the file hyperlink messages for the pull requesting lobby page
          * Parameters: sender (string), lobbyName (string), content (FileLinkeBlock)
          */
-        public void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content)
+        public void ReceiveLobbyMessageF(string sender, string lobbyName, MessageDatabase.FileLinkBlock content, DateTime dateTime)
         {
             if (_inLobbyPage != null)
             {
@@ -100,7 +100,7 @@ namespace MortalCombatClient
          *              messsaging page
          * Parameters: sender (string), lobbyName (string), content (string)
          */
-        public void ReceivePrivateMessage(string sender, string recipient, string content)
+        public void ReceivePrivateMessage(string sender, string recipient, string content, DateTime dateTime)
         {
             _mainWindow.Dispatcher.Invoke(() =>
             {
