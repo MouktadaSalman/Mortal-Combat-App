@@ -79,39 +79,28 @@ namespace MortalCombatClient
             // Check if the connection is faulted
             EnsureChannelIsOpen();
 
-            try
+
+            if (LobbyRoomList.SelectedItem != null)
             {
-                if (LobbyRoomList.SelectedItem != null)
+                //Get the lobby name
+                string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
+
+                Lobby lobby = duplexFoob.GetLobbyByName(selectedLobbyName);
+
+                if (lobby == null)
                 {
-                    //Get the lobby name
-                    string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
-                    duplexFoob.AddPlayertoLobby(curPlayer, selectedLobbyName);
-                    RefreshLists();
-
-                    Lobby lobby = duplexFoob.GetLobbyByName(selectedLobbyName);
-
-                    if (lobby == null)
-                    {
-                        MessageBox.Show("Lobby not found. Please try refreshing the list.");
-                        return;
-                    }
-
-                    NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));                
-                } 
-                else
-                {
-                    MessageBox.Show("Choose one of the lobbies then click 'Join' \n Note: If there are no lobbies, you can create one");
+                    MessageBox.Show("Lobby not found. Please try refreshing the list.");
+                    return;
                 }
 
+                duplexFoob.AddPlayertoLobby(curPlayer, selectedLobbyName);
+                RefreshLists();
+
+                NavigationService.Navigate(new InLobbyPage(duplexFoob, curPlayer, lobby));
             }
-            catch (FaultException ex)
+            else
             {
-                MessageBox.Show($"A communication error occurred: {ex.Message}");
-                EnsureChannelIsOpen();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("An issue occured\n Try refreshing list before joining lobby");
+                MessageBox.Show("Choose one of the lobbies then click 'Join' \n Note: If there are no lobbies, you can create one");
             }
         }
 
