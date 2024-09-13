@@ -45,11 +45,8 @@ namespace MortalCombatClient
             playerNameTextBox.Text = recipient;
             MessageRecipient = recipient;
 
-            var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                mainWindow.CreateChannel();
-            }
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            EnsureChannelIsOpen();
 
             mainWindow.UpdatePrivateCallbackContext(GetChatKey(player.Username, recipient), this);
             LoadChatHistory();
@@ -64,11 +61,7 @@ namespace MortalCombatClient
         {
 
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
@@ -90,11 +83,7 @@ namespace MortalCombatClient
         private void LoadNewMessagesButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
@@ -115,16 +104,12 @@ namespace MortalCombatClient
         private void LeaveChatButton_Click(object sender, RoutedEventArgs e)
         {
             // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
+            EnsureChannelIsOpen();
 
             try
             {
                 // Notify the MainWindow that we're closing this chat
-                ((MainWindow)System.Windows.Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
+                ((MainWindow)Application.Current.MainWindow).ClosePrivateMessagePage(GetChatKey(curPlayer.Username, MessageRecipient));
 
                 // Navigate back to the previous page
                 NavigationService.GoBack();
@@ -179,5 +164,32 @@ namespace MortalCombatClient
                 ? $"{user1}:{user2}"  //checks to open the same chat between both players
                 : $"{user2}:{user1}"; //no matter who the sender is and who the recipent is
         }
+
+        /* Method: EnsureChannelIsOpen
+         * Description: Ensures the channel is open
+         */
+        public void EnsureChannelIsOpen()
+        {
+            try
+            {
+                // If the channel is in a faulted state or not created, recreate it
+                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
+                {
+                    var mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.CreateChannel();
+                }
+
+                // Open the channel if it is not in an Open state
+                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
+                {
+                    ((ICommunicationObject)duplexFoob).Open();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }
