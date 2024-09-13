@@ -69,6 +69,10 @@ namespace MortalCombatBusinessServer
          */
         public void AddPlayerToServer(Player player)
         {
+            PlayerCallback playerCallback = OperationContext.Current.GetCallbackChannel<PlayerCallback>();
+
+            allPlayerCallback.TryAdd(player.Username, playerCallback);
+
             data.AddPlayerToServer(player);
         }
 
@@ -95,8 +99,6 @@ namespace MortalCombatBusinessServer
          */
         public void CheckUsernameValidity(string username)
         {
-            data.GetNumOfPlayers(out int numOfPlayers); 
-            
             int i = GetIndexForPlayer(username); // gets the index of the player username, return -1 if it doesn't exist
 
             // if the lobby name already exists, throw an exception
@@ -120,7 +122,6 @@ namespace MortalCombatBusinessServer
             // Check if the lobby name already exists by comparing it with all the lobby names in the database
 
             int i = GetIndexForLobby(lobbyName); // gets the index of the lobby name return, -1 if it doesn't exist
-
 
             // if the lobby name already exists, throw an exception
             if (i != -1)
@@ -249,6 +250,7 @@ namespace MortalCombatBusinessServer
             allPlayerCallback.TryRemove(pUserName, out plCallback);
 
             int i = GetIndexForPlayer(pUserName);
+
             Console.WriteLine($"Player {pUserName} is in index {i}.");            
 
             data.RemovePlayerFromServer(i);           

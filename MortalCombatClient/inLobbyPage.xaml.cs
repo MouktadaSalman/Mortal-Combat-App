@@ -43,8 +43,6 @@ namespace MortalCombatClient
             lobbyNameTextBox.Text = lobby.LobbyName;
 
             var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
             mainWindow.UpdateInLobbyCallbackContext(this);
 
@@ -59,8 +57,6 @@ namespace MortalCombatClient
          */
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
             //Get the message input
             string messageContent = messageBox.Text;
@@ -86,8 +82,6 @@ namespace MortalCombatClient
          */
         private async void SelectFilesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
             //To extract file path + filename
             string filePath = string.Empty;
@@ -156,8 +150,6 @@ namespace MortalCombatClient
          */
         private void OpenChatButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
             if (onlinePlayers.SelectedItem != null) { 
             string recipent = onlinePlayers.SelectedItem.ToString();
@@ -184,8 +176,6 @@ namespace MortalCombatClient
          */
         public void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
             //Clear the chat
             MessagesListBox.Items.Clear();
@@ -320,32 +310,6 @@ namespace MortalCombatClient
 
             //Process handled
             e.Handled = true;
-        }
-
-        /* Method: EnsureChannelIsOpen
-         * Description: To ensure the channel is open
-         */
-        public void EnsureChannelIsOpen()
-        {
-            try
-            {
-                // If the channel is in a faulted state or not created, recreate it
-                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-                {
-                    var mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
-                    mainWindow.CreateChannel();
-                }
-
-                // Open the channel if it is not in an Open state
-                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
-                {
-                    ((ICommunicationObject)duplexFoob).Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 }

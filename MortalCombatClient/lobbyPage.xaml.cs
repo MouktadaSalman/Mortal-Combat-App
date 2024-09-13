@@ -36,7 +36,6 @@ namespace MortalCombatClient
             duplexFoob = inFoob;
             curPlayer = player;
 
-            EnsureChannelIsOpen();
 
             RefreshLists();
         }
@@ -47,9 +46,6 @@ namespace MortalCombatClient
          */
         private async void CreateLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
-
             try
             {
                 string createdLobbyName = NewLobbyName.Text;
@@ -76,8 +72,6 @@ namespace MortalCombatClient
          */
         private void JoinLobbyButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
 
 
             if (LobbyRoomList.SelectedItem != null)
@@ -111,9 +105,6 @@ namespace MortalCombatClient
          */
         private async void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
-
             try
             {
                 await Task.Run(() => duplexFoob.RemovePlayerFromServer(curPlayer.Username));
@@ -133,8 +124,6 @@ namespace MortalCombatClient
          */
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
             RefreshLists();
         }
 
@@ -144,8 +133,6 @@ namespace MortalCombatClient
          */
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            EnsureChannelIsOpen();
             if (LobbyRoomList.SelectedItem == null)
             {
                 MessageBox.Show("Please select a lobby to delete");
@@ -192,27 +179,6 @@ namespace MortalCombatClient
         /* Method: EnsureChannelIsOpen
          * Description: Ensures the channel is open
          */
-        public void EnsureChannelIsOpen()
-        {
-            try
-            {
-                // If the channel is in a faulted state or not created, recreate it
-                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-                {
-                    var mainWindow = (MainWindow)Application.Current.MainWindow;
-                    mainWindow.CreateChannel();
-                }
-
-                // Open the channel if it is not in an Open state
-                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
-                {
-                    ((ICommunicationObject)duplexFoob).Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        
     }
 }

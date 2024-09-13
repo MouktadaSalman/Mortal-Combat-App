@@ -38,7 +38,6 @@ namespace MortalCombatClient
 
             duplexFoob = inDuplexFoob;
             
-            EnsureChannelIsOpen();
         }
 
         /* Method: Button_Click
@@ -47,13 +46,6 @@ namespace MortalCombatClient
          */
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the connection is faulted
-            if (((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                mainWindow.CreateChannel();
-            }
-
             string username = UsernameBox.Text.ToString();
 
             var button = sender as Button; // Cast sender to Button
@@ -93,32 +85,5 @@ namespace MortalCombatClient
             duplexFoob.AddPlayerToServer(newPlayer);
             return newPlayer;
         }
-
-        /* Method: EnsureChannelIsOpen
-         * Description: Ensures the channel is open
-         */
-        public void EnsureChannelIsOpen()
-        {
-            try
-            {
-                // If the channel is in a faulted state or not created, recreate it
-                if (duplexFoob == null || ((ICommunicationObject)duplexFoob).State == CommunicationState.Faulted)
-                {
-                    var mainWindow = (MainWindow)Application.Current.MainWindow;
-                    mainWindow.CreateChannel();
-                }
-
-                // Open the channel if it is not in an Open state
-                if (((ICommunicationObject)duplexFoob).State != CommunicationState.Opened)
-                {
-                    ((ICommunicationObject)duplexFoob).Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to create or open the channel: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
     }
-
 }
