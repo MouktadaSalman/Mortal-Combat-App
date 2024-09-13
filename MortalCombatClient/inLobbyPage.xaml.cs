@@ -189,11 +189,14 @@ namespace MortalCombatClient
                 {
                     filePath = opf.FileName;
                 }
+                else //If user doesn't select any file (press Cancel or 'x' button)
+                {
+                    filePath = null;
+                }
             }
 
-            System.Windows.MessageBox.Show($"Path somehow: {filePath.ToString()}");
-
-            if (filePath != null)
+            //Check if none is selected
+            if (!string.IsNullOrEmpty(filePath))
             {
                 string[] f = filePath.Split('\\');
                 fileName = f.Last();
