@@ -191,6 +191,8 @@ namespace MortalCombatClient
                 }
             }
 
+            System.Windows.MessageBox.Show($"Path somehow: {filePath.ToString()}");
+
             if (filePath != null)
             {
                 string[] f = filePath.Split('\\');
