@@ -23,6 +23,7 @@ using System.ServiceModel;
 using MortalCombatBusinessServer;
 using Mortal_Combat_Data_Library;
 using System.Runtime.Remoting.Contexts;
+using System.ServiceModel.Dispatcher;
 
 namespace MortalCombatClient
 {
@@ -57,6 +58,8 @@ namespace MortalCombatClient
             tcp.OpenTimeout = TimeSpan.FromMinutes(1);
             tcp.CloseTimeout = TimeSpan.FromMinutes(1);
 
+
+           
             string URL = "net.tcp://localhost:8200/MortalCombatBusinessService";
             channelFactory = new DuplexChannelFactory<BusinessInterface>(callbackInstance, tcp, URL);
             duplexFoob = channelFactory.CreateChannel();

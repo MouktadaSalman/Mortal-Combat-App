@@ -184,6 +184,7 @@ namespace MortalCombatBusinessServer
         {
             List<PlayerCallback> playerCallBacks = allLobbies[lobbyName];
             
+           
             PlayerCallback plCallback = allPlayerCallback[playerUsername];
 
             foreach(var pCB in playerCallBacks)

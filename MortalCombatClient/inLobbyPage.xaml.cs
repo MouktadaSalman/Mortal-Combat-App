@@ -76,14 +76,20 @@ namespace MortalCombatClient
 
         private void SendMessageButton_Click(object sender, RoutedEventArgs e)
         {
+            if (onlinePlayers.SelectedItem != null) { 
             string recipent = onlinePlayers.SelectedItem.ToString();
             if (!recipent.Equals(curPlayer.Username))
             {
                 PrivateMessagePage nextPage = new PrivateMessagePage(duplexFoob, curPlayer, recipent);
                 NavigationService.Navigate(nextPage);
-            } else
+            }
+            else
             {
                 System.Windows.MessageBox.Show("You can not send a message to yourself");
+            }
+        } else
+            {
+                System.Windows.MessageBox.Show("You must choose a player before clicking 'Open Chat'");
             }
         }
 
@@ -235,6 +241,8 @@ namespace MortalCombatClient
 
         private void LeaveLobbyButton_Click(object sender, RoutedEventArgs e)
         {
+
+            //error occurs here from client side
             duplexFoob.RemovePlayerFromLobby(curPlayer.Username, curLobby.LobbyName);
             NavigationService.GoBack();
         }
