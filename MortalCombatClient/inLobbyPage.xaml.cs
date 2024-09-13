@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using Mortal_Combat_Data_Library;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.ServiceModel;
 
 namespace MortalCombatClient
 {

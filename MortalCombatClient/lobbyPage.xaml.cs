@@ -42,7 +42,7 @@ namespace MortalCombatClient
                 mainWindow.CreateChannel();
             }
 
-            mainWindow.UpdateLobbyCallbackContext(this);
+            
             RefreshLists();
         }
 
