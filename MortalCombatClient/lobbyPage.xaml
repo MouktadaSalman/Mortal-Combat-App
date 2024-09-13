@@ -46,7 +46,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.75"/>
             </Button.Background>
         </Button>
-
+        <TextBlock Name="notificationStar" Width="30" Margin="793,296,77,284" Background="Black" Foreground="White" />
 
     </Grid>
 </Page>

@@ -142,6 +142,12 @@ namespace MortalCombatClient
             string selectedLobbyName = LobbyRoomList.SelectedItem.ToString();
             try
             {
+                Lobby lobby = duplexFoob.GetLobbyByName(selectedLobbyName);
+                if (lobby == null)
+                {
+                    MessageBox.Show("Lobby not found. Please try refreshing the list.");
+                    return;
+                }
                 await Task.Run(() => duplexFoob.DeleteLobby(selectedLobbyName));                
             }
             catch(FaultException<PlayersStilInLobbyFault> ex)

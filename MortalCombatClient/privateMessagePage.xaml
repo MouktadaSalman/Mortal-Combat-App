@@ -9,14 +9,14 @@
       Title="Page1" Height="600" Width="900">
 
     <Grid>
-        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="695" Height="386" Margin="146,100,0,0" FontSize="14" BorderBrush="White" Foreground="White">
+        <ListBox x:Name="MessagesListBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="695" Height="386" Margin="146,100,0,0" FontSize="16" BorderBrush="White" Foreground="White">
             <ListBox.Background>
-                <SolidColorBrush Color="Black" Opacity="0.5"/>
+                <SolidColorBrush Color="Black" Opacity="0.7"/>
             </ListBox.Background>
         </ListBox>
 
 
-        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="29" Margin="146,492,0,0" TextWrapping="Wrap" Text="Enter your message here" VerticalAlignment="Top" Width="581" Foreground="White" BorderBrush="White" FontSize="16">
+        <TextBox x:Name="messageBox" HorizontalAlignment="Left" Height="29" Margin="146,492,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="581" Foreground="White" BorderBrush="White" FontSize="16">
             <TextBox.Background>
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
             </TextBox.Background>
