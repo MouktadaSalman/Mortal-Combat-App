@@ -4,33 +4,33 @@ This project is an implementation of an online gaming lobby for Mortal Kombat X 
 
 ## Features
 
-Gaming Lobby Server
+**Gaming Lobby Server**
 
-User Management: Ensures unique player logins and prevents duplicate usernames.
+- User Management: Ensures unique player logins and prevents duplicate usernames.
 
-Lobby Room Management: Allows players to create, join, and leave lobby rooms.
+- Lobby Room Management: Allows players to create, join, and leave lobby rooms.
 
-Message Distribution: Sends messages from a player to all members in the same lobby.
+- Message Distribution: Sends messages from a player to all members in the same lobby.
 
-Private Messaging: Enables private communication between players.
+- Private Messaging: Enables private communication between players.
 
-File Sharing: Facilitates image and text file sharing among players in a lobby room.
+- File Sharing: Facilitates image and text file sharing among players in a lobby room.
 
-Client Application (WPF)
+**Client Application (WPF)**
 
-User Login: Players log in with a unique username to access the system.
+- User Login: Players log in with a unique username to access the system.
 
-Lobby Room Selection: Displays available lobby rooms for players to join.
+- Lobby Room Selection: Displays available lobby rooms for players to join.
 
-Lobby Room Creation: Allows users to create new lobby rooms with unique names.
+- Lobby Room Creation: Allows users to create new lobby rooms with unique names.
 
-Lobby Room Messaging: Players can send and receive messages within a room.
+- Lobby Room Messaging: Players can send and receive messages within a room.
 
-Private Messaging: Enables one-on-one private communication.
+- Private Messaging: Enables one-on-one private communication.
 
-File Sharing: Allows users to upload and download images and text files.
+- File Sharing: Allows users to upload and download images and text files.
 
-Logout: Players can log out when they are finished.
+- Logout: Players can log out when they are finished.
 
 ## Additional Features
 
