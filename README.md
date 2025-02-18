@@ -92,7 +92,12 @@ Only image and text file sharing is supported.
 
 ## Authors
 
-This project was developed as part of a university assignment by a team of two/three members.
+## Authors
+
+- [Mouktada Salman](https://github.com/MouktadaSalman)
+- [Ahmed Youseif](https://github.com/Ahmedo-o)
+- [Ahmed Youseif](https://github.com/Ahmedo-o)
+
 
 ## License
 
