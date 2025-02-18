@@ -96,7 +96,7 @@ Only image and text file sharing is supported.
 
 - [Mouktada Salman](https://github.com/MouktadaSalman)
 - [Ahmed Youseif](https://github.com/Ahmedo-o)
-- [Ahmed Youseif](https://github.com/Ahmedo-o)
+- [M.Jauhar](https://github.com/MasterBam)
 
 
 ## License
