@@ -92,8 +92,6 @@ Only image and text file sharing is supported.
 
 ## Authors
 
-## Authors
-
 - [Mouktada Salman](https://github.com/MouktadaSalman)
 - [Ahmed Youseif](https://github.com/Ahmedo-o)
 - [M.Jauhar](https://github.com/MasterBam)
